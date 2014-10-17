@@ -9,18 +9,31 @@
 	$path = explode(DIRECTORY_SEPARATOR , __FILE__);
 	include_once "IncludesAndClasses/DBBase.class.php";
 	include_once @"IncludesAndClasses/BranchBase.class.php";
+	include_once "Functions.php";
+
 	$dbBaseClass = new DBBase();
 
 	$BranchBase = new BranchBase();
 	$BranchRecord = $BranchBase::$Branch;
 
-	$BranchRecord['BranchCode'] = "Branch'Code";
-	$BranchRecord['Name'] = "Names's";
-	$BranchRecord['Active'] = '0';
-	$BranchRecord['ContactPersonName'] = 'ContactPersonName';
-	$BranchRecord['Longitude'] = 123.4567;
+	$name = $BranchRecord['BranchCode']['FieldName'];
+	$help = $BranchRecord['BranchCode']['Helptext'];
+	initializeFieldParametersArray($fieldParams);
+
+	$t = array_key_exists ( FieldParameters::class_par , $BranchRecord['BranchCode'][0]);
+	$v1 = $BranchRecord['BranchCode'][0][FieldParameters::class_par];
+	$t = array_key_exists ( FieldParameters::groupIdName_par , $BranchRecord['BranchCode'][0]);
+	$t = array_key_exists ( FieldParameters::autoRefresh_par , $BranchRecord['BranchCode'][0]);
+
+	$BranchRecord['BranchCode']['Value'] = "Branch'Code";
+	$BranchRecord['Name']['Value'] = "Names's";
+	$BranchRecord['Active']['Value'] = '0';
+	$BranchRecord['ContactPersonName']['Value'] = 'ContactPersonName';
+	$BranchRecord['PhoneNumber']['Value'] = '(012)2311234';
+	$BranchRecord['FaxNumber']['Value'] = '(012)2311234';
+	$BranchRecord['Longitude']['Value'] = '123.4567';
+	$BranchRecord['Latitude']['Value'] = '123.4567';
 	$BranchBase->update('Branch', 'id', 1, $BranchRecord);
-//	$BranchBase->insert($BranchRecord);
 
 	if ($dbBaseClass->conn) {
 		echo "Connection established.<br />";

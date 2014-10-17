@@ -52,7 +52,7 @@
 	echo '<tr>';
 	echo '</tr>';
 	echo '</thead>';
-	while ($record = sqlsrv_fetch_array($records, SQLSRV_FETCH_ASSOC)) {
+	while ($record = sqlsrv_fetch_array($records, SQLSRV_FETCH_BOTH)) {
 		echo "<tr>";
 		echo "<td>{$record['BranchCode']}</td>";
 		echo "<td>{$record['Name']}</td>";

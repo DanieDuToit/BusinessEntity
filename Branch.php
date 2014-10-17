@@ -7,6 +7,7 @@
 	 */
 	include_once 'functions.php';
 	include_once 'IncludesAndClasses\DBBase.class.php';
+	include_once 'IncludesAndClasses\BranchBase.class.php';
 	if (isset($_GET['id']) === false || isset($_GET['action']) === false) {
 		header("Location: BranchDisplayGrid.php");
 	}
@@ -20,33 +21,37 @@
 		die("ERROR: Could not connect. " .  printf('%s',$dbBaseClass->dbGetErrorMsg()));
 	}
 
-	//
+	// Read the records
 	$records = $dbBaseClass->getAllByFieldName('Branch', 'id', $id);
 
 	if ($records === false) {
 		die($dbBaseClass->dbGetErrorMsg());
 	}
 
+	// Get the specific record
 	$record = sqlsrv_fetch_array($records, SQLSRV_FETCH_ASSOC);
 
-	function echoValue($fieldIdName, $fieldType, $required)
+	$branchBase = BranchBase::$Branch;
+	function echoValue($fieldIdName, $fieldType)
 	{
 		global $action;
 		global $record;
-		initializeFieldParametersArray($fieldParams);
+		global $branchBase;
+		initializeFieldParametersArray($fieldParams, $fieldIdName, $branchBase);
 		if ($action == 'r' || $action == 'd') {
 			$fieldParams[FieldParameters::disabled_par] = 'Disabled';
 		}
-		$inputField = "";
-		switch($fieldType){
-			case "text":
-				$inputField .= drawInputField($fieldIdName, $fieldType, $record[$fieldIdName], $fieldParams);
-				break;
-			case "checkbox":
-				$fieldParams[FieldParameters::onClick_par] = "onClick()";
-				$inputField .= drawInputField($fieldIdName, $fieldType, "checked", $fieldParams);
-				break;
-		}
+//		$inputField = "";
+		$inputField = drawInputField($fieldIdName, $branchBase[$fieldIdName]['Type'], $record[$fieldIdName], $fieldParams);
+//		switch($fieldType){
+//			case "text":
+//				$inputField .= drawInputField($fieldIdName, $branchBase[$fieldIdName]['Type'], $record[$fieldIdName], $fieldParams);
+//				break;
+//			case "checkbox":
+//				$fieldParams[FieldParameters::onClick_par] = "onClick()";
+//				$inputField .= drawInputField($fieldIdName, $fieldType, $record[$fieldIdName], $fieldParams);
+//				break;
+//		}
 		$temp = "<td class=\"fieldName\"><b>$fieldIdName</ b></td>";
 		$temp .= "<td>$inputField</td>";
 		echo "<td class=\"fieldName\"><b>$fieldIdName</ b></td>";

@@ -6,7 +6,7 @@
 	 * Date: 2014/10/09
 	 * Time: 12:29 PM
 	 */
-	$path = explode(DIRECTORY_SEPARATOR , __FILE__);
+	$path = explode(DIRECTORY_SEPARATOR, __FILE__);
 
 	include_once("functions.php");
 	include_once 'DBBase.class.php';
@@ -15,35 +15,93 @@
 		{
 			private $dbBaseClass;
 			static $Branch = array(
-				'BranchCode'               => '',
-				'Name'                     => '',
-				'Active'                   => 1,
-				'CustomMessage'            => '',
-				'PhoneNumber'              => '',
-				'FaxNumber'                => '',
-				'PhysicalAddressLine1'     => '',
-				'PhysicalAddressLine2'     => '',
-				'PhysicalAddressLine3'     => '',
-				'PhysicalAddressLine4'     => '',
-				'PhysicalAddressLine5'     => '',
-				'PostalAddressLine1'       => '',
-				'PostalAddressLine2'       => '',
-				'PostalAddressLine3'       => '',
-				'PostalAddressLine4'       => '',
-				'PostalAddressLine5'       => '',
-				'BankName'                 => '',
-				'BankBranchName'           => '',
-				'BankBranchCode'           => '',
-				'BankAccountNumber'        => '',
-				'ContactPersonName'        => '',
-				'ContactPersonNumber'      => '',
-				'ContactPersonEmail'       => '',
-				'AdminContactPersonName'   => '',
-				'AdminContactPersonNumber' => '',
-				'AdminContactPersonEmail'  => '',
-				'Longitude'                => 0.000000,
-				'Latitude'                 => 0.000000,
-				'BusinessEntityId'         => '',
+				'BranchCode'               =>
+					array('FieldName' => 'BranchCode', 'Helptext' => 'No Help Text', 'Type' => 'text', 'Value' => '', 'Meta' =>
+						array(FieldParameters::required_par => true, FieldParameters::width_par => 250, FieldParameters::maxlength_par => 10)),
+				'Name'                     =>
+					array('FieldName' => 'Name', 'Helptext' => 'No Help Text', 'Type' => 'text', 'Value' => '', 'Meta' =>
+						array(FieldParameters::width_par => 250, FieldParameters::maxlength_par => 50)),
+				'Active'                   =>
+					array('FieldName' => 'Active', 'Helptext' => 'No Help Text', 'Type' => 'checkbox', 'Value' => 0, 'Meta' =>
+						array(FieldParameters::width_par => 250, FieldParameters::maxlength_par => 50)),
+				'CustomMessage'            =>
+					array('FieldName' => 'CustomMessage', 'Helptext' => 'No Help Text', 'Type' => 'text', 'Value' => '', 'Meta' =>
+						array(FieldParameters::width_par => 500, FieldParameters::maxlength_par => 800 )),
+				'PhoneNumber'              =>
+					array('FieldName' => 'PhoneNumber', 'Helptext' => 'No Help Text', 'Type' => 'text', 'Value' => '', 'Meta' =>
+						array(FieldParameters::width_par => 250, FieldParameters::maxlength_par => 50)),
+				'FaxNumber'                =>
+					array('FieldName' => 'FaxNumber', 'Helptext' => 'No Help Text', 'Type' => 'text', 'Value' => '', 'Meta' =>
+						array(FieldParameters::width_par => 250, FieldParameters::maxlength_par => 50)),
+				'PhysicalAddressLine1'     =>
+					array('FieldName' => 'PhysicalAddressLine1', 'Helptext' => 'No Help Text', 'Type' => 'text', 'Value' => '', 'Meta' =>
+						array(FieldParameters::width_par => 250, FieldParameters::maxlength_par => 50)),
+				'PhysicalAddressLine2'     =>
+					array('FieldName' => 'PhysicalAddressLine2', 'Helptext' => 'No Help Text', 'Type' => 'text', 'Value' => '', 'Meta' =>
+						array(FieldParameters::width_par => 250, FieldParameters::maxlength_par => 50)),
+				'PhysicalAddressLine3'     =>
+					array('FieldName' => 'PhysicalAddressLine3', 'Helptext' => 'No Help Text', 'Type' => 'text', 'Value' => '', 'Meta' =>
+						array(FieldParameters::width_par => 250, FieldParameters::maxlength_par => 50)),
+				'PhysicalAddressLine4'     =>
+					array('FieldName' => 'PhysicalAddressLine4', 'Helptext' => 'No Help Text', 'Type' => 'text', 'Value' => '', 'Meta' =>
+						array(FieldParameters::width_par => 250, FieldParameters::maxlength_par => 50)),
+				'PhysicalAddressLine5'     =>
+					array('FieldName' => 'PhysicalAddressLine5', 'Helptext' => 'No Help Text', 'Type' => 'text', 'Value' => '', 'Meta' =>
+						array(FieldParameters::width_par => 250, FieldParameters::maxlength_par => 50)),
+				'PostalAddressLine1'       =>
+					array('FieldName' => 'PostalAddressLine1', 'Helptext' => 'No Help Text', 'Type' => 'text', 'Value' => '', 'Meta' =>
+						array(FieldParameters::width_par => 250, FieldParameters::maxlength_par => 600)),
+				'PostalAddressLine2'       =>
+					array('FieldName' => 'PostalAddressLine2', 'Helptext' => 'No Help Text', 'Type' => 'text', 'Value' => '', 'Meta' =>
+						array(FieldParameters::width_par => 250, FieldParameters::maxlength_par => 50)),
+				'PostalAddressLine3'       =>
+					array('FieldName' => 'PostalAddressLine3', 'Helptext' => 'No Help Text', 'Type' => 'text', 'Value' => '', 'Meta' =>
+						array(FieldParameters::width_par => 250, FieldParameters::maxlength_par => 50)),
+				'PostalAddressLine4'       =>
+					array('FieldName' => 'PostalAddressLine4', 'Helptext' => 'No Help Text', 'Type' => 'text', 'Value' => '', 'Meta' =>
+						array(FieldParameters::width_par => 250, FieldParameters::maxlength_par => 50)),
+				'PostalAddressLine5'       =>
+					array('FieldName' => 'PostalAddressLine5', 'Helptext' => 'No Help Text', 'Type' => 'text', 'Value' => '', 'Meta' =>
+						array(FieldParameters::width_par => 250, FieldParameters::maxlength_par => 50)),
+				'BankName'                 =>
+					array('FieldName' => 'BankName', 'Helptext' => 'No Help Text', 'Type' => 'text', 'Value' => '', 'Meta' =>
+						array(FieldParameters::width_par => 250, FieldParameters::maxlength_par => 50)),
+				'BankBranchName'           =>
+					array('FieldName' => 'BankBranchName', 'Helptext' => 'No Help Text', 'Type' => 'text', 'Value' => '', 'Meta' =>
+						array(FieldParameters::width_par => 250, FieldParameters::maxlength_par => 50)),
+				'BankBranchCode'           =>
+					array('FieldName' => 'BankBranchCode', 'Helptext' => 'No Help Text', 'Type' => 'text', 'Value' => '', 'Meta' =>
+						array(FieldParameters::width_par => 250, FieldParameters::maxlength_par => 50)),
+				'BankAccountNumber'        =>
+					array('FieldName' => 'BankAccountNumber', 'Helptext' => 'No Help Text', 'Type' => 'text', 'Value' => '', 'Meta' =>
+						array(FieldParameters::width_par => 250, FieldParameters::maxlength_par => 50)),
+				'ContactPersonName'        =>
+					array('FieldName' => 'ContactPersonName', 'Helptext' => 'No Help Text', 'Type' => 'text', 'Value' => '', 'Meta' =>
+						array(FieldParameters::width_par => 250, FieldParameters::maxlength_par => 50)),
+				'ContactPersonNumber'      =>
+					array('FieldName' => 'ContactPersonNumber', 'Helptext' => 'No Help Text', 'Type' => 'text', 'Value' => '', 'Meta' =>
+						array(FieldParameters::width_par => 250, FieldParameters::maxlength_par => 50)),
+				'ContactPersonEmail'       =>
+					array('FieldName' => 'ContactPersonEmail', 'Helptext' => 'No Help Text', 'Type' => 'text', 'Value' => '', 'Meta' =>
+						array(FieldParameters::width_par => 250, FieldParameters::maxlength_par => 50)),
+				'AdminContactPersonName'   =>
+					array('FieldName' => 'AdminContactPersonName', 'Helptext' => 'No Help Text', 'Type' => 'text', 'Value' => '', 'Meta' =>
+						array(FieldParameters::width_par => 250, FieldParameters::maxlength_par => 50)),
+				'AdminContactPersonNumber' =>
+					array('FieldName' => 'AdminContactPersonNumber', 'Helptext' => 'No Help Text', 'Type' => 'text', 'Value' => '', 'Meta' =>
+						array(FieldParameters::width_par => 250, FieldParameters::maxlength_par => 50)),
+				'AdminContactPersonEmail'  =>
+					array('FieldName' => 'AdminContactPersonEmail', 'Helptext' => 'No Help Text', 'Type' => 'text', 'Value' => '', 'Meta' =>
+						array(FieldParameters::width_par => 250, FieldParameters::maxlength_par => 50)),
+				'Longitude'                =>
+					array('FieldName' => 'Longitude', 'Helptext' => 'No Help Text', 'Type' => 'decimal', 'Value' => 0.0000, 'Meta' =>
+						array(FieldParameters::precision_par => 4)),
+				'Latitude'                 =>
+					array('FieldName' => 'Latitude', 'Helptext' => 'No Help Text', 'Type' => 'decimal', 'Value' => 0.0000, 'Meta' =>
+						array(FieldParameters::precision_par)),
+				'BusinessEntityId'         =>
+					array('FieldName' => 'BusinessEntityId', 'Helptext' => 'No Help Text', 'Type' => 'int', 'Value' => '', 'Meta' =>
+						array(FieldParameters::class_par => 'Class', FieldParameters::groupIdName_par => 'Group_ID'))
 			);
 
 			// Default Constructor
@@ -53,15 +111,15 @@
 			}
 
 			/**
-			 * @param $tableName: The name of the table which must be updated
-			 * @param $idName: The name of the "ID" field
-			 * @param $idValue: The value of the "ID" field
-			 * @param $changedRecord: A BranchBase::Branch type parameter containing the changed record
+			 * @param $tableName : The name of the table which must be updated
+			 * @param $idName : The name of the "ID" field
+			 * @param $idValue : The value of the "ID" field
+			 * @param $changedRecord : A BranchBase::Branch type parameter containing the changed record
 			 *
 			 * @return array: An array of errors or empty if no errors
-				NB!!!
-				Note: empty array is converted to null by non-strict equal '==' comparison.
-				Use is_null() or '===' if there is possible of getting empty array.
+			 * NB!!!
+			 * Note: empty array is converted to null by non-strict equal '==' comparison.
+			 * Use is_null() or '===' if there is possible of getting empty array.
 			 */
 			function update($tableName, $idName, $idValue, $changedRecord)
 			{
@@ -119,35 +177,35 @@
                 WHERE %s = %s
 	            GO ",
 					$tableName,
-					formatParameter($this::$Branch['BranchCode'], 'text'),
-					formatParameter($this::$Branch[$this::$Branch['Name']],'text'),
-					formatParameter($this::$Branch[$this::$Branch['Active']],'checkbox'),
-					formatParameter($this::$Branch[$this::$Branch['CustomMessage']],'text'),
-					formatParameter($this::$Branch[$this::$Branch['PhoneNumber']],'text'),
-					formatParameter($this::$Branch['FaxNumber'],'text'),
-					formatParameter($this::$Branch['PhysicalAddressLine1'],'text'),
-					formatParameter($this::$Branch['PhysicalAddressLine2'],'text'),
-					formatParameter($this::$Branch['PhysicalAddressLine3'],'text'),
-					formatParameter($this::$Branch['PhysicalAddressLine4'],'text'),
-					formatParameter($this::$Branch['PhysicalAddressLine5'],'text'),
-					formatParameter($this::$Branch['PostalAddressLine1'],'text'),
-					formatParameter($this::$Branch['PostalAddressLine2'],'text'),
-					formatParameter($this::$Branch['PostalAddressLine3'],'text'),
-					formatParameter($this::$Branch['PostalAddressLine4'],'text'),
-					formatParameter($this::$Branch['PostalAddressLine5'],'text'),
-					formatParameter($this::$Branch['BankName'],'text'),
-					formatParameter($this::$Branch['BankBranchName'],'text'),
-					formatParameter($this::$Branch['BankBranchCode'],'text'),
-					formatParameter($this::$Branch['BankAccountNumber'],'text'),
-					formatParameter($this::$Branch['ContactPersonName'],'text'),
-					formatParameter($this::$Branch['ContactPersonNumber'],'text'),
-					formatParameter($this::$Branch['ContactPersonEmail'],'text'),
-					formatParameter($this::$Branch['AdminContactPersonName'],'text'),
-					formatParameter($this::$Branch['AdminContactPersonNumber'],'text'),
-					formatParameter($this::$Branch['AdminContactPersonEmail'],'text'),
-					formatParameter($this::$Branch['Longitude'],'text'),
-					formatParameter($this::$Branch['Latitude'],'text'),
-					formatParameter($this::$Branch['BusinessEntityId'],'text'),
+					$this::$Branch['BranchCode']['Value'],
+					$this::$Branch['Name']['Value'],
+					$this::$Branch['Active']['Value'],
+					$this::$Branch['CustomMessage']['Value'],
+					$this::$Branch['PhoneNumber']['Value'],
+					$this::$Branch['FaxNumber']['Value'],
+					$this::$Branch['PhysicalAddressLine1']['Value'],
+					$this::$Branch['PhysicalAddressLine2']['Value'],
+					$this::$Branch['PhysicalAddressLine3']['Value'],
+					$this::$Branch['PhysicalAddressLine4']['Value'],
+					$this::$Branch['PhysicalAddressLine5']['Value'],
+					$this::$Branch['PostalAddressLine1']['Value'],
+					$this::$Branch['PostalAddressLine2']['Value'],
+					$this::$Branch['PostalAddressLine3']['Value'],
+					$this::$Branch['PostalAddressLine4']['Value'],
+					$this::$Branch['PostalAddressLine5']['Value'],
+					$this::$Branch['BankName']['Value'],
+					$this::$Branch['BankBranchName']['Value'],
+					$this::$Branch['BankBranchCode']['Value'],
+					$this::$Branch['BankAccountNumber']['Value'],
+					$this::$Branch['ContactPersonName']['Value'],
+					$this::$Branch['ContactPersonNumber']['Value'],
+					$this::$Branch['ContactPersonEmail']['Value'],
+					$this::$Branch['AdminContactPersonName']['Value'],
+					$this::$Branch['AdminContactPersonNumber']['Value'],
+					$this::$Branch['AdminContactPersonEmail']['Value'],
+					$this::$Branch['Longitude']['Value'],
+					$this::$Branch['Latitude']['Value'],
+					$this::$Branch['BusinessEntityId']['Value'],
 					$idName,
 					$idValue
 				);
@@ -260,35 +318,35 @@
 	                %f,
 	                %d )
 	            GO ",
-					$this::$Branch['BranchCode'],
-					$this::$Branch[$this::$Branch['Name']],
-					$this::$Branch[$this::$Branch['Active']],
-					$this::$Branch[$this::$Branch['CustomMessage']],
-					$this::$Branch[$this::$Branch['PhoneNumber']],
-					$this::$Branch['FaxNumber'],
-					$this::$Branch['PhysicalAddressLine1'],
-					$this::$Branch['PhysicalAddressLine2'],
-					$this::$Branch['PhysicalAddressLine3'],
-					$this::$Branch['PhysicalAddressLine4'],
-					$this::$Branch['PhysicalAddressLine5'],
-					$this::$Branch['PostalAddressLine1'],
-					$this::$Branch['PostalAddressLine2'],
-					$this::$Branch['PostalAddressLine3'],
-					$this::$Branch['PostalAddressLine4'],
-					$this::$Branch['PostalAddressLine5'],
-					$this::$Branch['BankName'],
-					$this::$Branch['BankBranchName'],
-					$this::$Branch['BankBranchCode'],
-					$this::$Branch['BankAccountNumber'],
-					$this::$Branch['ContactPersonName'],
-					$this::$Branch['ContactPersonNumber'],
-					$this::$Branch['ContactPersonEmail'],
-					$this::$Branch['AdminContactPersonName'],
-					$this::$Branch['AdminContactPersonNumber'],
-					$this::$Branch['AdminContactPersonEmail'],
-					$this::$Branch['Longitude'],
-					$this::$Branch['Latitude'],
-					$this::$Branch['BusinessEntityId']
+					$this::$Branch['BranchCode']['Value'],
+					$this::$Branch['Name']['Value'],
+					$this::$Branch['Active']['Value'],
+					$this::$Branch['CustomMessage']['Value'],
+					$this::$Branch['PhoneNumber']['Value'],
+					$this::$Branch['FaxNumber']['Value'],
+					$this::$Branch['PhysicalAddressLine1']['Value'],
+					$this::$Branch['PhysicalAddressLine2']['Value'],
+					$this::$Branch['PhysicalAddressLine3']['Value'],
+					$this::$Branch['PhysicalAddressLine4']['Value'],
+					$this::$Branch['PhysicalAddressLine5']['Value'],
+					$this::$Branch['PostalAddressLine1']['Value'],
+					$this::$Branch['PostalAddressLine2']['Value'],
+					$this::$Branch['PostalAddressLine3']['Value'],
+					$this::$Branch['PostalAddressLine4']['Value'],
+					$this::$Branch['PostalAddressLine5']['Value'],
+					$this::$Branch['BankName']['Value'],
+					$this::$Branch['BankBranchName']['Value'],
+					$this::$Branch['BankBranchCode']['Value'],
+					$this::$Branch['BankAccountNumber']['Value'],
+					$this::$Branch['ContactPersonName']['Value'],
+					$this::$Branch['ContactPersonNumber']['Value'],
+					$this::$Branch['ContactPersonEmail']['Value'],
+					$this::$Branch['AdminContactPersonName']['Value'],
+					$this::$Branch['AdminContactPersonNumber']['Value'],
+					$this::$Branch['AdminContactPersonEmail']['Value'],
+					$this::$Branch['Longitude']['Value'],
+					$this::$Branch['Latitude']['Value'],
+					$this::$Branch['BusinessEntityId']['Value']
 				);
 
 				$stmt = sqlsrv_prepare($this->dbBaseClass->conn, $sqlCommand); // Prepares a Transact-SQL query without executing it. Implicitly binds parameters.
@@ -310,31 +368,33 @@
 			/**
 			 * @return array: An array of invalid fields will be returned - empty array if none
 			 */
-			private function checkMandatoryFields(){
+			private function checkMandatoryFields()
+			{
 				$fields = array();
 				$i = 0;
-				if (BranchBase::$Branch['BranchCode'] == null) {
+				if (BranchBase::$Branch['BranchCode']['Value'] == null) {
 					$fields[$i++] = 'A value for Branch Code must be supplied';
 				}
-				if (BranchBase::$Branch['Active'] == null) {
+				if (BranchBase::$Branch['Active']['Value'] == null) {
 					$fields[$i] = 'A value for Active must be supplied';
 				}
 				return $fields;
 			}
 
-			private function checkFieldFormats() {
+			private function checkFieldFormats()
+			{
 				$fields = array();
 				$i = 0;
-				if (!isValidPhoneNumber(BranchBase::$Branch['PhoneNumber'])) {
+				if (!isValidPhoneNumber(BranchBase::$Branch['PhoneNumber']['Value'])) {
 					$fields[$i++] = 'PhoneNumber contains invalid characters';
 				}
-				if (!isValidPhoneNumber(BranchBase::$Branch['FaxNumber'])) {
+				if (!isValidPhoneNumber(BranchBase::$Branch['FaxNumber']['Value'])) {
 					$fields[$i++] = 'FaxNumber contains invalid characters';
 				}
-				if (!isValidCoordinate(BranchBase::$Branch['Longitude'])) {
+				if (!isValidCoordinate(BranchBase::$Branch['Longitude']['Value'])) {
 					$fields[$i++] = 'Longitude contains invalid characters';
 				}
-				if (!isValidCoordinate(BranchBase::$Branch['Latitude'])) {
+				if (!isValidCoordinate(BranchBase::$Branch['Latitude']['Value'])) {
 					$fields[$i] = 'Latitude contains invalid characters';
 				}
 				return $fields;

@@ -1,4 +1,5 @@
 <?php
+	$disabled = "";
 	/**
 	 * Returns the passed Request variable value, or the passed default if the Request is not set.
 	 *
@@ -22,13 +23,13 @@
 	 * @param  string $settingName
 	 * @return string
 	 */
-//	function getSessionApplicationVariable($variableName, $defaultValue = null)
-//	{
-//		if (isset($_SESSION[ApplicationSettings::$applicationPrefix . "_" . $variableName])) {
-//			return $_SESSION[ApplicationSettings::$applicationPrefix . "_" . $variableName];
-//		}
-//		return $defaultValue;
-//	}
+	//	function getSessionApplicationVariable($variableName, $defaultValue = null)
+	//	{
+	//		if (isset($_SESSION[ApplicationSettings::$applicationPrefix . "_" . $variableName])) {
+	//			return $_SESSION[ApplicationSettings::$applicationPrefix . "_" . $variableName];
+	//		}
+	//		return $defaultValue;
+	//	}
 
 	/**
 	 * Sets a Application $_SESSION variable.
@@ -77,7 +78,7 @@
 	 * @param text $fieldIdName
 	 * @param text $fieldType
 	 * @param text $fieldValue
-	 * @param array $fieldParams: [0]=width/maxlength value, [1]=onKeyUp, [2]=onBlur, [3]=
+	 * @param array $fieldParams : [0]=width/maxlength value, [1]=onKeyUp, [2]=onBlur, [3]=
 	 * @param text $helpText
 	 * @param boolean $isMandatory
 	 * @param text $class
@@ -85,6 +86,7 @@
 	 */
 	function drawInputField($fieldIdName, $fieldType, $fieldValue, $fieldParams, $helpText = null, $isMandatory = null, $class = null)
 	{
+		global $disabled;
 		$fieldIdName = (string)$fieldIdName;
 		$fieldType = (string)$fieldType;
 		$fieldValue = (string)$fieldValue;
@@ -102,6 +104,12 @@
 			$mandatoryFlag = "";
 		}
 
+		if (isset($fieldParams[FieldParameters::disabled_par])) {
+			if ($fieldParams[FieldParameters::disabled_par] == "Disabled") {
+				$disabled = " disabled";
+			}
+		}
+
 		//Error Div: shows validation errors
 		$errorDiv = "<span id=" . $fieldIdName . "Error name=" . $fieldIdName . "Error class=ErrorDiv></span>";
 
@@ -116,7 +124,7 @@
 				//2 - OnBlur
 				//3 - OnDoubleClick
 				if ($fieldParams[FieldParameters::width_par]) {
-					$width = ($fieldParams[FieldParameters::width_par] * 9) . "px";
+					$width = ($fieldParams[FieldParameters::width_par]) . "px";
 					$maxLength = $fieldParams[FieldParameters::maxlength_par];
 				} else {
 					$width = "250px";
@@ -134,15 +142,15 @@
 				if (isset($fieldParams[FieldParameters::onDblClick_par])) {
 					$onDoubleClick = 'onDblClick="' . $fieldParams[FieldParameters::onDblClick_par] . '"';
 				}
-				$disabled = "";
-				if (isset($fieldParams[FieldParameters::disabled_par])) {
-					if ($fieldParams[FieldParameters::disabled_par] == "Disabled") {
-						$disabled = " disabled";
-					}
-				}
+//				$disabled = "";
+//				if (isset($fieldParams[FieldParameters::disabled_par])) {
+//					if ($fieldParams[FieldParameters::disabled_par] == "Disabled") {
+//						$disabled = " disabled";
+//					}
+//				}
 				$retVal = "<input type=text id=$fieldIdName name=$fieldIdName style=\"width:$width\"
                           maxlength=\"$maxLength\" value=\"" . $fieldValue . "\" title=\"$helpText\"
-                          " . $onKeyUp . $onBlur . $onDoubleClick . $disabled."
+                          " . $onKeyUp . $onBlur . $onDoubleClick . $disabled . "
 
                           class=\"helpText $class\" />";
 				$retVal .= $mandatoryFlag;
@@ -150,12 +158,22 @@
 
 			case "double":
 			case "decimal":
+//				$disabled = "";
+//				if (isset($fieldParams[FieldParameters::disabled_par])) {
+//					if ($fieldParams[FieldParameters::disabled_par] == "Disabled") {
+//						$disabled = " disabled";
+//					}
+//				}
 				$precision = isset($fieldParams[FieldParameters::precision_par]) ? $fieldParams[FieldParameters::precision_par] : 2;
-				$fieldValue = number_format($fieldValue, $precision);
+				if ($fieldValue == null || $fieldValue == '') {
+					$fieldValue = '';
+				} else {
+					$fieldValue = number_format($fieldValue, $precision);
+				}
 				$retVal = "<input type=text id=$fieldIdName name=$fieldIdName align=right
                           onKeyUp=\"$().fieldValidatorDouble(event, '$fieldIdName', '$precision');\" 
                           value=\"" . $fieldValue . "\"
-                          $setHelpText 
+                          $setHelpText . $disabled .
                           onChange=\"editFormStateChange(this)\" 
                           class=\"helpText $class\" />";
 				$retVal .= $mandatoryFlag;
@@ -249,9 +267,10 @@
 				}
 				$retVal .= "<input type='checkbox' id=$fieldIdName name=$fieldIdName
                            value=\"" . $fieldIdName . "\"
-                           $checked 
-                           $setHelpText 
-                           $onClick 
+                           $checked
+                           $setHelpText
+                           $onClick
+                           $disabled
                            onChange=\"editFormStateChange(this)\"
                            class=\"helpText $class\" />";
 				$retVal .= $mandatoryFlag;
@@ -357,71 +376,71 @@
 				$retVal .= $mandatoryFlag;
 				break;
 
-/*			case "select":
-				//0 - ObjectName
-				//1 - First option blank
-				//2 - Form Submit on change
-				//3 - Extra Onchange
-				//4 - Filter Column
-				//5 - Filter Value
-				//6 - Width
-				//7 - Class
-				//8 - Make select2
-				if (isset($fieldParams[FieldParameters::onchange_par])) {
-					$extraOnChange = $fieldParams[FieldParameters::onchange_par];
-				} else {
-					$extraOnChange = "";
-				}
-				$autoRefresh = $fieldParams[FieldParameters::autoRefresh_par] == "True" ? "onChange=\"editFormStateChange(this); " . $extraOnChange . "; submit();\"" : "onChange=\"editFormStateChange(this); " . $extraOnChange . ";\" ";
-				if (isset($fieldParams[FieldParameters::width_par])) {
-					$width = "style=\"width: " . $fieldParams[FieldParameters::width_par] . "px;\"";
-				} else {
-					$width = "";
-				}
-				$param7 = isset($fieldParams[FieldParameters::isSelect2DropDown_par]) ? $fieldParams[FieldParameters::isSelect2DropDown_par] : '';
-				if ($param7 === "True") {
-					$select2 = "select2";
-				} else {
-					$select2 = "";
-				}
-				if (isset($fieldParams[FieldParameters::isSelect2DropDown_par])) {
-					$class = "class=\"" . $select2 . " " . $fieldParams[7] . " $class\"";
-				} else {
-					$class = "class=\"" . $select2 . " $class\"";
-				}
-				//Don't put an empty <option> unless the calling function wants it
-				$retVal .= "<div class=\"helpText\" $setHelpText><select id=$fieldIdName name=$fieldIdName $autoRefresh $width $class>";
-				if ($fieldParams[FieldParameters::value_par] <> "False") {
-					if ($fieldValue == $fieldParams[FieldParameters::value_par]) {
-						$selected = "selected";
-					} else {
-						$selected = "";
-					}
-					$retVal .= "<option value=\"" . $fieldParams[FieldParameters::value_par] . "\" $selected>" . $fieldParams[FieldParameters::value_par] . "</option>";
-				}
+			/*			case "select":
+							//0 - ObjectName
+							//1 - First option blank
+							//2 - Form Submit on change
+							//3 - Extra Onchange
+							//4 - Filter Column
+							//5 - Filter Value
+							//6 - Width
+							//7 - Class
+							//8 - Make select2
+							if (isset($fieldParams[FieldParameters::onchange_par])) {
+								$extraOnChange = $fieldParams[FieldParameters::onchange_par];
+							} else {
+								$extraOnChange = "";
+							}
+							$autoRefresh = $fieldParams[FieldParameters::autoRefresh_par] == "True" ? "onChange=\"editFormStateChange(this); " . $extraOnChange . "; submit();\"" : "onChange=\"editFormStateChange(this); " . $extraOnChange . ";\" ";
+							if (isset($fieldParams[FieldParameters::width_par])) {
+								$width = "style=\"width: " . $fieldParams[FieldParameters::width_par] . "px;\"";
+							} else {
+								$width = "";
+							}
+							$param7 = isset($fieldParams[FieldParameters::isSelect2DropDown_par]) ? $fieldParams[FieldParameters::isSelect2DropDown_par] : '';
+							if ($param7 === "True") {
+								$select2 = "select2";
+							} else {
+								$select2 = "";
+							}
+							if (isset($fieldParams[FieldParameters::isSelect2DropDown_par])) {
+								$class = "class=\"" . $select2 . " " . $fieldParams[7] . " $class\"";
+							} else {
+								$class = "class=\"" . $select2 . " $class\"";
+							}
+							//Don't put an empty <option> unless the calling function wants it
+							$retVal .= "<div class=\"helpText\" $setHelpText><select id=$fieldIdName name=$fieldIdName $autoRefresh $width $class>";
+							if ($fieldParams[FieldParameters::value_par] <> "False") {
+								if ($fieldValue == $fieldParams[FieldParameters::value_par]) {
+									$selected = "selected";
+								} else {
+									$selected = "";
+								}
+								$retVal .= "<option value=\"" . $fieldParams[FieldParameters::value_par] . "\" $selected>" . $fieldParams[FieldParameters::value_par] . "</option>";
+							}
 
-				$selectObject = new $fieldParams[0];
-				if (isset($fieldParams[4])) {
-					$select = $selectObject->getSelectSelect($fieldParams[4], $fieldParams[5]);
-				} else {
-					$select = $selectObject->getSelectSelect();
-				}
-				$result = dbQuery($select);
-				if ($result) {
-					while ($arow = dbFetchArray($result)) {
-						if ($fieldValue == $arow["Id"]) {
-							$selected = "selected";
-						} else {
-							$selected = "";
-						}
-						$retVal .= "<option value=" . $arow["Id"] . " $selected>" . $arow["Name"] . "</option>";
-					}
-				} else {
-					$retVal .= "<option>ERROR" . dbGetErrorMsg() . "</option>";
-				}
-				$retVal .= "</select></div>";
-				$retVal .= $mandatoryFlag;
-				break;*/
+							$selectObject = new $fieldParams[0];
+							if (isset($fieldParams[4])) {
+								$select = $selectObject->getSelectSelect($fieldParams[4], $fieldParams[5]);
+							} else {
+								$select = $selectObject->getSelectSelect();
+							}
+							$result = dbQuery($select);
+							if ($result) {
+								while ($arow = dbFetchArray($result)) {
+									if ($fieldValue == $arow["Id"]) {
+										$selected = "selected";
+									} else {
+										$selected = "";
+									}
+									$retVal .= "<option value=" . $arow["Id"] . " $selected>" . $arow["Name"] . "</option>";
+								}
+							} else {
+								$retVal .= "<option>ERROR" . dbGetErrorMsg() . "</option>";
+							}
+							$retVal .= "</select></div>";
+							$retVal .= $mandatoryFlag;
+							break;*/
 
 			case "time":
 				//0 - OnChange()
@@ -794,18 +813,18 @@
 	 * @param int $objectId
 	 * @return text
 	 */
-//	function decodeObjectId($objectName, $objectId)
-//	{
-//		$retVal = "";
-//		$decodeObject = new $objectName($objectId);
-//		$sql = $decodeObject->getDecodeSelect();
-//		$result = dbQuery($sql);
-//		if ($result) {
-//			$arow = dbFetchArray($result);
-//			$retVal = $arow["Name"];
-//		}
-//		return $retVal;
-//	}//decodeObjectId()
+	//	function decodeObjectId($objectName, $objectId)
+	//	{
+	//		$retVal = "";
+	//		$decodeObject = new $objectName($objectId);
+	//		$sql = $decodeObject->getDecodeSelect();
+	//		$result = dbQuery($sql);
+	//		if ($result) {
+	//			$arow = dbFetchArray($result);
+	//			$retVal = $arow["Name"];
+	//		}
+	//		return $retVal;
+	//	}//decodeObjectId()
 
 	/**
 	 * Returns the passed array into a comme seperated list of column names to a sql select
@@ -828,61 +847,61 @@
 	 * @param text $callingPage
 	 * @return array
 	 */
-//	function createColumnArray($objectName, $callingPage)
-//	{
-//		$retVal = array();
-//		$sql = "select aof.FieldName, aof.DisplayText, aof.MinLength, aof.MaxLength, aof.DataType,
-//                   aof.DiplayType, aof.IsMandatory, aof.Params, aof.OnOverview, aof.OnEdit, aof.ToolTip
-//            from ApplicationObjectField aof
-//            where aof.ObjectName = '$objectName' ";
-//		switch ($callingPage) {
-//			case "edit":
-//			case "new":
-//				$sql .= "and aof.OnEdit = 1 ";
-//				break;
-//			case "overview":
-//				$sql .= "and aof.OnOverview = 1 ";
-//				break;
-//		}
-//		$sql .= "order by aof.ColumnId";
-//		$result = dbQuery($sql);
-//		if ($result) {
-//			while ($arow = dbFetchArray($result)) {
-//				$retVal[$arow["FieldName"]] = array($arow["DisplayText"], $arow["MinLength"], $arow["MaxLength"], $arow["DataType"], $arow["DiplayType"],
-//					$arow["IsMandatory"], $arow["Params"], $arow["OnOverview"], $arow["OnEdit"], $arow["ToolTip"]);
-//			}
-//		}
-//
-//		return $retVal;
-//	}//createColumnArray()
+	//	function createColumnArray($objectName, $callingPage)
+	//	{
+	//		$retVal = array();
+	//		$sql = "select aof.FieldName, aof.DisplayText, aof.MinLength, aof.MaxLength, aof.DataType,
+	//                   aof.DiplayType, aof.IsMandatory, aof.Params, aof.OnOverview, aof.OnEdit, aof.ToolTip
+	//            from ApplicationObjectField aof
+	//            where aof.ObjectName = '$objectName' ";
+	//		switch ($callingPage) {
+	//			case "edit":
+	//			case "new":
+	//				$sql .= "and aof.OnEdit = 1 ";
+	//				break;
+	//			case "overview":
+	//				$sql .= "and aof.OnOverview = 1 ";
+	//				break;
+	//		}
+	//		$sql .= "order by aof.ColumnId";
+	//		$result = dbQuery($sql);
+	//		if ($result) {
+	//			while ($arow = dbFetchArray($result)) {
+	//				$retVal[$arow["FieldName"]] = array($arow["DisplayText"], $arow["MinLength"], $arow["MaxLength"], $arow["DataType"], $arow["DiplayType"],
+	//					$arow["IsMandatory"], $arow["Params"], $arow["OnOverview"], $arow["OnEdit"], $arow["ToolTip"]);
+	//			}
+	//		}
+	//
+	//		return $retVal;
+	//	}//createColumnArray()
 
 	/**
 	 * Returns an array of the fileds needed on the edit page of the passed object
 	 * @param text $objectName
 	 * @return array
 	 */
-//	function getObjectEditFields($objectName)
-//	{
-//		$retArray = array();
-//		$sql = "select aof.FieldName, aof.DataType
-//            from ApplicationObjectField aof
-//            where aof.ObjectName = '$objectName'
-//            and aof.OnEdit = 1
-//            and aof.DiplayType <> 'key'
-//            order by aof.ColumnId
-//            ";
-//		$result = dbQuery($sql);
-//		if ($result) {
-//			while ($arow = dbFetchArray($result)) {
-//				$fieldName = $arow["FieldName"];
-//				$dataType = $arow["DataType"];
-//				$retArray[$fieldName] = $dataType;
-//			}
-//		} else {
-//
-//		}
-//		return $retArray;
-//	}//getObjectEditFields()
+	//	function getObjectEditFields($objectName)
+	//	{
+	//		$retArray = array();
+	//		$sql = "select aof.FieldName, aof.DataType
+	//            from ApplicationObjectField aof
+	//            where aof.ObjectName = '$objectName'
+	//            and aof.OnEdit = 1
+	//            and aof.DiplayType <> 'key'
+	//            order by aof.ColumnId
+	//            ";
+	//		$result = dbQuery($sql);
+	//		if ($result) {
+	//			while ($arow = dbFetchArray($result)) {
+	//				$fieldName = $arow["FieldName"];
+	//				$dataType = $arow["DataType"];
+	//				$retArray[$fieldName] = $dataType;
+	//			}
+	//		} else {
+	//
+	//		}
+	//		return $retArray;
+	//	}//getObjectEditFields()
 
 	/**
 	 * Format the passed $paramValue for use as a sql stored procedure based on $paramType
@@ -941,17 +960,17 @@
 	 * @param int $securityObjectId
 	 * @return text
 	 */
-//	function getSecurityObjectNameById($securityObjectId)
-//	{
-//		$securityObjectName = "";
-//		$sql = "SELECT SecurityObjectName FROM SecurityObject WHERE SecurityObjectId = '" . $securityObjectId . "'";
-//		$result = dbQuery($sql);
-//		if ($result) {
-//			$arow = dbFetchArray($result);
-//			$securityObjectName = $arow["SecurityObjectName"];
-//		}
-//		return $securityObjectName;
-//	}//getSecurityObjectNameById()
+	//	function getSecurityObjectNameById($securityObjectId)
+	//	{
+	//		$securityObjectName = "";
+	//		$sql = "SELECT SecurityObjectName FROM SecurityObject WHERE SecurityObjectId = '" . $securityObjectId . "'";
+	//		$result = dbQuery($sql);
+	//		if ($result) {
+	//			$arow = dbFetchArray($result);
+	//			$securityObjectName = $arow["SecurityObjectName"];
+	//		}
+	//		return $securityObjectName;
+	//	}//getSecurityObjectNameById()
 
 	/**
 	 * Returns an array for drawInputField-dropdown to show a list of years from $yearsBefore to $yearsAfter
@@ -1016,20 +1035,20 @@
 	 * @param text $spacer
 	 * @return html
 	 */
-//	function printArrayRecurse($toPrint, $spacer)
-//	{
-//		$retVal = "";
-//		if (is_array($toPrint)) {
-//			$retVal .= "Array(" . count($toPrint) . ")";
-//			foreach ($toPrint as $col => $val) {
-//				$spaces = $spacer + 4;
-//				$retVal .= "<br />" . printSpaces($spaces, "&nbsp;") . " " . $col . " => " . printArrayRecurse($val, $spaces) . "";
-//			}
-//		} else {
-//			$retVal = $toPrint;
-//		}
-//		return $retVal;
-//	}//printArrayRecurse()
+	//	function printArrayRecurse($toPrint, $spacer)
+	//	{
+	//		$retVal = "";
+	//		if (is_array($toPrint)) {
+	//			$retVal .= "Array(" . count($toPrint) . ")";
+	//			foreach ($toPrint as $col => $val) {
+	//				$spaces = $spacer + 4;
+	//				$retVal .= "<br />" . printSpaces($spaces, "&nbsp;") . " " . $col . " => " . printArrayRecurse($val, $spaces) . "";
+	//			}
+	//		} else {
+	//			$retVal = $toPrint;
+	//		}
+	//		return $retVal;
+	//	}//printArrayRecurse()
 
 	/**
 	 * Print out an array in a user friendly format
@@ -1037,22 +1056,22 @@
 	 * @param boolean $echo
 	 * @return html
 	 */
-//	function printArray($toPrint, $echo = false)
-//	{
-//		$retVal = "";
-//		if (is_array($toPrint)) {
-//			foreach ($toPrint as $col => $val) {
-//				$retVal .= "<br />" . $col . " => " . printArrayRecurse($val, count($col));
-//			}
-//		} else {
-//			$retVal = $toPrint;
-//		}
-//		if ($echo) {
-//			echo "<br />" . $retVal;
-//		} else {
-//			return $retVal;
-//		}
-//	}//printArray()
+	//	function printArray($toPrint, $echo = false)
+	//	{
+	//		$retVal = "";
+	//		if (is_array($toPrint)) {
+	//			foreach ($toPrint as $col => $val) {
+	//				$retVal .= "<br />" . $col . " => " . printArrayRecurse($val, count($col));
+	//			}
+	//		} else {
+	//			$retVal = $toPrint;
+	//		}
+	//		if ($echo) {
+	//			echo "<br />" . $retVal;
+	//		} else {
+	//			return $retVal;
+	//		}
+	//	}//printArray()
 
 	/**
 	 * This routine returns the php data type given the SQL data type.
@@ -1102,21 +1121,39 @@
 
 	function isValidCoordinate($coordinate)
 	{
-		if (preg_match('^[-]?[0-9]*[.]{0,1}[0-9]{4}', $coordinate)) {
+		if (preg_match('/^[-]?[0-9]*[.]{0,1}[0-9]{4}/', $coordinate)) {
 			return true;
 		}
 		return false;
 	}
 
-	function initializeFieldParametersArray(&$array) {
+	/**
+	 * @param $array : NB!!! This array is passed by reference
+	 * @param $fieldName : The lookup field name
+	 * @param $recordBase : The Record's Base Array that contains the meta data
+	 * @internal param $FieldName : The lookup field name
+	 */
+	function initializeFieldParametersArray(&$array, $fieldName, $recordBase)
+	{
+		$fieldMeta = $recordBase[$fieldName]['Meta'];
 		for ($i = 0; $i < FieldParameters::arraySize; $i++) {
-			$array[$i] = null;
+			$t = array_key_exists($i, $fieldMeta);
+//			$v1 = $BranchRecord['BranchCode'][0][FieldParameters::class_par];
+//			$t = array_key_exists ( FieldParameters::groupIdName_par , $BranchRecord['BranchCode'][0]);
+//			$t = array_key_exists ( FieldParameters::autoRefresh_par , $BranchRecord['BranchCode'][0]);
+			if ($t) {
+				$array[$i] = $fieldMeta[$i];
+			} else {
+				$array[$i] = null;
+			}
+//			$array[$i] = null;
 		}
 	}
 
 	abstract class FieldParameters
 	{
-		const arraySize = 19;
+		const arraySize = 21; // NB NB - Keep this up to date if you add to this class
+
 		const width_par = 0;
 		const maxlength_par = 1;
 		const onKeyUp_par = 2;
@@ -1137,5 +1174,7 @@
 		const onchange_par = 17;
 		const value_par = 18;
 		const disabled_par = 19;
+		const required_par = 20;
 	}
+
 ?>
