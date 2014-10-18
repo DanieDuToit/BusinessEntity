@@ -1,27 +1,30 @@
 <?php
-	/**
-	 * Created by PhpStorm.
-	 * User: dutoitd1
-	 * Date: 2014/10/14
-	 * Time: 09:56 AM
-	 */
-	include_once 'functions.php';
-	include_once 'IncludesAndClasses\DBBase.class.php';
-	include_once 'IncludesAndClasses\BranchBase.class.php';
-	if (isset($_GET['id']) === false || isset($_GET['action']) === false) {
-		header("Location: BranchDisplayGrid.php");
-	}
-	$id = (int)$_GET['id'];
-	$action = $_GET['action'];
+/**
+ * Created by PhpStorm.
+ * User: dutoitd1
+ * Date: 2014/10/14
+ * Time: 09:56 AM
+ */
+include_once 'functions.php';
+include_once 'IncludesAndClasses\DBBase.class.php';
+include_once 'IncludesAndClasses\BranchBase.class.php';
+if (isset($_GET['id']) === false || isset($_GET['action']) === false) {
+	header("Location: BranchDisplayGrid.php");
+}
+$id = (int)$_GET['id'];
+sanitizeString($id);
+$action = $_GET['action'];
+sanitizeString($action);
 
-	// Set up DB connection
-	$dbBaseClass = new DBBase();
-	if ($dbBaseClass->conn === false)
-	{
-		die("ERROR: Could not connect. " .  printf('%s',$dbBaseClass->dbGetErrorMsg()));
-	}
+// Set up DB connection
+$dbBaseClass = new DBBase();
+if ($dbBaseClass->conn === false) {
+	die("ERROR: Could not connect. " . printf('%s', $dbBaseClass->dbGetErrorMsg()));
+}
 
-	// Read the records
+// An existing record is expected when the action is not "Create"
+if ($action != 'c') {
+	// Read the record
 	$records = $dbBaseClass->getAllByFieldName('Branch', 'id', $id);
 
 	if ($records === false) {
@@ -30,33 +33,22 @@
 
 	// Get the specific record
 	$record = sqlsrv_fetch_array($records, SQLSRV_FETCH_ASSOC);
+}
 
-	$branchBase = BranchBase::$Branch;
-	function echoValue($fieldIdName, $fieldType)
-	{
-		global $action;
-		global $record;
-		global $branchBase;
-		initializeFieldParametersArray($fieldParams, $fieldIdName, $branchBase);
-		if ($action == 'r' || $action == 'd') {
-			$fieldParams[FieldParameters::disabled_par] = 'Disabled';
-		}
-//		$inputField = "";
-		$inputField = drawInputField($fieldIdName, $branchBase[$fieldIdName]['Type'], $record[$fieldIdName], $fieldParams);
-//		switch($fieldType){
-//			case "text":
-//				$inputField .= drawInputField($fieldIdName, $branchBase[$fieldIdName]['Type'], $record[$fieldIdName], $fieldParams);
-//				break;
-//			case "checkbox":
-//				$fieldParams[FieldParameters::onClick_par] = "onClick()";
-//				$inputField .= drawInputField($fieldIdName, $fieldType, $record[$fieldIdName], $fieldParams);
-//				break;
-//		}
-		$temp = "<td class=\"fieldName\"><b>$fieldIdName</ b></td>";
-		$temp .= "<td>$inputField</td>";
-		echo "<td class=\"fieldName\"><b>$fieldIdName</ b></td>";
-		echo("<td>$inputField</td>");
+$branchBase = BranchBase::$Branch;
+function echoField($fieldIdName)
+{
+	global $action;
+	global $record;
+	global $branchBase;
+	initializeFieldParametersArray($fieldParams, $fieldIdName, $branchBase);
+	if ($action == 'r' || $action == 'd') {
+		$fieldParams[FieldParameters::disabled_par] = 'Disabled';
 	}
+	$inputField = (string)drawInputField($fieldIdName, $branchBase[$fieldIdName]['Type'], $record[$fieldIdName], $fieldParams);
+	echo "<td class=\"fieldName\"><b>$fieldIdName</ b></td>";
+	echo("<td>$inputField</td>");
+}
 
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
@@ -68,117 +60,112 @@
 
 <h1>Create / Read / Update / Delete a Branch</h1>
 
-<form action="Branch.php" >
+<form action="BranchAction.php">
 	<table width="200" border="0" cellspacing="2px" cellpadding="2px">
 		<tbody>
 		<tr>
-			<?php echoValue("BranchCode", "text", true) ?>
+			<?php echoField("BranchCode") ?>
 		</tr>
 		<tr>
-			<?php echoValue("Name", "text", false) ?>
+			<?php echoField("Name") ?>
 		</tr>
 		<tr>
-			<?php echoValue("Active", "checkbox", false) ?>
+			<?php echoField("Active") ?>
+		Active
+		<tr>
+			<?php echoField("CustomMessage") ?>
 		</tr>
 		<tr>
-			<?php echoValue("CustomMessage", "text", false) ?>
+			<?php echoField("PhoneNumber") ?>
 		</tr>
 		<tr>
-			<?php echoValue("PhoneNumber", "text", false) ?>
+			<?php echoField("FaxNumber") ?>
 		</tr>
 		<tr>
-			<?php echoValue("FaxNumber", "text", false) ?>
+			<?php echoField("PhysicalAddressLine1") ?>
 		</tr>
 		<tr>
-			<?php echoValue("PhysicalAddressLine1", "text", false) ?>
+			<?php echoField("PhysicalAddressLine2") ?>
 		</tr>
 		<tr>
-<!--			<td class="fieldName"><b>PhysicalAddressLine2</b></td>-->
-			<?php echoValue("PhysicalAddressLine2", "text", false) ?>
+			<?php echoField("PhysicalAddressLine3") ?>
 		</tr>
 		<tr>
-<!--			<td class="fieldName"><b>PhysicalAddressLine3</b></td>-->
-			<?php echoValue("PhysicalAddressLine3", "text", false) ?>
+			<?php echoField("PhysicalAddressLine4") ?>
 		</tr>
 		<tr>
-<!--			<td class="fieldName"><b>PhysicalAddressLine4</b></td>-->
-			<?php echoValue("PhysicalAddressLine4", "text", false) ?>
+			<?php echoField("PhysicalAddressLine5") ?>
 		</tr>
 		<tr>
-<!--			<td class="fieldName"><b>PhysicalAddressLine5</b></td>-->
-			<?php echoValue("PhysicalAddressLine5", "text", false) ?>
+			<?php echoField("PostalAddressLine1") ?>
 		</tr>
 		<tr>
-<!--			<td class="fieldName"><b>PostalAddressLine1</b></td>-->
-			<?php echoValue("PostalAddressLine1", "text", false) ?>
+			<?php echoField("PostalAddressLine2") ?>
 		</tr>
 		<tr>
-<!--			<td class="fieldName"><b>PostalAddressLine2</b></td>-->
-			<?php echoValue("PostalAddressLine2", "text", false) ?>
+			<?php echoField("PostalAddressLine3") ?>
 		</tr>
 		<tr>
-<!--			<td class="fieldName"><b>PostalAddressLine3</b></td>-->
-			<?php echoValue("PostalAddressLine3", "text", false) ?>
+			<?php echoField("PostalAddressLine4") ?>
 		</tr>
 		<tr>
-<!--			<td class="fieldName"><b>PostalAddressLine4</b></td>-->
-			<?php echoValue("PostalAddressLine4", "text", false) ?>
+			<?php echoField("PostalAddressLine5") ?>
 		</tr>
 		<tr>
-<!--			<td class="fieldName"><b>PostalAddressLine5</b></td>-->
-			<?php echoValue("PostalAddressLine5", "text", false) ?>
+			<?php echoField("BankName") ?>
 		</tr>
 		<tr>
-<!--			<td class="fieldName"><b>BankName</b></td>-->
-			<?php echoValue("BankName", "text", false) ?>
+			<?php echoField("BankBranchName") ?>
 		</tr>
 		<tr>
-<!--			<td class="fieldName"><b>BankBranchName</b></td>-->
-			<?php echoValue("BankBranchName", "text", false) ?>
+			<?php echoField("BankBranchCode") ?>
 		</tr>
 		<tr>
-<!--			<td class="fieldName"><b>BankBranchCode</b></td>-->
-			<?php echoValue("BankBranchCode", "text", false) ?>
+			<?php echoField("BankAccountNumber") ?>
 		</tr>
 		<tr>
-<!--			<td class="fieldName"><b>BankAccountNumber</b></td>-->
-			<?php echoValue("BankAccountNumber", "text", false) ?>
+			<?php echoField("ContactPersonName") ?>
 		</tr>
 		<tr>
-<!--			<td class="fieldName"><b>ContactPersonName</b></td>-->
-			<?php echoValue("ContactPersonName", "text", false) ?>
+			<?php echoField("ContactPersonNumber") ?>
 		</tr>
 		<tr>
-<!--			<td class="fieldName"><b>ContactPersonNumber</b></td>-->
-			<?php echoValue("ContactPersonNumber", "text", false) ?>
+			<?php echoField("ContactPersonEmail") ?>
 		</tr>
 		<tr>
-<!--			<td class="fieldName"><b>ContactPersonEmail</b></td>-->
-			<?php echoValue("ContactPersonEmail", "text", false) ?>
+			<?php echoField("AdminContactPersonName") ?>
 		</tr>
 		<tr>
-<!--			<td class="fieldName"><b>AdminContactPersonName</b></td>-->
-			<?php echoValue("AdminContactPersonName", "text", false) ?>
+			<?php echoField("AdminContactPersonNumber") ?>
 		</tr>
 		<tr>
-<!--			<td class="fieldName"><b>AdminContactPersonNumber</b></td>-->
-			<?php echoValue("AdminContactPersonNumber", "text", false) ?>
+			<?php echoField("AdminContactPersonEmail") ?>
 		</tr>
 		<tr>
-<!--			<td class="fieldName"><b>AdminContactPersonEmail</b></td>-->
-			<?php echoValue("AdminContactPersonEmail", "text", false) ?>
+			<?php echoField("Longitude") ?>
 		</tr>
 		<tr>
-<!--			<td class="fieldName"><b>Longitude</b></td>-->
-			<?php echoValue("Longitude", "text", false) ?>
+			<?php echoField("Latitude") ?>
 		</tr>
 		<tr>
-<!--			<td class="fieldName"><b>Latitude</b></td>-->
-			<?php echoValue("Latitude", "text", false) ?>
+			<?php echoField("BusinessEntityId") ?>
 		</tr>
 		</tbody>
 	</table>
-	<div><?php echo drawSubmitButton("Read", "Read")?></div>
+	<?php if ($action == 'c') ?>
+	<div>
+		<?php
+		if ($action == 'c') {
+			echo (string)drawSubmitButton("Create", "Create");
+		}
+		if ($action == 'u') {
+			echo (string)drawSubmitButton("Update", "Update");
+		}
+		if ($action == 'd') {
+			echo (string)drawSubmitButton("Delete", "Delete");
+		}
+		?>
+	</div>
 </form>
 </body>
 </html>

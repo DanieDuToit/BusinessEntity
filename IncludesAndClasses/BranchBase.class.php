@@ -16,10 +16,10 @@
 			private $dbBaseClass;
 			static $Branch = array(
 				'BranchCode'               =>
-					array('FieldName' => 'BranchCode', 'Helptext' => 'No Help Text', 'Type' => 'text', 'Value' => '', 'Meta' =>
+					array('FieldName' => 'BranchCode', 'Helptext' => 'The branch code', 'Type' => 'text', 'Value' => '', 'Meta' =>
 						array(FieldParameters::required_par => true, FieldParameters::width_par => 250, FieldParameters::maxlength_par => 10)),
 				'Name'                     =>
-					array('FieldName' => 'Name', 'Helptext' => 'No Help Text', 'Type' => 'text', 'Value' => '', 'Meta' =>
+					array('FieldName' => 'Name', 'Helptext' => 'Branch Name', 'Type' => 'text', 'Value' => '', 'Meta' =>
 						array(FieldParameters::width_par => 250, FieldParameters::maxlength_par => 50)),
 				'Active'                   =>
 					array('FieldName' => 'Active', 'Helptext' => 'No Help Text', 'Type' => 'checkbox', 'Value' => 0, 'Meta' =>
@@ -98,10 +98,10 @@
 						array(FieldParameters::precision_par => 4)),
 				'Latitude'                 =>
 					array('FieldName' => 'Latitude', 'Helptext' => 'No Help Text', 'Type' => 'decimal', 'Value' => 0.0000, 'Meta' =>
-						array(FieldParameters::precision_par)),
+						array(FieldParameters::precision_par => 4)),
 				'BusinessEntityId'         =>
 					array('FieldName' => 'BusinessEntityId', 'Helptext' => 'No Help Text', 'Type' => 'int', 'Value' => '', 'Meta' =>
-						array(FieldParameters::class_par => 'Class', FieldParameters::groupIdName_par => 'Group_ID'))
+						array(FieldParameters::width_par => 10))
 			);
 
 			// Default Constructor

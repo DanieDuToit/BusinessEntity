@@ -61,7 +61,7 @@
 		echo "<td>{$record['ContactPersonNumber']}</td>";
 		echo "<td>{$record['FaxNumber']}</td>";
 		echo "<td>{$record['ContactPersonEmail']}</td>";
-		echo "<td><a href=Branch.php?action=c&id={$record['id']}>Create</a></td>";
+		echo "<td><a href=Branch.php?action=c&id=-1>Create</a></td>";
 		echo "<td><a href=Branch.php?action=r&id={$record['id']}>Read</a></td>";
 		echo "<td><a href=Branch.php?action=u&id={$record['id']}>Update</a></td>";
 		echo "<td><a href=Branch.php?action=d&id={$record['id']}>Delete</a></td>";
