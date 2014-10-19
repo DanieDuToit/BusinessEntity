@@ -28,11 +28,11 @@
  */
 	include_once "IncludesAndClasses/DBBase.class.php";
 	include_once "IncludesAndClasses/BranchBase.class.php";
-	include_once "functions.php";
+	include_once "IncludesAndClasses/functions.inc.php";
 	$dbBaseClass = new DBBase();
 	if ($dbBaseClass->conn === false)
 	{
-		die("ERROR: Could not connect. " . printf('%s',$dbBaseClass->dbGetErrorMsg()));
+		die("ERROR: Could not connect. " . printf('%s',dbGetErrorMsg()));
 	}
 	if (isset($_POST["Search"])) {
 		$bc = $_POST['SearchBC'];
@@ -43,7 +43,7 @@
 		$records = $dbBaseClass->getFieldsForAll('Branch', array('id', 'BranchCode', 'Name', 'PhoneNumber', 'ContactPersonName', 'ContactPersonNumber', 'FaxNumber', 'ContactPersonEmail'));
 	}
 	if ($records === false) {
-		die($dbBaseClass->dbGetErrorMsg());
+		die(dbGetErrorMsg());
 	}
 	$numFields = sqlsrv_num_fields( $records );
 	echo "<table>";

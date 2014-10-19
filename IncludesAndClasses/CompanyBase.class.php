@@ -74,7 +74,7 @@ class CompanyBase extends DBBase
        
         if(!$stmt){
 
-                $retval= $this->dbBaseClass->dbGetErrorMsg();
+                $retval= dbGetErrorMsg();
 		return printf('An error was received when the function sqlsrv_prepare was called.
 						The error message was: %s', $retval);
             

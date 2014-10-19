@@ -213,20 +213,6 @@
 				return $result;
 
 			}
-
-
-			/**
-			 * Returns the last error returned by sql_srv.
-			 *
-			 * @return text: Returns error and/or warning information about the last operation.
-			 */
-			function dbGetErrorMsg()
-			{
-				$retVal = sqlsrv_errors();
-				$retVal = $retVal[0]["message"];
-				$retVal = preg_replace('/\[Microsoft]\[SQL Server Native Client [0-9]+.[0-9]+]/', '', $retVal);
-				return $retVal;
-			}//dbGetErrorMsg()
-
 		}
 	}
+?>

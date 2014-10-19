@@ -5,9 +5,9 @@
  * Date: 2014/10/14
  * Time: 09:56 AM
  */
-include_once 'functions.php';
-include_once 'IncludesAndClasses\DBBase.class.php';
-include_once 'IncludesAndClasses\BranchBase.class.php';
+include_once 'IncludesAndClasses/functions.inc.php';
+include_once 'IncludesAndClasses/DBBase.class.php';
+include_once 'IncludesAndClasses/BranchBase.class.php';
 if (isset($_GET['id']) === false || isset($_GET['action']) === false) {
 	header("Location: BranchDisplayGrid.php");
 }
@@ -19,7 +19,7 @@ sanitizeString($action);
 // Set up DB connection
 $dbBaseClass = new DBBase();
 if ($dbBaseClass->conn === false) {
-	die("ERROR: Could not connect. " . printf('%s', $dbBaseClass->dbGetErrorMsg()));
+	die("ERROR: Could not connect. " . printf('%s', dbGetErrorMsg()));
 }
 
 // An existing record is expected when the action is not "Create"
@@ -28,7 +28,7 @@ if ($action != 'c') {
 	$records = $dbBaseClass->getAllByFieldName('Branch', 'id', $id);
 
 	if ($records === false) {
-		die($dbBaseClass->dbGetErrorMsg());
+		die(dbGetErrorMsg());
 	}
 
 	// Get the specific record
@@ -41,7 +41,7 @@ function echoField($fieldIdName)
 	global $action;
 	global $record;
 	global $branchBase;
-	initializeFieldParametersArray($fieldParams, $fieldIdName, $branchBase);
+	$fieldParams = initializeFieldParametersArray($fieldIdName, $branchBase);
 	if ($action == 'r' || $action == 'd') {
 		$fieldParams[FieldParameters::disabled_par] = 'Disabled';
 	}
@@ -61,7 +61,7 @@ function echoField($fieldIdName)
 <h1>Create / Read / Update / Delete a Branch</h1>
 
 <form action="BranchAction.php" method="post">
-	<input type="hidden" value="<?php echo $id ?>" id="id">
+	<input type="hidden" value="<?php echo $id ?>" id="id" name="id">
 	<table width="200" border="0" cellspacing="2px" cellpadding="2px">
 		<tbody>
 		<tr>
