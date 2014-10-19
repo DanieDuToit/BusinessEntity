@@ -60,7 +60,8 @@ function echoField($fieldIdName)
 
 <h1>Create / Read / Update / Delete a Branch</h1>
 
-<form action="BranchAction.php">
+<form action="BranchAction.php" method="post">
+	<input type="hidden" value="<?php echo $id ?>" id="id">
 	<table width="200" border="0" cellspacing="2px" cellpadding="2px">
 		<tbody>
 		<tr>

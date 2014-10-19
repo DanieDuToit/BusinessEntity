@@ -1,5 +1,5 @@
 <?php
-$disabled = "";
+//$disabled = "";
 //include_once "IncludesAndClasses/MabeEnum/Enum";
 /**
  * Returns the passed Request variable value, or the passed default if the Request is not set.
@@ -1212,4 +1212,32 @@ abstract class FieldParameters
 	const placeholder_par = 22;
 }
 
+/**
+ * This function returns a recordBase array that was populated with the related values from the postArray
+ *
+ * @param $postArray : An array with key/value pairs - normally from $_POST
+ * @param $recordBase : A Record class that relates to the postArray
+ */
+function PopulateRecord($postArray, $recordBase) {
+	foreach ($postArray as $key => $value) {
+		$recordBase[$key]['Value'] = $value;
+	}
+	return $recordBase;
+}
+
+function ValidateRecord($record) {
+	foreach ($record as $field) {
+		// Is field required?
+		$required = array_key_exists (FieldParameters::required_par, $field['Meta']);
+		if ($required) {
+			// TODO - Add something here to add an error message to an array to be returned with errors
+			// Must field be checked for syntax problems/
+			$syntaxCheck = $field['CheckValidFormat'];
+			if ($syntaxCheck !== '') {
+				$result = call_user_func($syntaxCheck, $field['Value']);
+				// TODO - Add something here to add an error message to an array to be returned with errors
+			}
+		}
+	}
+}
 ?>

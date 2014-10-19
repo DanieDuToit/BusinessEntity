@@ -48,7 +48,7 @@
 	$numFields = sqlsrv_num_fields( $records );
 	echo "<table>";
 	echo '<thead>';
-	echo '<td>Branch Code</td><td>Name</td><td>Phone Number</td><td>ContactPersonName</td><td>ContactPersonNumber</td><td>FaxNumber</td><td>ContactPersonEmail</td>';
+	echo '<td>Branch</td><td>Name</td><td>Phone Number</td><td>ContactPersonName</td><td>ContactPersonNumber</td><td>FaxNumber</td><td>ContactPersonEmail</td>';
 	echo '<tr>';
 	echo '</tr>';
 	echo '</thead>';
