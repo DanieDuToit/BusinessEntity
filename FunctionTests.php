@@ -9,7 +9,7 @@
 	$path = explode(DIRECTORY_SEPARATOR , __FILE__);
 	include_once "IncludesAndClasses/DBBase.class.php";
 	include_once @"IncludesAndClasses/BranchBase.class.php";
-	include_once "Functions.php";
+	include_once "IncludesAndClasses/functions.inc.php";
 
 	$dbBaseClass = new DBBase();
 
@@ -39,14 +39,14 @@
 		echo "Connection established.<br />";
 	} else {
 		echo "Connection could not be established.<br />";
-		die($dbBaseClass->dbGetErrorMsg());
+		die(dbGetErrorMsg());
 	}
 	// Using dbQuery
 	echo '<h2>Using dbQuery</h2>';
 	$sql = "SELECT TOP(10) Name FROM company";
 	$stmt = $dbBaseClass->dbQuery($sql);
 	if ($stmt === false) {
-		die($dbBaseClass->dbGetErrorMsg());
+		die(dbGetErrorMsg());
 	}
 	while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
 		echo $row['Name'] . ", " . "<br />";
@@ -57,7 +57,7 @@
 	echo '<h2>Using getAll</h2>';
 	$stmt = $dbBaseClass->getAll('Company');
 	if ($stmt === false) {
-		die($dbBaseClass->dbGetErrorMsg());
+		die(dbGetErrorMsg());
 	}
 	while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
 		echo $row['Name'] . ", " . "<br />";
@@ -68,7 +68,7 @@
 	echo '<h2>Using getAllByFieldname</h2>';
 	$stmt = $dbBaseClass->getAllByFieldName('Company', 'Name', 'Protea Security');
 	if ($stmt === false) {
-		die($dbBaseClass->dbGetErrorMsg());
+		die(dbGetErrorMsg());
 	}
 	while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
 		echo $row['Name'] . ", " . "<br />";
@@ -80,7 +80,7 @@
 	$fields = array('Name', 'CompanyCode');
 	$stmt = $dbBaseClass->getFieldsByFieldName('Company', 'Name', 'Protea Security', $fields);
 	if ($stmt === false) {
-		die($dbBaseClass->dbGetErrorMsg());
+		die(dbGetErrorMsg());
 	}
 	while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
 		echo "{$row['Name']} , {$row['CompanyCode']} <br />";
@@ -92,7 +92,7 @@
 	$fields = array('Name', 'CompanyCode');
 	$stmt = $dbBaseClass->getFieldsForAll('Company', $fields);
 	if ($stmt === false) {
-		die($dbBaseClass->dbGetErrorMsg());
+		die(dbGetErrorMsg());
 	}
 	while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
 		echo "{$row['Name']} , {$row['CompanyCode']} <br />";

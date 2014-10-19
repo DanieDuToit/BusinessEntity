@@ -28,11 +28,11 @@
  */
 	include_once "IncludesAndClasses/DBBase.class.php";
 	include_once "IncludesAndClasses/BranchBase.class.php";
-	include_once "functions.php";
+	include_once "IncludesAndClasses/functions.inc.php";
 	$dbBaseClass = new DBBase();
 	if ($dbBaseClass->conn === false)
 	{
-		die("ERROR: Could not connect. " . printf('%s',$dbBaseClass->dbGetErrorMsg()));
+		die("ERROR: Could not connect. " . printf('%s',dbGetErrorMsg()));
 	}
 	if (isset($_POST["Search"])) {
 		$bc = $_POST['SearchBC'];
@@ -43,12 +43,12 @@
 		$records = $dbBaseClass->getFieldsForAll('Branch', array('id', 'BranchCode', 'Name', 'PhoneNumber', 'ContactPersonName', 'ContactPersonNumber', 'FaxNumber', 'ContactPersonEmail'));
 	}
 	if ($records === false) {
-		die($dbBaseClass->dbGetErrorMsg());
+		die(dbGetErrorMsg());
 	}
 	$numFields = sqlsrv_num_fields( $records );
 	echo "<table>";
 	echo '<thead>';
-	echo '<td>Branch Code</td><td>Name</td><td>Phone Number</td><td>ContactPersonName</td><td>ContactPersonNumber</td><td>FaxNumber</td><td>ContactPersonEmail</td>';
+	echo '<td>Branch</td><td>Name</td><td>Phone Number</td><td>ContactPersonName</td><td>ContactPersonNumber</td><td>FaxNumber</td><td>ContactPersonEmail</td>';
 	echo '<tr>';
 	echo '</tr>';
 	echo '</thead>';
@@ -61,7 +61,7 @@
 		echo "<td>{$record['ContactPersonNumber']}</td>";
 		echo "<td>{$record['FaxNumber']}</td>";
 		echo "<td>{$record['ContactPersonEmail']}</td>";
-		echo "<td><a href=Branch.php?action=c&id={$record['id']}>Create</a></td>";
+		echo "<td><a href=Branch.php?action=c&id=-1>Create</a></td>";
 		echo "<td><a href=Branch.php?action=r&id={$record['id']}>Read</a></td>";
 		echo "<td><a href=Branch.php?action=u&id={$record['id']}>Update</a></td>";
 		echo "<td><a href=Branch.php?action=d&id={$record['id']}>Delete</a></td>";
