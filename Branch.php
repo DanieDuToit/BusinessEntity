@@ -58,7 +58,18 @@ function echoField($fieldIdName)
 </head>
 <body>
 
-<h1>Create / Read / Update / Delete a Branch</h1>
+<?php
+	if ($action == 'c') {
+		$val = 'Insert';
+	}
+	if ($action == 'u') {
+		$val = 'Update';
+	}
+	if ($action == 'd') {
+		$val = 'Remove';
+	}
+	echo sprintf('<div class="heading"><h1>%s a Branch</h1></div>', $val);
+?>
 
 <form action="BranchAction.php" method="post">
 	<input type="hidden" value="<?php echo $id ?>" id="id" name="id">
@@ -72,7 +83,6 @@ function echoField($fieldIdName)
 		</tr>
 		<tr>
 			<?php echoField("Active") ?>
-		Active
 		<tr>
 			<?php echoField("CustomMessage") ?>
 		</tr>

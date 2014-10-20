@@ -108,8 +108,8 @@
 					array('FieldName' => 'Latitude', 'FriendlyName' => 'Supply friendly name', 'Helptext' => 'No Help Text', 'Type' => 'decimal', 'CheckValidFormat' => 'isValidCoordinate', 'Value' => 0.0000, 'Meta' =>
 						array(FieldParameters::precision_par => 4)),
 				'BusinessEntityId'         =>
-					array('FieldName' => 'BusinessEntityId', 'FriendlyName' => 'Supply friendly name', 'Helptext' => 'No Help Text', 'Type' => 'int', 'CheckValidFormat' => '', 'Value' => '', 'Meta' =>
-						array())
+					array('FieldName' => 'BusinessEntityId', 'FriendlyName' => 'Supply friendly name', 'Helptext' => 'No Help Text', 'Type' => 'int', 'CheckValidFormat' => 'isDigitOnly', 'Value' => '', 'Meta' =>
+						array(FieldParameters::maxlength_par => 8))
 			);
 
 			// Default Constructor
@@ -137,7 +137,7 @@
 				// Populate the Branch array
 				$this::$Branch = $changedRecord;
 				$sqlCommand = sprintf("
-				USE [Calm]
+				USE [CALM]
 				GO
 	            UPDATE Branch
 	                SET [BranchCode] = '%s'
@@ -169,8 +169,7 @@
 	                ,[Longitude] = '%f'
 	                ,[Latitude] = '%f'
 	                ,[BusinessEntityId] = '%d'
-                WHERE %s = '%s'
-                GO",
+                WHERE %s = '%s'",
 					$this::$Branch['BranchCode']['Value'],
 					$this::$Branch['Name']['Value'],
 					$this::$Branch['Active']['Value'],
@@ -206,12 +205,12 @@
 				$stmt = sqlsrv_prepare($this->dbBaseClass->conn, $sqlCommand); // Prepares a Transact-SQL query without executing it. Implicitly binds parameters.
 				if (!$stmt) {
 					return array(printf('An error was received when the function sqlsrv_prepare was called.
-						The error message was: %s', sqlsrv_errors()));
+						The error message was: %s', dbGetErrorMsg()));
 				}
 				$result = sqlsrv_execute($stmt); // Executes a prepared statement.
 				if (!$result) {
 					return array(printf('An error was received when the function sqlsrv_execute was called.
-						The error message was: %s', sqlsrv_errors()));
+						The error message was: %s', dbGetErrorMsg()));
 				}
 				return array();
 				// NB!!!
