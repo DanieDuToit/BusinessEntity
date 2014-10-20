@@ -1,54 +1,66 @@
 <?php
 
+include_once @"functions.php";
 include_once @"IncludesAndClasses\DBBase.class.php";
-include_once @"IncludesAndClasses\CompanyBase.class.php";
 
-$companyBase = new CompanyBase();
-
-$companyRecord = $companyBase::$company;
-$companyRecord['Name'] = 'ProteaTest';
-$companyRecord['CompanyCode'] = 'Testone';
-$companyRecord['ShortName'] = 'test';
-$companyRecord['BusinessEntityId'] = 5;
-$companyBase->insert($companyRecord);
-        
-$sql = "SELECT * FROM Company";
-
-$stmt = sqlsrv_query( $dbBaseClass->conn, $sql);
-if( $stmt === false ) {
-	die( print_r( sqlsrv_errors(), true));
-}
-
-$numFields = sqlsrv_num_Fields( $stmt);
-
-while(sqlsrv_fetch($stmt)){
+if (isset($_GET['id'])=== false || isset($_GET['action'])=== false){
     
-    for($i = 0; $i< $numFields; $i++){
-        
-        echo sqlsrv_get_field($stmt, $i)."";
-    }
-    
-    echo "<br />";
+    //header("Location: CompanyDisplayGrid.php");
 }
-
-
-//Using update statement from DBBase class
-
-//echo '<h2>Update by Id</h2>';
-//$stmt = $dbBaseClass->updateById('Company', 'ID', '5');
-//if( $stmt === false ) {
-//	die( $dbBaseClass->dbGetErrorMsg());
-//}
-//else {
-//	echo $row .", "."<br />";
-//}
-//sqlsrv_free_stmt( $stmt);
-
-
-//while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
-//	echo $row['Name'].", "."<br />";
-//}
-//sqlsrv_free_stmt( $stmt);
-
+    $id = (int) $_GET['id'];
+    $action = $_GET['action'];
+    
+  function echoValue($fieldIdName, $fieldType , $required)
+  {
+      global $action;
+      initializeFieldParametersArray($fieldParams);
+      if($action == 'r' || $action == 'd'){
+          $fieldParams[FieldParameters::disabled_par] = 'Disabled';
+      }
+      $inputField ="";
+      switch($fieldType){
+          case "text":
+              $inputField .= drawInputField($fieldIdName, $fieldType, " ", $fieldParams);
+              break;
+          case "checkbox":
+              $inputField .= drawInputField($fieldIdName, $fieldType, "checked", $fieldParams);
+              break;
+ 
+      }
+      echo "<td calss = \"fieldName\" ><b>$fieldIdName</b></td>\r\n";
+      echo("<td>$inputField</td>");
+    
+  }
 
 ?>
+
+
+
+<!DOCTYPE HTML PUBLIC  "-//W3C//DTD HTML 4.0.1//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>company</title>
+ </head>
+ <body>
+ <h1> Create/Read/Update/Delete a Company </h1>
+ <form>
+     <table width="200" border="0" cellspacing="2px" cellpadding ="2px">
+         <tr>
+             <?php echoValue("Name" , "text" , true) ?>
+         </tr>
+         <tr>
+             <?php echoValue("CompanyCode", "text", true) ?>
+         </tr>
+         <tr>
+             <?php echoValue("Active", "checkbox", false ) ?>
+         </tr>
+         <tr>
+             <?php echoValue("ShortName", "text", false) ?>
+         </tr>
+         <tr>
+             <?php echoValue("BusinessEntityId", "text", false) ?>
+         </tr>
+  
+     </table>
+ </form>

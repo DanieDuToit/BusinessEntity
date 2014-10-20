@@ -34,7 +34,7 @@
 						array(FieldParameters::width_par => 250, FieldParameters::maxlength_par => 50)),
 				'CustomMessage'            =>
 					array('FieldName' => 'CustomMessage', 'FriendlyName' => 'Supply friendly name', 'Helptext' => 'No Help Text', 'Type' => 'text', 'CheckValidFormat' => '', 'Value' => '', 'Meta' =>
-						array(FieldParameters::width_par => 500, FieldParameters::maxlength_par => 800 )),
+						array(FieldParameters::width_par => 500, FieldParameters::maxlength_par => 800)),
 				'PhoneNumber'              =>
 					array('FieldName' => 'PhoneNumber', 'FriendlyName' => 'Supply friendly name', 'Helptext' => 'No Help Text', 'Type' => 'text', 'CheckValidFormat' => 'isValidPhoneNumber', 'Value' => '', 'Meta' =>
 						array(FieldParameters::width_par => 250, FieldParameters::maxlength_par => 50)),
@@ -108,8 +108,8 @@
 					array('FieldName' => 'Latitude', 'FriendlyName' => 'Supply friendly name', 'Helptext' => 'No Help Text', 'Type' => 'decimal', 'CheckValidFormat' => 'isValidCoordinate', 'Value' => 0.0000, 'Meta' =>
 						array(FieldParameters::precision_par => 4)),
 				'BusinessEntityId'         =>
-					array('FieldName' => 'BusinessEntityId', 'FriendlyName' => 'Supply friendly name', 'Helptext' => 'No Help Text', 'Type' => 'int', 'CheckValidFormat' => '', 'Value' => '', 'Meta' =>
-						array())
+					array('FieldName' => 'BusinessEntityId', 'FriendlyName' => 'Supply friendly name', 'Helptext' => 'No Help Text', 'Type' => 'int', 'CheckValidFormat' => 'isDigitOnly', 'Value' => '', 'Meta' =>
+						array(FieldParameters::maxlength_par => 8, FieldParameters::nullIfZero_par => true))
 			);
 
 			// Default Constructor
@@ -136,41 +136,38 @@
 				}
 				// Populate the Branch array
 				$this::$Branch = $changedRecord;
-				$sqlCommand = sprintf("
-				USE [Calm]
-				GO
+				$sqlCommand = sprintf("BEGIN
 	            UPDATE Branch
-	                SET [BranchCode] = '%s'
-	                ,[Name] = '%s'
-	                ,[Active] = '%s'
-	                ,[CustomMessage] = '%s'
-	                ,[PhoneNumber] = '%s'
-	                ,[FaxNumber] = '%s'
-	                ,[PhysicalAddressLine1] = '%s'
-	                ,[PhysicalAddressLine2] = '%s'
-	                ,[PhysicalAddressLine3] = '%s'
-	                ,[PhysicalAddressLine4] = '%s'
-	                ,[PhysicalAddressLine5] = '%s'
-	                ,[PostalAddressLine1] = '%s'
-	                ,[PostalAddressLine2] = '%s'
-	                ,[PostalAddressLine3] = '%s'
-	                ,[PostalAddressLine4] = '%s'
-	                ,[PostalAddressLine5] = '%s'
-	                ,[BankName] = '%s'
-	                ,[BankBranchName] = '%s'
-	                ,[BankBranchCode] = '%s'
-	                ,[BankAccountNumber] = '%s'
-	                ,[ContactPersonName] = '%s'
-	                ,[ContactPersonNumber] = '%s'
-	                ,[ContactPersonEmail] = '%s'
-	                ,[AdminContactPersonName] = '%s'
-	                ,[AdminContactPersonNumber] = '%s'
-	                ,[AdminContactPersonEmail] = '%s'
-	                ,[Longitude] = '%f'
-	                ,[Latitude] = '%f'
-	                ,[BusinessEntityId] = '%d'
-                WHERE %s = '%s'
-                GO",
+	                SET [BranchCode] = %s
+	                ,[Name] = %s
+	                ,[Active] = %s
+	                ,[CustomMessage] = %s
+	                ,[PhoneNumber] = %s
+	                ,[FaxNumber] = %s
+	                ,[PhysicalAddressLine1] = %s
+	                ,[PhysicalAddressLine2] = %s
+	                ,[PhysicalAddressLine3] = %s
+	                ,[PhysicalAddressLine4] = %s
+	                ,[PhysicalAddressLine5] = %s
+	                ,[PostalAddressLine1] = %s
+	                ,[PostalAddressLine2] = %s
+	                ,[PostalAddressLine3] = %s
+	                ,[PostalAddressLine4] = %s
+	                ,[PostalAddressLine5] = %s
+	                ,[BankName] = %s
+	                ,[BankBranchName] = %s
+	                ,[BankBranchCode] = %s
+	                ,[BankAccountNumber] = %s
+	                ,[ContactPersonName] = %s
+	                ,[ContactPersonNumber] = %s
+	                ,[ContactPersonEmail] = %s
+	                ,[AdminContactPersonName] = %s
+	                ,[AdminContactPersonNumber] = %s
+	                ,[AdminContactPersonEmail] = %s
+	                ,[Longitude] = %f
+	                ,[Latitude] = %f
+	                ,[BusinessEntityId] = %s
+                WHERE %s = %s END",
 					$this::$Branch['BranchCode']['Value'],
 					$this::$Branch['Name']['Value'],
 					$this::$Branch['Active']['Value'],
@@ -203,15 +200,16 @@
 					$idName,
 					$idValue
 				);
+//				echo ($sqlCommand); die();
 				$stmt = sqlsrv_prepare($this->dbBaseClass->conn, $sqlCommand); // Prepares a Transact-SQL query without executing it. Implicitly binds parameters.
 				if (!$stmt) {
 					return array(printf('An error was received when the function sqlsrv_prepare was called.
-						The error message was: %s', sqlsrv_errors()));
+						The error message was: %s', dbGetErrorMsg()));
 				}
 				$result = sqlsrv_execute($stmt); // Executes a prepared statement.
 				if (!$result) {
 					return array(printf('An error was received when the function sqlsrv_execute was called.
-						The error message was: %s', sqlsrv_errors()));
+						The error message was: %s', dbGetErrorMsg()));
 				}
 				return array();
 				// NB!!!
@@ -235,8 +233,7 @@
 				}
 				$this::$Branch = $record;
 				$sqlCommand = sprintf("
-				USE [Calm]
-				GO
+				BEGIN
 	            INSERT INTO [dbo].[Branch] (
 	                [BranchCode]
 	                ,[Name]
@@ -268,36 +265,36 @@
 	                ,[Latitude]
 	                ,[BusinessEntityId] )
 	             VALUES (
-	                '%s',
-	                '%s',
-	                '%b',
-	                '%s',
-	                '%s',
-	                '%s',
-	                '%s',
-	                '%s',
-	                '%s',
-	                '%s',
-	                '%s',
-	                '%s',
-	                '%s',
-	                '%s',
-	                '%s',
-	                '%s',
-	                '%s',
-	                '%s',
-	                '%s',
-	                '%s',
-	                '%s',
-	                '%s',
-	                '%s',
-	                '%s',
-	                '%s',
-	                '%s',
-	                '%f',
-	                '%f',
-	                '%d' )
-                GO",
+	                %s,
+	                %s,
+	                %b,
+	                %s,
+	                %s,
+	                %s,
+	                %s,
+	                %s,
+	                %s,
+	                %s,
+	                %s,
+	                %s,
+	                %s,
+	                %s,
+	                %s,
+	                %s,
+	                %s,
+	                %s,
+	                %s,
+	                %s,
+	                %s,
+	                %s,
+	                %s,
+	                %s,
+	                %s,
+	                %s,
+	                %f,
+	                %f,
+	                %s )
+                END",
 					$this::$Branch['BranchCode']['Value'],
 					$this::$Branch['Name']['Value'],
 					$this::$Branch['Active']['Value'],
@@ -329,55 +326,21 @@
 					$this::$Branch['BusinessEntityId']['Value']
 				);
 
+//				echo $sqlCommand; die;
 				$stmt = sqlsrv_prepare($this->dbBaseClass->conn, $sqlCommand); // Prepares a Transact-SQL query without executing it. Implicitly binds parameters.
 				if (!$stmt) {
 					return array(printf('An error was received when the function sqlsrv_prepare was called.
-						The error message was: %s', sqlsrv_errors()));
+						The error message was: %s', dbGetErrorMsg()));
 				}
 				$result = sqlsrv_execute($stmt); // Executes a prepared statement.
 				if (!$result) {
 					return array(printf('An error was received when the function sqlsrv_execute was called.
-						The error message was: %s', sqlsrv_errors()));
+						The error message was: %s', dbGetErrorMsg()));
 				}
 				return array();
 				// NB!!!
 				// Note: empty array is converted to null by non-strict equal '==' comparison.
 				// Use is_null() or '===' if there is possible of getting empty array.
-			}
-
-			/**
-			 * @return array: An array of invalid fields will be returned - empty array if none
-			 */
-			private function checkMandatoryFields()
-			{
-				$fields = array();
-				$i = 0;
-				if (BranchBase::$Branch['BranchCode']['Value'] == null) {
-					$fields[$i++] = 'A value for Branch Code must be supplied';
-				}
-				if (BranchBase::$Branch['Active']['Value'] == null) {
-					$fields[$i] = 'A value for Active must be supplied';
-				}
-				return $fields;
-			}
-
-			private function checkFieldFormats()
-			{
-				$fields = array();
-				$i = 0;
-				if (!isValidPhoneNumber(BranchBase::$Branch['PhoneNumber']['Value'])) {
-					$fields[$i++] = 'PhoneNumber contains invalid characters';
-				}
-				if (!isValidPhoneNumber(BranchBase::$Branch['FaxNumber']['Value'])) {
-					$fields[$i++] = 'FaxNumber contains invalid characters';
-				}
-				if (!isValidCoordinate(BranchBase::$Branch['Longitude']['Value'])) {
-					$fields[$i++] = 'Longitude contains invalid characters';
-				}
-				if (!isValidCoordinate(BranchBase::$Branch['Latitude']['Value'])) {
-					$fields[$i] = 'Latitude contains invalid characters';
-				}
-				return $fields;
 			}
 		}
 	}

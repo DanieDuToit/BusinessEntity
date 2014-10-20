@@ -40,8 +40,6 @@ class CompanyBase extends DBBase
     
     public function insert($record)
     {
-       //$mandatoryFields = $this->checkMandatoryFields();
-       //if($mandatoryFields === True){
         //populate $company array
         if(!is_array($record))
         {
@@ -88,16 +86,65 @@ class CompanyBase extends DBBase
        return array();
        }
        
-       /** else {
-           echo "Not all Mandatory Fields are filled in:" .$mandatoryFields;
-       } */
-         
+       
+
+
+    public function update($tableName, $id , $value , $changeRecord){
+      
+        if(!is_array($changeRecord)){
+            return array(printf('A Company Record was expected as a parameter but a %s was received', gettype($changeRecord)));
+        }
+        //populate the company array
+        $this::$company = $changeRecord;
+        
+        //check if all Mandatory fields are provided
+        $invalidFields = $this->checkMandatoryFields();
+        if(count((array)$invalidFields) >0) {
+            //some mandatory fields need are left empty
+            return $invalidFields;
+        }
+        
+        $sqlCommand = sprintf("
+               UPDATE %s
+               SET
+               [Name] = '%s' ,
+               [CompanyCode] = '%s',
+               [Active] = '%b',
+               [ShortName] = '%s',
+               [BusinessEntityId] = %d
+               WHERE %s = %s
+               Go" ,
+                        $tableName,
+                        $this::$company['Name'],
+                        $this::$company['CompanyCode'],
+                        $this::$company['Active'],
+                        $this::$company['ShortName'],
+                        $this::$company['BusinessEntityId'],
+                        $id,
+                        $value);
+             
+        echo $sqlCommand;
+   }
+   
+   
+   
+   private function checkMandatoryFields(){
+       $fields = array();
+       $i = 0;
+       if (CompanyBase::$company['Name'] == null){
+           $fields[$i++]='Company Name should be supplied';
+        }
+        
+       if(CompanyBase::$company['CompanyCode'] == null){
+           $fields[$i++]='Company code should be supplied';
+       }
+       
+       if(CompanyBase::$company['Active']== null){
+           $fields[$i++]='A value for Active must be supplied';
+       }
+       
+   }
+  
+    
+  
     }
-    
-//    public function update($tablename, $id , $value , $changeRecord){
-//        
-//        
-//    }
-  
-    
-  

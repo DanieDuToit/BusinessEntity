@@ -1,54 +1,60 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: dutoitd1
- * Date: 2014/10/14
- * Time: 09:56 AM
- */
-include_once 'IncludesAndClasses/functions.inc.php';
-include_once 'IncludesAndClasses/DBBase.class.php';
-include_once 'IncludesAndClasses/BranchBase.class.php';
-if (isset($_GET['id']) === false || isset($_GET['action']) === false) {
-	header("Location: BranchDisplayGrid.php");
-}
-$id = (int)$_GET['id'];
-sanitizeString($id);
-$action = $_GET['action'];
-sanitizeString($action);
+	/**
+	 * Created by PhpStorm.
+	 * User: dutoitd1
+	 * Date: 2014/10/14
+	 * Time: 09:56 AM
+	 */
+	include_once 'IncludesAndClasses/functions.inc.php';
+	include_once 'IncludesAndClasses/DBBase.class.php';
+	include_once 'IncludesAndClasses/BranchBase.class.php';
+	if (!isset($_POST['Create'])) {
+		if (isset($_GET['id']) === false || isset($_GET['action']) === false) {
+			header("Location: BranchDisplayGrid.php");
+		}
+		$id = (int)$_GET['id'];
+		$action = $_GET['action'];
+		sanitizeString($id);
+	}
+	else {
+		$action = 'c';
+		$id = -1;
+	}
+	sanitizeString($action);
 
-// Set up DB connection
-$dbBaseClass = new DBBase();
-if ($dbBaseClass->conn === false) {
-	die("ERROR: Could not connect. " . printf('%s', dbGetErrorMsg()));
-}
-
-// An existing record is expected when the action is not "Create"
-if ($action != 'c') {
-	// Read the record
-	$records = $dbBaseClass->getAllByFieldName('Branch', 'id', $id);
-
-	if ($records === false) {
-		die(dbGetErrorMsg());
+	// Set up DB connection
+	$dbBaseClass = new DBBase();
+	if ($dbBaseClass->conn === false) {
+		die("ERROR: Could not connect. " . printf('%s', dbGetErrorMsg()));
 	}
 
-	// Get the specific record
-	$record = sqlsrv_fetch_array($records, SQLSRV_FETCH_ASSOC);
-}
+	// An existing record is expected when the action is not "Create"
+	if ($action != 'c') {
+		// Read the record
+		$records = $dbBaseClass->getAllByFieldName('Branch', 'id', $id);
 
-$branchBase = BranchBase::$Branch;
-function echoField($fieldIdName)
-{
-	global $action;
-	global $record;
-	global $branchBase;
-	$fieldParams = initializeFieldParametersArray($fieldIdName, $branchBase);
-	if ($action == 'r' || $action == 'd') {
-		$fieldParams[FieldParameters::disabled_par] = 'Disabled';
+		if ($records === false) {
+			die(dbGetErrorMsg());
+		}
+
+		// Get the specific record
+		$record = sqlsrv_fetch_array($records, SQLSRV_FETCH_ASSOC);
 	}
-	$inputField = (string)drawInputField($fieldIdName, $branchBase[$fieldIdName]['Type'], $record[$fieldIdName], $fieldParams);
-	echo "<td class=\"fieldName\"><b>$fieldIdName</ b></td>";
-	echo("<td>$inputField</td>");
-}
+
+	$branchBase = BranchBase::$Branch;
+	function echoField($fieldIdName)
+	{
+		global $action;
+		global $record;
+		global $branchBase;
+		$fieldParams = initializeFieldParametersArray($fieldIdName, $branchBase);
+		if ($action == 'r' || $action == 'd') {
+			$fieldParams[FieldParameters::disabled_par] = 'Disabled';
+		}
+		$inputField = (string)drawInputField($fieldIdName, $branchBase[$fieldIdName]['Type'], $record[$fieldIdName], $fieldParams);
+		echo "<td class=\"fieldName\"><b>$fieldIdName</ b></td>";
+		echo("<td>$inputField</td>");
+	}
 
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
@@ -58,7 +64,18 @@ function echoField($fieldIdName)
 </head>
 <body>
 
-<h1>Create / Read / Update / Delete a Branch</h1>
+<?php
+	if ($action == 'c') {
+		$val = 'Insert';
+	}
+	if ($action == 'u') {
+		$val = 'Update';
+	}
+	if ($action == 'd') {
+		$val = 'Remove';
+	}
+	echo sprintf('<div class="heading"><h1>%s a Branch</h1></div>', $val);
+?>
 
 <form action="BranchAction.php" method="post">
 	<input type="hidden" value="<?php echo $id ?>" id="id" name="id">
@@ -72,7 +89,6 @@ function echoField($fieldIdName)
 		</tr>
 		<tr>
 			<?php echoField("Active") ?>
-		Active
 		<tr>
 			<?php echoField("CustomMessage") ?>
 		</tr>
@@ -156,15 +172,15 @@ function echoField($fieldIdName)
 	<?php if ($action == 'c') ?>
 	<div>
 		<?php
-		if ($action == 'c') {
-			echo (string)drawSubmitButton("Create", "Create");
-		}
-		if ($action == 'u') {
-			echo (string)drawSubmitButton("Update", "Update");
-		}
-		if ($action == 'd') {
-			echo (string)drawSubmitButton("Delete", "Delete");
-		}
+			if ($action == 'c') {
+				echo (string)drawSubmitButton("Create", "Create");
+			}
+			if ($action == 'u') {
+				echo (string)drawSubmitButton("Update", "Update");
+			}
+			if ($action == 'd') {
+				echo (string)drawSubmitButton("Delete", "Delete");
+			}
 		?>
 	</div>
 </form>
