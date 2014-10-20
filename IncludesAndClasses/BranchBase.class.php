@@ -1,9 +1,8 @@
 <?php
 
 	/**
-	 * Created by PhpStorm.
 	 * User: dutoitd1
-	 * Date: 2014/10/09
+	 * Date: 2014/10/20
 	 * Time: 12:29 PM
 	 *
 	 * Every field in the record base class contains the following objects:

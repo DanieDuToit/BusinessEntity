@@ -15,11 +15,15 @@ if (!class_exists('ApplicationSettings')) {
 		class DBSettings
 		{
 			static $extension = "sqlsrv";
-			static $Server = "vmhost\sql2012";
-//			static $Server = "DANIE-HP";
 			static $database = "CALM";
 			static $dbUser = "calm";
 			static $dbPass = "calm";
+
+			// At work
+//			static $Server = "vmhost\sql2012";
+
+			// At home
+			static $Server = "DANIE-HP";
 		}
 	}
 ?>
