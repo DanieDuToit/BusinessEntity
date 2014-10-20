@@ -109,7 +109,7 @@
 						array(FieldParameters::precision_par => 4)),
 				'BusinessEntityId'         =>
 					array('FieldName' => 'BusinessEntityId', 'FriendlyName' => 'Supply friendly name', 'Helptext' => 'No Help Text', 'Type' => 'int', 'CheckValidFormat' => 'isDigitOnly', 'Value' => '', 'Meta' =>
-						array(FieldParameters::maxlength_par => 8))
+						array(FieldParameters::maxlength_par => 8, FieldParameters::nullIfZero_par=>true))
 			);
 
 			// Default Constructor
@@ -136,40 +136,38 @@
 				}
 				// Populate the Branch array
 				$this::$Branch = $changedRecord;
-				$sqlCommand = sprintf("
-				USE [CALM]
-				GO
+				$sqlCommand = sprintf("BEGIN
 	            UPDATE Branch
-	                SET [BranchCode] = '%s'
-	                ,[Name] = '%s'
-	                ,[Active] = '%s'
-	                ,[CustomMessage] = '%s'
-	                ,[PhoneNumber] = '%s'
-	                ,[FaxNumber] = '%s'
-	                ,[PhysicalAddressLine1] = '%s'
-	                ,[PhysicalAddressLine2] = '%s'
-	                ,[PhysicalAddressLine3] = '%s'
-	                ,[PhysicalAddressLine4] = '%s'
-	                ,[PhysicalAddressLine5] = '%s'
-	                ,[PostalAddressLine1] = '%s'
-	                ,[PostalAddressLine2] = '%s'
-	                ,[PostalAddressLine3] = '%s'
-	                ,[PostalAddressLine4] = '%s'
-	                ,[PostalAddressLine5] = '%s'
-	                ,[BankName] = '%s'
-	                ,[BankBranchName] = '%s'
-	                ,[BankBranchCode] = '%s'
-	                ,[BankAccountNumber] = '%s'
-	                ,[ContactPersonName] = '%s'
-	                ,[ContactPersonNumber] = '%s'
-	                ,[ContactPersonEmail] = '%s'
-	                ,[AdminContactPersonName] = '%s'
-	                ,[AdminContactPersonNumber] = '%s'
-	                ,[AdminContactPersonEmail] = '%s'
-	                ,[Longitude] = '%f'
-	                ,[Latitude] = '%f'
-	                ,[BusinessEntityId] = '%d'
-                WHERE %s = '%s'",
+	                SET [BranchCode] = %s
+	                ,[Name] = %s
+	                ,[Active] = %s
+	                ,[CustomMessage] = %s
+	                ,[PhoneNumber] = %s
+	                ,[FaxNumber] = %s
+	                ,[PhysicalAddressLine1] = %s
+	                ,[PhysicalAddressLine2] = %s
+	                ,[PhysicalAddressLine3] = %s
+	                ,[PhysicalAddressLine4] = %s
+	                ,[PhysicalAddressLine5] = %s
+	                ,[PostalAddressLine1] = %s
+	                ,[PostalAddressLine2] = %s
+	                ,[PostalAddressLine3] = %s
+	                ,[PostalAddressLine4] = %s
+	                ,[PostalAddressLine5] = %s
+	                ,[BankName] = %s
+	                ,[BankBranchName] = %s
+	                ,[BankBranchCode] = %s
+	                ,[BankAccountNumber] = %s
+	                ,[ContactPersonName] = %s
+	                ,[ContactPersonNumber] = %s
+	                ,[ContactPersonEmail] = %s
+	                ,[AdminContactPersonName] = %s
+	                ,[AdminContactPersonNumber] = %s
+	                ,[AdminContactPersonEmail] = %s
+	                ,[Longitude] = %f
+	                ,[Latitude] = %f
+	                ,[BusinessEntityId] = %s
+                WHERE %s = %s END",
 					$this::$Branch['BranchCode']['Value'],
 					$this::$Branch['Name']['Value'],
 					$this::$Branch['Active']['Value'],
@@ -202,6 +200,7 @@
 					$idName,
 					$idValue
 				);
+//				echo ($sqlCommand); die();
 				$stmt = sqlsrv_prepare($this->dbBaseClass->conn, $sqlCommand); // Prepares a Transact-SQL query without executing it. Implicitly binds parameters.
 				if (!$stmt) {
 					return array(printf('An error was received when the function sqlsrv_prepare was called.
@@ -234,8 +233,7 @@
 				}
 				$this::$Branch = $record;
 				$sqlCommand = sprintf("
-				USE [Calm]
-				GO
+				BEGIN
 	            INSERT INTO [dbo].[Branch] (
 	                [BranchCode]
 	                ,[Name]
@@ -267,36 +265,36 @@
 	                ,[Latitude]
 	                ,[BusinessEntityId] )
 	             VALUES (
-	                '%s',
-	                '%s',
-	                '%b',
-	                '%s',
-	                '%s',
-	                '%s',
-	                '%s',
-	                '%s',
-	                '%s',
-	                '%s',
-	                '%s',
-	                '%s',
-	                '%s',
-	                '%s',
-	                '%s',
-	                '%s',
-	                '%s',
-	                '%s',
-	                '%s',
-	                '%s',
-	                '%s',
-	                '%s',
-	                '%s',
-	                '%s',
-	                '%s',
-	                '%s',
-	                '%f',
-	                '%f',
-	                '%d' )
-                GO",
+	                %s,
+	                %s,
+	                %b,
+	                %s,
+	                %s,
+	                %s,
+	                %s,
+	                %s,
+	                %s,
+	                %s,
+	                %s,
+	                %s,
+	                %s,
+	                %s,
+	                %s,
+	                %s,
+	                %s,
+	                %s,
+	                %s,
+	                %s,
+	                %s,
+	                %s,
+	                %s,
+	                %s,
+	                %s,
+	                %s,
+	                %f,
+	                %f,
+	                %d )
+                END",
 					$this::$Branch['BranchCode']['Value'],
 					$this::$Branch['Name']['Value'],
 					$this::$Branch['Active']['Value'],

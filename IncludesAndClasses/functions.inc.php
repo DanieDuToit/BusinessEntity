@@ -725,17 +725,20 @@
 	/**
 	 * Format the passed value for sql based on the passed type
 	 * Adds single quotes where needed
-	 * @param text $fieldValue
+	 * @param text $fieldValue :
 	 * @param text $fieldType
-	 * @return text
+	 * @return : changed field value
 	 */
-	function formatForSql($fieldValue, $fieldType)
+	function formatForSql($fieldValue, $fieldType, $fieldParameters = array())
 	{
 		$fieldValue = (string)$fieldValue;
 		$fieldType = (string)$fieldType;
+		$retVal = '';
 		switch ($fieldType) {
+			case null:
+				break;
 			case "checkbox":
-				if ($fieldValue = "Active") {
+				if ($fieldValue == "Active") {
 					$retVal = "1";
 				} else {
 					$retVal = "0";
@@ -752,7 +755,9 @@
 			case "int":
 			case "money":
 			case "numeric":
-				if ($fieldValue === 0) {
+				if (array_key_exists(FieldParameters::nullIfZero_par, $fieldParameters) && $fieldValue == null) {
+					$retVal = "null";
+				} elseif ($fieldValue === 0) {
 					$retVal = "0";
 				} elseif ($fieldValue === "0") {
 					$retVal = "0";
@@ -1234,7 +1239,7 @@
 
 	abstract class FieldParameters
 	{
-		const arraySize = 23; // NB NB - Keep this up to date if you add to this class
+		const arraySize = 24; // NB NB - Keep this up to date if you add to this class
 
 		const width_par = 0;
 		const maxlength_par = 1;
@@ -1258,6 +1263,7 @@
 		const disabled_par = 19;
 		const required_par = 20;
 		const placeholder_par = 22;
+		const nullIfZero_par = 23;
 	}
 
 	/**
@@ -1278,6 +1284,9 @@
 	{
 		$errorList = array();
 		foreach ($record as $field) {
+//			if ($field == 'null') {
+//				break;
+//			}
 			// Is field required?
 			if (isset($field['Meta'])) {
 				$required = array_key_exists(FieldParameters::required_par, $field['Meta']);
@@ -1300,7 +1309,11 @@
 					}
 				}
 			}
-			$field['Value'] = formatForSql($field['Value'], $field['Type']);
+			if (!(isset($field['Value']) && isset($field['Type']) && isset($field['Meta']))) {
+				continue;
+			}
+			$val = formatForSql($field['Value'], $field['Type'], $field['Meta']);
+			$record[$field['FieldName']]['Value'] = $val;
 		}
 		return $errorList;
 	}
