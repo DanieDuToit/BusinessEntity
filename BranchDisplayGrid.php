@@ -10,12 +10,17 @@
 </head>
 <body>
 <h1>Branches</h1>
-<form action="BranchDisplayGrid.php" method="post">
+<form name="form1" action="BranchDisplayGrid.php" method="post">
 	<div>
 		<label for="SearchBC">Branch Code</label>
 		<input type="text" name="SearchBC" id="SearchBC" >
 		<label for="Search"></label>
 		<input type="submit" value="Search" name="Search">
+	</div>
+</form>
+<form name="form2" action="Branch.php" method="post">
+	<div>
+		<input type="submit" value="Create" name="Create" id="Create">
 	</div>
 </form>
 <br>
@@ -61,7 +66,6 @@
 		echo "<td>{$record['ContactPersonNumber']}</td>";
 		echo "<td>{$record['FaxNumber']}</td>";
 		echo "<td>{$record['ContactPersonEmail']}</td>";
-		echo "<td><a href=Branch.php?action=c&id=-1>Create</a></td>";
 		echo "<td><a href=Branch.php?action=r&id={$record['id']}>Read</a></td>";
 		echo "<td><a href=Branch.php?action=u&id={$record['id']}>Update</a></td>";
 		echo "<td><a href=Branch.php?action=d&id={$record['id']}>Delete</a></td>";

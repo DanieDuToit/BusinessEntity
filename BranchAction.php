@@ -24,7 +24,7 @@
 		die("ERROR: Could not connect. " . printf('%s', dbGetErrorMsg()));
 	}
 	$branchTemplate = BranchBase::$Branch;
-	if (!isset($_POST['id'])) {
+	if (!isset($_POST['id']) && !isset($_POST['Create'])) {
 		echo "<div class='error'> <h3>No ID was received for ACTION.PHP</h3></div>";
 		die;
 	}
@@ -53,18 +53,17 @@
 //	$action = 'Create';
 		$record = PopulateRecord($_POST, $branchTemplate);
 		$validateErrors = ValidateRecord($record);
-		$updateErrors = $branchBase->insert($record);
 		if ($validateErrors) {
 			foreach ($validateErrors as $error) {
 				echo "<div class='error'><h3>$error</h3></div><br>";
 			}
+			die;
 		}
+		$updateErrors = $branchBase->insert($record);
 		if ($updateErrors) {
 			foreach ($updateErrors as $error) {
 				echo "<div class='error'><h3>$error</h3></div><br>";
 			}
-		}
-		if ($validateErrors || $updateErrors) {
 			die;
 		}
 	} else {

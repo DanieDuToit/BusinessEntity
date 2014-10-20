@@ -34,7 +34,7 @@
 						array(FieldParameters::width_par => 250, FieldParameters::maxlength_par => 50)),
 				'CustomMessage'            =>
 					array('FieldName' => 'CustomMessage', 'FriendlyName' => 'Supply friendly name', 'Helptext' => 'No Help Text', 'Type' => 'text', 'CheckValidFormat' => '', 'Value' => '', 'Meta' =>
-						array(FieldParameters::width_par => 500, FieldParameters::maxlength_par => 800 )),
+						array(FieldParameters::width_par => 500, FieldParameters::maxlength_par => 800)),
 				'PhoneNumber'              =>
 					array('FieldName' => 'PhoneNumber', 'FriendlyName' => 'Supply friendly name', 'Helptext' => 'No Help Text', 'Type' => 'text', 'CheckValidFormat' => 'isValidPhoneNumber', 'Value' => '', 'Meta' =>
 						array(FieldParameters::width_par => 250, FieldParameters::maxlength_par => 50)),
@@ -109,7 +109,7 @@
 						array(FieldParameters::precision_par => 4)),
 				'BusinessEntityId'         =>
 					array('FieldName' => 'BusinessEntityId', 'FriendlyName' => 'Supply friendly name', 'Helptext' => 'No Help Text', 'Type' => 'int', 'CheckValidFormat' => 'isDigitOnly', 'Value' => '', 'Meta' =>
-						array(FieldParameters::maxlength_par => 8, FieldParameters::nullIfZero_par=>true))
+						array(FieldParameters::maxlength_par => 8, FieldParameters::nullIfZero_par => true))
 			);
 
 			// Default Constructor
@@ -293,7 +293,7 @@
 	                %s,
 	                %f,
 	                %f,
-	                %d )
+	                %s )
                 END",
 					$this::$Branch['BranchCode']['Value'],
 					$this::$Branch['Name']['Value'],
@@ -326,55 +326,21 @@
 					$this::$Branch['BusinessEntityId']['Value']
 				);
 
+//				echo $sqlCommand; die;
 				$stmt = sqlsrv_prepare($this->dbBaseClass->conn, $sqlCommand); // Prepares a Transact-SQL query without executing it. Implicitly binds parameters.
 				if (!$stmt) {
 					return array(printf('An error was received when the function sqlsrv_prepare was called.
-						The error message was: %s', sqlsrv_errors()));
+						The error message was: %s', dbGetErrorMsg()));
 				}
 				$result = sqlsrv_execute($stmt); // Executes a prepared statement.
 				if (!$result) {
 					return array(printf('An error was received when the function sqlsrv_execute was called.
-						The error message was: %s', sqlsrv_errors()));
+						The error message was: %s', dbGetErrorMsg()));
 				}
 				return array();
 				// NB!!!
 				// Note: empty array is converted to null by non-strict equal '==' comparison.
 				// Use is_null() or '===' if there is possible of getting empty array.
-			}
-
-			/**
-			 * @return array: An array of invalid fields will be returned - empty array if none
-			 */
-			private function checkMandatoryFields()
-			{
-				$fields = array();
-				$i = 0;
-				if (BranchBase::$Branch['BranchCode']['Value'] == null) {
-					$fields[$i++] = 'A value for Branch Code must be supplied';
-				}
-				if (BranchBase::$Branch['Active']['Value'] == null) {
-					$fields[$i] = 'A value for Active must be supplied';
-				}
-				return $fields;
-			}
-
-			private function checkFieldFormats()
-			{
-				$fields = array();
-				$i = 0;
-				if (!isValidPhoneNumber(BranchBase::$Branch['PhoneNumber']['Value'])) {
-					$fields[$i++] = 'PhoneNumber contains invalid characters';
-				}
-				if (!isValidPhoneNumber(BranchBase::$Branch['FaxNumber']['Value'])) {
-					$fields[$i++] = 'FaxNumber contains invalid characters';
-				}
-				if (!isValidCoordinate(BranchBase::$Branch['Longitude']['Value'])) {
-					$fields[$i++] = 'Longitude contains invalid characters';
-				}
-				if (!isValidCoordinate(BranchBase::$Branch['Latitude']['Value'])) {
-					$fields[$i] = 'Latitude contains invalid characters';
-				}
-				return $fields;
 			}
 		}
 	}

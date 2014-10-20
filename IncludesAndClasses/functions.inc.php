@@ -1288,12 +1288,13 @@
 //				break;
 //			}
 			// Is field required?
+			$required = false;
 			if (isset($field['Meta'])) {
 				$required = array_key_exists(FieldParameters::required_par, $field['Meta']);
 			}
 			if ($required) {
 				if ($field['Value'] == null) {
-					array_push($errorList, $field['FriendlyName'] . "must have a value");
+					array_push($errorList, $field['FriendlyName'] . " must have a value");
 				}
 			}
 			if ($required || $field['Value'] != null) {
@@ -1327,7 +1328,7 @@
 	{
 		$retVal = sqlsrv_errors();
 		$retVal = $retVal[0]["message"];
-		$retVal = preg_replace('/\[Microsoft]\[SQL Server Native Client [0-9]+.[0-9]+]/', '', $retVal);
+		$retVal = preg_replace('/\[Microsoft]\[SQL Server Native Client [0-9]+.[0-9]+]\[SQL Server]/', '', $retVal);
 		return $retVal;
 	}//dbGetErrorMsg()
 
