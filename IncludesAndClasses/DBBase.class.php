@@ -36,7 +36,7 @@
 			function dbTransactionBegin()
 			{
 				return sqlsrv_begin_transaction($this->conn); // Begins a transaction.
-			}//dbTransactionBegin()
+			}
 
 			/**
 			 * Commits the sql transaction.
@@ -46,7 +46,7 @@
 			function dbTransactionCommit()
 			{
 				return sqlsrv_commit($this->conn); // Commits a transaction.
-			}//dbTransactionCommit()
+			}
 
 			/**
 			 * Rolls back the sql transaction.
@@ -56,7 +56,7 @@
 			function dbTransactionRollback()
 			{
 				return sqlsrv_rollback($this->conn); // Rolls back a transaction.
-			}//dbTransactionRollback()
+			}
 
 			/**
 			 * Executes the passed sql and returns the result set.
