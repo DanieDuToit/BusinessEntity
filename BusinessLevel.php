@@ -11,7 +11,7 @@ include_once 'IncludesAndClasses/DBBase.class.php';
 include_once 'IncludesAndClasses/BranchBase.class.php';
 if (!isset($_POST['Create'])) {
 	if (isset($_GET['id']) === false || isset($_GET['action']) === false) {
-		header("Location: BranchDisplayGrid.php");
+		header("Location: BusinessLevelDisplayGrid.php");
 	}
 	$id = (int)$_GET['id'];
 	$action = $_GET['action'];
@@ -31,7 +31,7 @@ if ($dbBaseClass->conn === false) {
 // An existing record is expected when the action is not "Create"
 if ($action != 'c') {
 	// Read the record
-	$records = $dbBaseClass->getAllByFieldName('Branch', 'id', $id);
+	$records = $dbBaseClass->getAllByFieldName('BuLevel', 'id', $id);
 
 	if ($records === false) {
 		die(dbGetErrorMsg());
@@ -41,17 +41,17 @@ if ($action != 'c') {
 	$record = sqlsrv_fetch_array($records, SQLSRV_FETCH_ASSOC);
 }
 
-$branchBase = BranchBase::$Branch;
+$BusinessLevelBase = BusinessLevelBase::$BusinessLevel;
 function echoField($fieldIdName)
 {
 	global $action;
 	global $record;
-	global $branchBase;
-	$fieldParams = initializeFieldParametersArray($fieldIdName, $branchBase);
+	global $BusinessLevelBase;
+	$fieldParams = initializeFieldParametersArray($fieldIdName, $BusinessLevelBase);
 	if ($action == 'r' || $action == 'd') {
 		$fieldParams[FieldParameters::disabled_par] = 'Disabled';
 	}
-	$inputField = (string)drawInputField($fieldIdName, $branchBase[$fieldIdName]['Type'], $record[$fieldIdName], $fieldParams);
+	$inputField = (string)drawInputField($fieldIdName, $BusinessLevelBase[$fieldIdName]['Type'], $record[$fieldIdName], $fieldParams);
 	echo "<td class=\"fieldName\"><b>$fieldIdName</ b></td>";
 	echo("<td>$inputField</td>");
 }
@@ -82,94 +82,13 @@ echo sprintf('<div class="heading"><h1>%s a Branch</h1></div>', $val);
 	<table width="200" border="0" cellspacing="2px" cellpadding="2px">
 		<tbody>
 		<tr>
-			<?php echoField("BranchCode") ?>
-		</tr>
-		<tr>
 			<?php echoField("Name") ?>
 		</tr>
 		<tr>
 			<?php echoField("Active") ?>
 		<tr>
-			<?php echoField("CustomMessage") ?>
-		</tr>
-		<tr>
-			<?php echoField("PhoneNumber") ?>
-		</tr>
-		<tr>
-			<?php echoField("FaxNumber") ?>
-		</tr>
-		<tr>
-			<?php echoField("PhysicalAddressLine1") ?>
-		</tr>
-		<tr>
-			<?php echoField("PhysicalAddressLine2") ?>
-		</tr>
-		<tr>
-			<?php echoField("PhysicalAddressLine3") ?>
-		</tr>
-		<tr>
-			<?php echoField("PhysicalAddressLine4") ?>
-		</tr>
-		<tr>
-			<?php echoField("PhysicalAddressLine5") ?>
-		</tr>
-		<tr>
-			<?php echoField("PostalAddressLine1") ?>
-		</tr>
-		<tr>
-			<?php echoField("PostalAddressLine2") ?>
-		</tr>
-		<tr>
-			<?php echoField("PostalAddressLine3") ?>
-		</tr>
-		<tr>
-			<?php echoField("PostalAddressLine4") ?>
-		</tr>
-		<tr>
-			<?php echoField("PostalAddressLine5") ?>
-		</tr>
-		<tr>
-			<?php echoField("BankName") ?>
-		</tr>
-		<tr>
-			<?php echoField("BankBranchName") ?>
-		</tr>
-		<tr>
-			<?php echoField("BankBranchCode") ?>
-		</tr>
-		<tr>
-			<?php echoField("BankAccountNumber") ?>
-		</tr>
-		<tr>
-			<?php echoField("ContactPersonName") ?>
-		</tr>
-		<tr>
-			<?php echoField("ContactPersonNumber") ?>
-		</tr>
-		<tr>
-			<?php echoField("ContactPersonEmail") ?>
-		</tr>
-		<tr>
-			<?php echoField("AdminContactPersonName") ?>
-		</tr>
-		<tr>
-			<?php echoField("AdminContactPersonNumber") ?>
-		</tr>
-		<tr>
-			<?php echoField("AdminContactPersonEmail") ?>
-		</tr>
-		<tr>
-			<?php echoField("Longitude") ?>
-		</tr>
-		<tr>
-			<?php echoField("Latitude") ?>
-		</tr>
-		<tr>
-			<?php echoField("BusinessEntityId") ?>
-		</tr>
 		</tbody>
 	</table>
-	<?php if ($action == 'c') ?>
 	<div>
 		<?php
 		if ($action == 'c') {
