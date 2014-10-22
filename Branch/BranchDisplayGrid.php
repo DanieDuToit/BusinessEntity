@@ -31,9 +31,9 @@
  * Date: 2014/10/14
  * Time: 01:52 PM
  */
-	include_once "IncludesAndClasses/DBBase.class.php";
-	include_once "IncludesAndClasses/BranchBase.class.php";
-	include_once "IncludesAndClasses/functions.inc.php";
+	include_once "../IncludesAndClasses/DBBase.class.php";
+	include_once "../IncludesAndClasses/BranchBase.class.php";
+	include_once "../IncludesAndClasses/functions.inc.php";
 	$dbBaseClass = new DBBase();
 	if ($dbBaseClass->conn === false)
 	{

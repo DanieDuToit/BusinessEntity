@@ -77,7 +77,7 @@ if ($action == 'c') {
 echo sprintf('<div class="heading"><h1>%s a Branch</h1></div>', $val);
 ?>
 
-<form action="BranchAction.php" method="post">
+<form action="Branch/BranchAction.php" method="post">
 	<input type="hidden" value="<?php echo $id ?>" id="id" name="id">
 	<table width="200" border="0" cellspacing="2px" cellpadding="2px">
 		<tbody>

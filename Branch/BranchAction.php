@@ -14,25 +14,25 @@
 	 * Date: 2014/10/18
 	 * Time: 07:25 PM
 	 */
-	include_once "IncludesAndClasses/DBBase.class.php";
-	include_once "IncludesAndClasses/BranchBase.class.php";
-	include_once "IncludesAndClasses/functions.inc.php";
+	include_once "../IncludesAndClasses/DBBase.class.php";
+	include_once "../IncludesAndClasses/BranchBase.class.php";
+	include_once "../IncludesAndClasses/functions.inc.php";
 //	echo buildPostForDebug($_POST);
 //	die();
-	$branchBase = new BranchBase();
-	if ($branchBase->conn === false) {
+	$recordBase = new BranchBase();
+	if ($recordBase->conn === false) {
 		die("ERROR: Could not connect. " . printf('%s', dbGetErrorMsg()));
 	}
-	$branchTemplate = BranchBase::$Branch;
+	$recordTemplate = BranchBase::$Branch;
 	if (!isset($_POST['id']) && !isset($_POST['Create'])) {
 		echo "<div class='error'> <h3>No ID was received for ACTION.PHP</h3></div>";
 		die;
 	}
 	if (isset($_POST['Update'])) {
 //	$action = 'Update';
-		$record = PopulateRecord($_POST, $branchTemplate);
+		$record = PopulateRecord($_POST, $recordTemplate);
 		$validateErrors = ValidateRecord($record);
-		$updateErrors = $branchBase->update("id", $_POST['id'], $record);
+		$updateErrors = $recordBase->update("id", $_POST['id'], $record);
 		if ($validateErrors) {
 			foreach ($validateErrors as $error) {
 				echo "<div class='error'><h3>$error</h3></div><br>";
@@ -51,7 +51,7 @@
 		echo "<div class='error'> <h3>Not implemented yet</h3></div>";
 	} elseif (isset($_POST['Create'])) {
 //	$action = 'Create';
-		$record = PopulateRecord($_POST, $branchTemplate);
+		$record = PopulateRecord($_POST, $recordTemplate);
 		$validateErrors = ValidateRecord($record);
 		if ($validateErrors) {
 			foreach ($validateErrors as $error) {
@@ -59,7 +59,7 @@
 			}
 			die;
 		}
-		$updateErrors = $branchBase->insert($record);
+		$updateErrors = $recordBase->insert($record);
 		if ($updateErrors) {
 			foreach ($updateErrors as $error) {
 				echo "<div class='error'><h3>$error</h3></div><br>";
