@@ -33,9 +33,9 @@ table,td,th {border: 1px solid black}
  * Time: 09:38 PM
  */
 
-include_once "IncludesAndClasses/DBBase.class.php";
-include_once "IncludesAndClasses/DivisionBase.class.php";
-include_once "IncludesAndClasses/functions.inc.php";
+include_once "../IncludesAndClasses/DBBase.class.php";
+include_once "../IncludesAndClasses/DivisionBase.class.php";
+include_once "../IncludesAndClasses/functions.inc.php";
 $dbBaseClass = new DBBase();
 if ($dbBaseClass->conn === false)
 {
