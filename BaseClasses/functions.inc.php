@@ -1,6 +1,6 @@
 <?php
 	//$disabled = "";
-	//include_once "IncludesAndClasses/MabeEnum/Enum";
+	//include_once "Includes/MabeEnum/Enum";
 	/**
 	 * Returns the passed Request variable value, or the passed default if the Request is not set.
 	 *
@@ -8,15 +8,15 @@
 	 * @param text $defaultValue
 	 * @return text
 	 */
-	function getRequestVariable($paramName, $defaultValue = null)
-	{
-		$paramName = (string)$paramName;
-		if (isset($_REQUEST[$paramName])) {
-			return $_REQUEST[$paramName];
-		} else {
-			return $defaultValue;
-		}
-	}//getRequestVariable()
+//	function getRequestVariable($paramName, $defaultValue = null)
+//	{
+//		$paramName = (string)$paramName;
+//		if (isset($_REQUEST[$paramName])) {
+//			return $_REQUEST[$paramName];
+//		} else {
+//			return $defaultValue;
+//		}
+//	}//getRequestVariable()
 
 	/**
 	 * Returns the passed Session variable value, or null if the Session variable is not set.
@@ -38,20 +38,20 @@
 	 * @param string $variableName
 	 * @param string $value
 	 */
-	function setSessionApplicationVariable($variableName, $value)
-	{
-		$_SESSION[ApplicationSettings::$applicationPrefix . "_" . $variableName] = $value;
-	}
+//	function setSessionApplicationVariable($variableName, $value)
+//	{
+//		$_SESSION[ApplicationSettings::$applicationPrefix . "_" . $variableName] = $value;
+//	}
 
 	/**
 	 * Unsets a Application $_SESSION variable.
 	 *
 	 * @param string $variableName
 	 */
-	function unsetSessionApplicationVariable($variableName)
-	{
-		unset($_SESSION[ApplicationSettings::$applicationPrefix . $variableName]);
-	}
+//	function unsetSessionApplicationVariable($variableName)
+//	{
+//		unset($_SESSION[ApplicationSettings::$applicationPrefix . $variableName]);
+//	}
 
 	/**
 	 * Draws a standard link
@@ -61,18 +61,18 @@
 	 * @param text $onClick
 	 * @return string
 	 */
-	function drawLink($action, $displayText, $class = null, $onClick = null)
-	{
-		if ($onClick) {
-			$onClick = "onClick=\"return " . (string)$onClick . "\"";
-		}
-		if ($class == null) {
-			$retVal = "<a href=\"default_old.php?action=" . (string)$action . "\" (string)$onClick >" . (string)$displayText . "</a>";
-		} else {
-			$retVal = "<a class=\"" . (string)$class . "\" href=\"default_old.php?action=" . (string)$action . "\" $onClick >" . (string)$displayText . "</a>";
-		}
-		return $retVal;
-	}//drawLink()
+//	function drawLink($action, $displayText, $class = null, $onClick = null)
+//	{
+//		if ($onClick) {
+//			$onClick = "onClick=\"return " . (string)$onClick . "\"";
+//		}
+//		if ($class == null) {
+//			$retVal = "<a href=\"default_old.php?action=" . (string)$action . "\" (string)$onClick >" . (string)$displayText . "</a>";
+//		} else {
+//			$retVal = "<a class=\"" . (string)$class . "\" href=\"default_old.php?action=" . (string)$action . "\" $onClick >" . (string)$displayText . "</a>";
+//		}
+//		return $retVal;
+//	}//drawLink()
 
 	/**
 	 * Return the html for standard input fields based on the passed parameters
@@ -1340,5 +1340,4 @@
 		}
 		return rtrim($string, "&");
 	}
-
 ?>

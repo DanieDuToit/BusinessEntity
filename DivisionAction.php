@@ -8,21 +8,25 @@
 	}
 </style>
 <?php
-/**
- * Created by PhpStorm.
- * User: dutoitd1
- * Date: 2014/10/22
- * Time: 08:42 AM
- */
-	include_once "../IncludesAndClasses/DBBase.class.php";
-	include_once "../IncludesAndClasses/DivisionBase.class.php";
-	include_once "../IncludesAndClasses/functions.inc.php";
+	/**
+	 * Created by PhpStorm.
+	 * User: dutoitd1
+	 * Date: 2014/10/22
+	 * Time: 08:42 AM
+	 */
+	//	include_once "Classes/BaseClasses/BaseDB.class.php";
+	//	include_once "Classes/BaseClasses/BaseDivision.class.php";
+	//	include_once "Includes/functions.inc.php";
+	include "Header.inc.php";
 
-	$recordBase = new DivisionBase();
+	//	echo buildPostForDebug($_POST);
+	//	die;
+
+	$recordBase = new BaseDivision();
 	if ($recordBase->conn === false) {
 		die("ERROR: Could not connect. " . printf('%s', dbGetErrorMsg()));
 	}
-	$recordTemplate = BranchBase::$Branch;
+	$recordTemplate = BaseDivision::$Division;
 	if (!isset($_POST['id']) && !isset($_POST['Create'])) {
 		echo "<div class='error'> <h3>No ID was received for ACTION.PHP</h3></div>";
 		die;
@@ -40,9 +44,7 @@
 			}
 		}
 		if ($updateErrors) {
-			foreach ($updateErrors as $error) {
-				echo "<div class='error'><h3>$error</h3></div><br>";
-			}
+			echo "<div class='error'><h3>$updateErrors</h3></div><br>";
 		}
 		if ($validateErrors || $updateErrors) {
 			die;
@@ -62,12 +64,10 @@
 		}
 		$updateErrors = $recordBase->insert($record);
 		if ($updateErrors) {
-			foreach ($updateErrors as $error) {
+			if ($updateErrors) {
 				echo "<div class='error'><h3>$error</h3></div><br>";
 			}
 			die;
 		}
-	} else {
-		header("Location: DivisionDisplayGrid.php");
 	}
-	echo "<h1>Successful</h1>";
+	header("Location: DivisionDisplayGrid.php");

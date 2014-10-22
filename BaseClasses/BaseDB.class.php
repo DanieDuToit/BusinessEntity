@@ -5,9 +5,9 @@
 	 *
 	 * @author Danie du Toit
 	 */
-	include_once "settings.php";
-	if (!class_exists('DBBase')) {
-		class DBBase
+	include_once "settings.inc.php";
+	if (!class_exists('BaseDB')) {
+		class BaseDB
 		{
 			public $conn;
 
@@ -78,12 +78,12 @@
 			 * @param $tableName : The table of which all data is needed
 			 * @return bool|resource
 			 */
-			function getAll($tableName)
+			function getAll($tableName, $filter="")
 			{
 				if (empty($tableName)) {
 					return false;
 				}
-				$sql = 'SELECT * FROM ' . $tableName;
+				$sql = "BEGIN SELECT * FROM $tableName $filter END";
 				$result = $this->dbQuery($sql);
 				return $result;
 			}
@@ -99,7 +99,7 @@
 			 */
 			function getAllByFieldName($tableName, $searchFieldName, $searchValue)
 			{
-				$sql = "SELECT * FROM " . $tableName . " WHERE " . $searchFieldName . " = '" . $searchValue . "'";
+				$sql = "BEGIN SELECT * FROM $tableName WHERE $searchFieldName = $searchValue END";
 				$result = $this->dbQuery($sql); // Executes the passed sql and returns the result set.
 				return $result;
 			}
@@ -123,18 +123,36 @@
 			}
 
 			/**
+			 * @param $tableName : string - name of the table
+			 * @param $searchFieldName : The fieldname of the records you want to do the search on
+			 * @param $searchValue : either integer(only) or alphanumeric
+			 * @param $fieldNames : The fields that you want to be returned
+			 * @return bool|resource: a statement resource on success and FALSE if an error occurred.
+			 */
+			function getFieldsByFilter($tableName, $fieldNames, $filter = "" )
+			{
+				if (!is_array($fieldNames)) {
+					return array();
+				}
+				$fields = implode(",", $fieldNames);
+				$sql = "SELECT " . $fields . " FROM $tableName $filter";
+				$result = $this->dbQuery($sql); // Executes the passed sql and returns the result set.
+				return $result;
+			}
+
+			/**
 			 * @param $tableName :  string - name of the table
 			 * @param $fieldNames : (ARRAY): The fieldnames of the fields of the records
 			 * @return bool|resource: Returns a statement resource on success and FALSE if an error occurred.
 			 */
-			function getFieldsForAll($tableName, $fieldNames)
+			function getFieldsForAll($tableName, $fieldNames, $filter="")
 			{
 				if (!is_array($fieldNames)) { // Finds whether a variable is an array
 					$fields = $fieldNames;
 				} else {
 					$fields = implode(",", $fieldNames); // Join array elements with a string
 				}
-				$sql = 'SELECT ' . $fields . ' FROM ' . $tableName;
+				$sql = 'SELECT ' . $fields . " FROM $tableName $filter";
 				$result = $this->dbQuery($sql); // Executes the passed sql and returns the result set.
 				return $result;
 			}
@@ -148,9 +166,9 @@
 			function deleteRecords($tableName, $searchFieldName, $searchValue)
 			{
 				if (ctype_digit($searchValue)) {
-					$sql = "DELETE FROM " . $tableName . " WHERE " . $searchFieldName . " = " . $searchValue;
+					$sql = "BEGIN DELETE FROM $tableName WHERE $searchFieldName = $searchValue END";
 				} else {
-					$sql = "DELETE FROM " . $tableName . " WHERE " . $searchFieldName . " = '" . $searchValue . "'";
+					$sql = "BEGIN DELETE FROM $tableName WHERE $searchFieldName = $searchValue END";
 				}
 				// Prepare the statement
 				$stmt = sqlsrv_prepare($this->conn, $sql); // Prepares a Transact-SQL query without executing it. Implicitly binds parameters.
@@ -192,16 +210,16 @@
 			}
 
 
-			function updateById($tablename, $id, $value)
+			function updateById($tableName, $id, $value)
 			{
 
-				$sql = 'SELECT * FROM ' . $tablename . ' WHERE ' . $id . ' = ' . $value;
+				$sql = "BEGIN SELECT * FROM $tableName WHERE $id = $value END";
 
 				$stmt = sqlsrv_query($this->conn, $sql);
 
 				$row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC);
 
-				$sqlUpdate = 'UPDATE ' . $tablename . ' SET ' . $row . ' WHERE ' . $id . ' = ' . $value;
+				$sqlUpdate = "BEGIN UPDATE $tableName SET $row WHERE $id = $value END";
 
 				//prepare statement
 				$stmtUpdate = sqlsrv_prepare($this->conn, $sqlUpdate);

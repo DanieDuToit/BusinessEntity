@@ -1,8 +1,4 @@
 <style>
-	.message {
-		color: green;
-	}
-
 	.error {
 		color: red;
 	}
@@ -14,16 +10,17 @@
 	 * Date: 2014/10/18
 	 * Time: 07:25 PM
 	 */
-	include_once "../IncludesAndClasses/DBBase.class.php";
-	include_once "../IncludesAndClasses/BranchBase.class.php";
-	include_once "../IncludesAndClasses/functions.inc.php";
-//	echo buildPostForDebug($_POST);
-//	die();
-	$recordBase = new BranchBase();
+	include "Header.inc.php";
+//	include_once "Classes/BaseClasses/BaseDB.class.php";
+//	include_once "Classes/BaseClasses/BaseBranch.class.php";
+//	include_once "Includes/functions.inc.php";
+	//	echo buildPostForDebug($_POST);
+	//	die();
+	$recordBase = new BaseBranch();
 	if ($recordBase->conn === false) {
 		die("ERROR: Could not connect. " . printf('%s', dbGetErrorMsg()));
 	}
-	$recordTemplate = BranchBase::$Branch;
+	$recordTemplate = BaseBranch::$Branch;
 	if (!isset($_POST['id']) && !isset($_POST['Create'])) {
 		echo "<div class='error'> <h3>No ID was received for ACTION.PHP</h3></div>";
 		die;
@@ -39,9 +36,7 @@
 			}
 		}
 		if ($updateErrors) {
-			foreach ($updateErrors as $error) {
-				echo "<div class='error'><h3>$error</h3></div><br>";
-			}
+			echo "<div class='error'><h3>$updateErrors</h3></div><br>";
 		}
 		if ($validateErrors || $updateErrors) {
 			die;
@@ -66,8 +61,7 @@
 			}
 			die;
 		}
-	} else {
-		header("Location: BranchDisplayGrid.php");
 	}
-	echo "<h1>Successful</h1>";
+	header("Location: BranchDisplayGrid.php");
+
 

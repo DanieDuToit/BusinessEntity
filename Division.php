@@ -5,10 +5,19 @@
 	 * Date: 2014/10/21
 	 * Time: 09:30 PM
 	 */
+
+	if (isset($_POST['Return'])) {
+		header("Location: DivisionDisplayGrid.php");
+	}
+
 	$action = '';
-	include_once '../IncludesAndClasses/functions.inc.php';
-	include_once '../IncludesAndClasses/DBBase.class.php';
-	include_once '../IncludesAndClasses/DivisionBase.class.php';
+	include "Header.inc.php";
+//	include_once "BaseClasses/settings.inc.php";
+//	include_once "BaseClasses/BaseDB.class.php";
+//	include_once "BaseClasses/BaseBranch.class.php";
+//	include_once "BaseClasses/BaseBusinessLevel.class.php";
+//	include_once "BaseClasses/BaseDivision.class.php";
+//	include_once "BaseClasses/functions.inc.php";
 
 //	echo buildPostForDebug($_GET);
 //	die;
@@ -27,10 +36,14 @@
 	sanitizeString($action);
 
 	// Set up DB connection
-	$dbBaseClass = new DBBase();
+	$dbBaseClass = new BaseDB();
 	if ($dbBaseClass->conn === false) {
 		die("ERROR: Could not connect. " . printf('%s', dbGetErrorMsg()));
 	}
+
+	// Get the BusinessLevel records
+	$businessLevelBase = new BaseBusinessLevel();
+	$businessLevelRecords = $dbBaseClass->GetAll("BusinessLevel", "WHERE BusinessLevelId = 1");
 
 	// An existing record is expected when the action is not "Create"
 	if ($action != 'c') {
@@ -44,7 +57,7 @@
 		// Get the specific record
 		$record = sqlsrv_fetch_array($records, SQLSRV_FETCH_ASSOC);
 	}
-	$recordBase = DivisionBase::$Division;
+	$recordBase = BaseDivision::$Division;
 
 	function echoField($fieldIdName)
 	{
@@ -82,6 +95,8 @@
 ?>
 <form action="DivisionAction.php" method="post">
 	<input type="hidden" value="<?php echo $id ?>" id="id" name="id">
+	<input type="hidden" value="<?php echo $id ?>" id="BusinessEntityParentId" name="BusinessEntityParentId">
+	<input type="hidden" value="<?php echo $id ?>" id="BusinessLevelId" name="BusinessLevelId">
 	<table width="200" border="0" cellspacing="2px" cellpadding="2px">
 		<tbody>
 		<tr>
@@ -114,5 +129,10 @@
 				echo (string)drawSubmitButton("Delete", "Delete");
 			}
 		?>
+		<form action="Division.php" method="post">
+			<?php
+				echo (string)(drawSubmitButton("Return", "Return"));
+			?>
+		</form>
 	</div>
 </form>

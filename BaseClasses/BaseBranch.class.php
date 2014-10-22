@@ -16,9 +16,9 @@
 	 * (7) Meta data array: Parameters must be set here - See "abstract class FieldParameters" in functions.inc.php for valid parameters.
 	 */
 	include_once("functions.inc.php");
-	include_once 'DBBase.class.php';
-	if (!class_exists('BranchBase')) {
-		class BranchBase extends DBBase
+	include_once "BaseDB.class.php";
+	if (!class_exists('BaseBranch')) {
+		class BaseBranch extends BaseDB
 		{
 			private $dbBaseClass;
 			static $Branch = array(
@@ -114,14 +114,14 @@
 			// Default Constructor
 			function __construct()
 			{
-				$this->dbBaseClass = new DBBase();
+				$this->dbBaseClass = new BaseDB();
 			}
 
 			/**
 			 * @param $tableName : The name of the table which must be updated
 			 * @param $idName : The name of the "ID" field
 			 * @param $idValue : The value of the "ID" field
-			 * @param $changedRecord : A BranchBase::Branch type parameter containing the changed record
+			 * @param $changedRecord : A BaseBranch::Branch type parameter containing the changed record
 			 *
 			 * @return array: An array of errors or empty if no errors
 			 * NB!!!
@@ -134,7 +134,6 @@
 					return array(printf('A Branch record was expected as a parameter but a %s was received', gettype($changedRecord)));
 				}
 				// Populate the Branch array
-				$this::$Branch = $changedRecord;
 				$sqlCommand = sprintf("BEGIN
 	            UPDATE Branch
 	                SET [BranchCode] = %s
@@ -167,38 +166,39 @@
 	                ,[Latitude] = %f
 	                ,[BusinessEntityId] = %s
                 WHERE %s = %s END",
-					$this::$Branch['BranchCode']['Value'],
-					$this::$Branch['Name']['Value'],
-					$this::$Branch['Active']['Value'],
-					$this::$Branch['CustomMessage']['Value'],
-					$this::$Branch['PhoneNumber']['Value'],
-					$this::$Branch['FaxNumber']['Value'],
-					$this::$Branch['PhysicalAddressLine1']['Value'],
-					$this::$Branch['PhysicalAddressLine2']['Value'],
-					$this::$Branch['PhysicalAddressLine3']['Value'],
-					$this::$Branch['PhysicalAddressLine4']['Value'],
-					$this::$Branch['PhysicalAddressLine5']['Value'],
-					$this::$Branch['PostalAddressLine1']['Value'],
-					$this::$Branch['PostalAddressLine2']['Value'],
-					$this::$Branch['PostalAddressLine3']['Value'],
-					$this::$Branch['PostalAddressLine4']['Value'],
-					$this::$Branch['PostalAddressLine5']['Value'],
-					$this::$Branch['BankName']['Value'],
-					$this::$Branch['BankBranchName']['Value'],
-					$this::$Branch['BankBranchCode']['Value'],
-					$this::$Branch['BankAccountNumber']['Value'],
-					$this::$Branch['ContactPersonName']['Value'],
-					$this::$Branch['ContactPersonNumber']['Value'],
-					$this::$Branch['ContactPersonEmail']['Value'],
-					$this::$Branch['AdminContactPersonName']['Value'],
-					$this::$Branch['AdminContactPersonNumber']['Value'],
-					$this::$Branch['AdminContactPersonEmail']['Value'],
-					$this::$Branch['Longitude']['Value'],
-					$this::$Branch['Latitude']['Value'],
-					$this::$Branch['BusinessEntityId']['Value'],
+					$changedRecord['BranchCode']['Value'],
+					$changedRecord['Name']['Value'],
+					$changedRecord['Active']['Value'],
+					$changedRecord['CustomMessage']['Value'],
+					$changedRecord['PhoneNumber']['Value'],
+					$changedRecord['FaxNumber']['Value'],
+					$changedRecord['PhysicalAddressLine1']['Value'],
+					$changedRecord['PhysicalAddressLine2']['Value'],
+					$changedRecord['PhysicalAddressLine3']['Value'],
+					$changedRecord['PhysicalAddressLine4']['Value'],
+					$changedRecord['PhysicalAddressLine5']['Value'],
+					$changedRecord['PostalAddressLine1']['Value'],
+					$changedRecord['PostalAddressLine2']['Value'],
+					$changedRecord['PostalAddressLine3']['Value'],
+					$changedRecord['PostalAddressLine4']['Value'],
+					$changedRecord['PostalAddressLine5']['Value'],
+					$changedRecord['BankName']['Value'],
+					$changedRecord['BankBranchName']['Value'],
+					$changedRecord['BankBranchCode']['Value'],
+					$changedRecord['BankAccountNumber']['Value'],
+					$changedRecord['ContactPersonName']['Value'],
+					$changedRecord['ContactPersonNumber']['Value'],
+					$changedRecord['ContactPersonEmail']['Value'],
+					$changedRecord['AdminContactPersonName']['Value'],
+					$changedRecord['AdminContactPersonNumber']['Value'],
+					$changedRecord['AdminContactPersonEmail']['Value'],
+					$changedRecord['Longitude']['Value'],
+					$changedRecord['Latitude']['Value'],
+					$changedRecord['BusinessEntityId']['Value'],
 					$idName,
 					$idValue
 				);
+				$this::$Branch = $changedRecord;
 //				echo ($sqlCommand); die();
 				$stmt = sqlsrv_prepare($this->dbBaseClass->conn, $sqlCommand); // Prepares a Transact-SQL query without executing it. Implicitly binds parameters.
 				if (!$stmt) {
@@ -230,7 +230,6 @@
 				if (!is_array($record)) {
 					return array(printf('A Branch record was expected as a parameter but a %s was received', gettype($record)));
 				}
-				$this::$Branch = $record;
 				$sqlCommand = sprintf("
 				BEGIN
 	            INSERT INTO [dbo].[Branch] (
@@ -294,36 +293,37 @@
 	                %f,
 	                %s )
                 END",
-					$this::$Branch['BranchCode']['Value'],
-					$this::$Branch['Name']['Value'],
-					$this::$Branch['Active']['Value'],
-					$this::$Branch['CustomMessage']['Value'],
-					$this::$Branch['PhoneNumber']['Value'],
-					$this::$Branch['FaxNumber']['Value'],
-					$this::$Branch['PhysicalAddressLine1']['Value'],
-					$this::$Branch['PhysicalAddressLine2']['Value'],
-					$this::$Branch['PhysicalAddressLine3']['Value'],
-					$this::$Branch['PhysicalAddressLine4']['Value'],
-					$this::$Branch['PhysicalAddressLine5']['Value'],
-					$this::$Branch['PostalAddressLine1']['Value'],
-					$this::$Branch['PostalAddressLine2']['Value'],
-					$this::$Branch['PostalAddressLine3']['Value'],
-					$this::$Branch['PostalAddressLine4']['Value'],
-					$this::$Branch['PostalAddressLine5']['Value'],
-					$this::$Branch['BankName']['Value'],
-					$this::$Branch['BankBranchName']['Value'],
-					$this::$Branch['BankBranchCode']['Value'],
-					$this::$Branch['BankAccountNumber']['Value'],
-					$this::$Branch['ContactPersonName']['Value'],
-					$this::$Branch['ContactPersonNumber']['Value'],
-					$this::$Branch['ContactPersonEmail']['Value'],
-					$this::$Branch['AdminContactPersonName']['Value'],
-					$this::$Branch['AdminContactPersonNumber']['Value'],
-					$this::$Branch['AdminContactPersonEmail']['Value'],
-					$this::$Branch['Longitude']['Value'],
-					$this::$Branch['Latitude']['Value'],
-					$this::$Branch['BusinessEntityId']['Value']
+					$record['BranchCode']['Value'],
+					$record['Name']['Value'],
+					$record['Active']['Value'],
+					$record['CustomMessage']['Value'],
+					$record['PhoneNumber']['Value'],
+					$record['FaxNumber']['Value'],
+					$record['PhysicalAddressLine1']['Value'],
+					$record['PhysicalAddressLine2']['Value'],
+					$record['PhysicalAddressLine3']['Value'],
+					$record['PhysicalAddressLine4']['Value'],
+					$record['PhysicalAddressLine5']['Value'],
+					$record['PostalAddressLine1']['Value'],
+					$record['PostalAddressLine2']['Value'],
+					$record['PostalAddressLine3']['Value'],
+					$record['PostalAddressLine4']['Value'],
+					$record['PostalAddressLine5']['Value'],
+					$record['BankName']['Value'],
+					$record['BankBranchName']['Value'],
+					$record['BankBranchCode']['Value'],
+					$record['BankAccountNumber']['Value'],
+					$record['ContactPersonName']['Value'],
+					$record['ContactPersonNumber']['Value'],
+					$record['ContactPersonEmail']['Value'],
+					$record['AdminContactPersonName']['Value'],
+					$record['AdminContactPersonNumber']['Value'],
+					$record['AdminContactPersonEmail']['Value'],
+					$record['Longitude']['Value'],
+					$record['Latitude']['Value'],
+					$record['BusinessEntityId']['Value']
 				);
+				$this::$Branch = $record;
 
 //				echo $sqlCommand; die;
 				$stmt = sqlsrv_prepare($this->dbBaseClass->conn, $sqlCommand); // Prepares a Transact-SQL query without executing it. Implicitly binds parameters.
