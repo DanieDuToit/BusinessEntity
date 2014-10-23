@@ -1,36 +1,64 @@
 <?php
 
-include_once @"functions.php";
-include_once @"IncludesAndClasses\DBBase.class.php";
+ if(isset($_POST['Return']))
+ {
+     header("Location: CompanyDisplayGrid.php");
+ }
+include "Header.inc.php";
+$action = '';
+	//include_once 'Includes/functions.inc.php';
+	//include_once 'Classes/BaseClasses/BaseDB.class.php';
+	//include_once 'Classes/BaseClasses/BaseCompany.class.php';
 
-if (isset($_GET['id'])=== false || isset($_GET['action'])=== false){
-    
-    //header("Location: CompanyDisplayGrid.php");
-}
-    $id = (int) $_GET['id'];
+if (!isset($_POST['Create'])) {
+    if (isset($_GET['id']) === false || isset($_GET['action']) === false) {
+
+       header("Location: CompanyDisplayGrid.php");
+    }
+    $id = (int)$_GET['id'];
     $action = $_GET['action'];
-    
-  function echoValue($fieldIdName, $fieldType , $required)
-  {
-      global $action;
-      initializeFieldParametersArray($fieldParams);
-      if($action == 'r' || $action == 'd'){
-          $fieldParams[FieldParameters::disabled_par] = 'Disabled';
-      }
-      $inputField ="";
-      switch($fieldType){
-          case "text":
-              $inputField .= drawInputField($fieldIdName, $fieldType, " ", $fieldParams);
-              break;
-          case "checkbox":
-              $inputField .= drawInputField($fieldIdName, $fieldType, "checked", $fieldParams);
-              break;
- 
-      }
-      echo "<td calss = \"fieldName\" ><b>$fieldIdName</b></td>\r\n";
-      echo("<td>$inputField</td>");
-    
-  }
+    sanitizeString($id);
+} else {
+    $action = 'c';
+    $id = -1;
+}
+sanitizeString($action);
+
+// Set up DB connection
+	$dbBaseClass = new BaseDB();
+if ($dbBaseClass->conn === false) {
+    die("ERROR: Could not connect. " . printf('%s', dbGetErrorMsg()));
+}
+
+// An existing record is expected when the action is not "Create"
+if ($action != 'c') {
+    // Read the record
+    $records = $dbBaseClass->getAll('Company', "WHERE id = $id");
+
+    if ($records === false) {
+        die(dbGetErrorMsg());
+    }
+
+    // Get the specific record
+    $record = sqlsrv_fetch_array($records, SQLSRV_FETCH_ASSOC);
+}
+
+
+ $companyBase = BaseCompany::$company;
+
+function echoField($fieldIdName)
+{
+    global $action;
+    global $record;
+    global $companyBase;
+    $fieldParams = initializeFieldParametersArray($fieldIdName, $companyBase);
+    if ($action == 'r' || $action == 'd') {
+        $fieldParams[FieldParameters::disabled_par] = 'Disabled';
+    }
+    $inputField = (string)drawInputField($fieldIdName, $companyBase[$fieldIdName]['Type'], $record[$fieldIdName], $fieldParams);
+    echo "<td class=\"fieldName\"><b>$fieldIdName</ b></td>";
+    echo("<td>$inputField</td>");
+}
 
 ?>
 
@@ -43,24 +71,80 @@ if (isset($_GET['id'])=== false || isset($_GET['action'])=== false){
     <title>company</title>
  </head>
  <body>
- <h1> Create/Read/Update/Delete a Company </h1>
- <form>
-     <table width="200" border="0" cellspacing="2px" cellpadding ="2px">
+
+ <?php
+ if ($action == 'c') {
+     $val = 'Insert';
+ } elseif ($action == 'u') {
+     $val = 'Update';
+ } elseif ($action == 'd') {
+     $val = 'Remove';
+ } else {
+     $val = 'Display';
+ }
+ echo sprintf('<div class="heading"><h1>%s a Company</h1></div>', $val);
+ ?>
+
+
+<form action="CompanyAction.php" method="post">
+     <input type="hidden" value="<? echo $id ?>" id="id" name="id">
+	<table width="200" border="0" cellspacing="2px" cellpadding="2px">
          <tr>
-             <?php echoValue("Name" , "text" , true) ?>
+             <?php echoField("Name") ?>
          </tr>
          <tr>
-             <?php echoValue("CompanyCode", "text", true) ?>
+             <?php echoField("CompanyCode") ?>
          </tr>
          <tr>
-             <?php echoValue("Active", "checkbox", false ) ?>
+             <?php echoField("Active") ?>
          </tr>
          <tr>
-             <?php echoValue("ShortName", "text", false) ?>
+             <?php echoField("ShortName") ?>
          </tr>
          <tr>
-             <?php echoValue("BusinessEntityId", "text", false) ?>
+             <?php echoField("BusinessEntityId") ?>
          </tr>
   
      </table>
+     <div>
+
+         <?php
+			if ($action == 'c') {
+				echo (string)drawSubmitButton("Create", "Create");
+            }
+			if ($action == 'u') {
+                echo drawSubmitButton("Update", "Update");
+            }
+			if ($action == 'd') {
+                echo drawSubmitButton("Delete", "Delete");
+            }
+          ?>
+         <form>
+             <?php
+               echo (drawSubmitButton("Return", "Return"));
+            ?>
+
+         </form>
+     </div>
+
  </form>
+
+
+ </body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

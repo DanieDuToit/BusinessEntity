@@ -1,4 +1,8 @@
 <style>
+	.message {
+		color: green;
+	}
+
 	.error {
 		color: red;
 	}
@@ -6,25 +10,29 @@
 <?php
 	/**
 	 * Created by PhpStorm.
-	 * User: Danie
-	 * Date: 2014/10/18
-	 * Time: 07:25 PM
+	 * User: dutoitd1
+	 * Date: 2014/10/22
+	 * Time: 08:42 AM
 	 */
+	//	include_once "Classes/BaseClasses/BaseDB.class.php";
+	//	include_once "Classes/BaseClasses/BaseDivision.class.php";
+	//	include_once "Includes/functions.inc.php";
 	include "Header.inc.php";
-//	include_once "Classes/BaseClasses/BaseDB.class.php";
-//	include_once "Classes/BaseClasses/BaseBranch.class.php";
-//	include_once "Includes/functions.inc.php";
+
 	//	echo buildPostForDebug($_POST);
-	//	die();
-	$recordBase = new BaseBranch();
+	//	die;
+
+	$recordBase = new BaseDivision();
 	if ($recordBase->conn === false) {
 		die("ERROR: Could not connect. " . printf('%s', dbGetErrorMsg()));
 	}
-	$recordTemplate = BaseBranch::$Branch;
+	$recordTemplate = BaseDivision::$Division;
 	if (!isset($_POST['id']) && !isset($_POST['Create'])) {
 		echo "<div class='error'> <h3>No ID was received for ACTION.PHP</h3></div>";
 		die;
 	}
+
+
 	if (isset($_POST['Update'])) {
 //	$action = 'Update';
 		$record = PopulateRecord($_POST, $recordTemplate);
@@ -43,7 +51,7 @@
 		}
 	} elseif (isset($_POST['Delete'])) {
 //	$action = 'Delete';
-		echo "<div class='error'> <h3>Not implemented yet</h3></div>";
+		echo "<div class='message'> <h3>Not implemented yet</h3></div>";
 	} elseif (isset($_POST['Create'])) {
 //	$action = 'Create';
 		$record = PopulateRecord($_POST, $recordTemplate);
@@ -56,12 +64,10 @@
 		}
 		$updateErrors = $recordBase->insert($record);
 		if ($updateErrors) {
-			foreach ($updateErrors as $error) {
+			if ($updateErrors) {
 				echo "<div class='error'><h3>$error</h3></div><br>";
 			}
 			die;
 		}
 	}
-	header("Location: BranchDisplayGrid.php");
-
-
+	header("Location: DivisionDisplayGrid.php");

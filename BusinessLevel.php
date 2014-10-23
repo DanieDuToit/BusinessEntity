@@ -1,14 +1,15 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: dutoitd1
- * Date: 2014/10/14
- * Time: 09:56 AM
- */
+
+ if(isset($_POST['Return']))
+ {
+     header("Location: BusinessLevelDisplayGrid.php");
+ }
+
 $action = '';
-include_once 'IncludesAndClasses/functions.inc.php';
-include_once 'IncludesAndClasses/DBBase.class.php';
-include_once 'IncludesAndClasses/BranchBase.class.php';
+	//include_once 'Includes/functions.inc.php';
+	//include_once 'Classes/BaseClasses/BaseDB.class.php';
+	//include_once 'Classes/BaseClasses/BaseBranch.class.php';
+	include "Header.inc.php";
 if (!isset($_POST['Create'])) {
 	if (isset($_GET['id']) === false || isset($_GET['action']) === false) {
 		header("Location: BusinessLevelDisplayGrid.php");
@@ -23,7 +24,7 @@ if (!isset($_POST['Create'])) {
 sanitizeString($action);
 
 // Set up DB connection
-$dbBaseClass = new DBBase();
+	$dbBaseClass = new BaseDB();
 if ($dbBaseClass->conn === false) {
 	die("ERROR: Could not connect. " . printf('%s', dbGetErrorMsg()));
 }
@@ -41,18 +42,20 @@ if ($action != 'c') {
 	$record = sqlsrv_fetch_array($records, SQLSRV_FETCH_ASSOC);
 }
 
-$BusinessLevelBase = BusinessLevelBase::$BusinessLevel;
+	$recordBase = BaseBusinessLevel::$BusinessLevel;
 function echoField($fieldIdName)
 {
 	global $action;
 	global $record;
-	global $BusinessLevelBase;
-	$fieldParams = initializeFieldParametersArray($fieldIdName, $BusinessLevelBase);
+	global $recordBase;
+	$fieldParams = initializeFieldParametersArray($fieldIdName, $recordBase);
 	if ($action == 'r' || $action == 'd') {
 		$fieldParams[FieldParameters::disabled_par] = 'Disabled';
 	}
-	$inputField = (string)drawInputField($fieldIdName, $BusinessLevelBase[$fieldIdName]['Type'], $record[$fieldIdName], $fieldParams);
-	echo "<td class=\"fieldName\"><b>$fieldIdName</ b></td>";
+	$inputField = (string)drawInputField($fieldIdName, $recordBase[$fieldIdName]['Type'], $record[$fieldIdName], $fieldParams);
+	$str = (string)$recordBase[$fieldIdName]['FriendlyName'];
+	if ($str == "") $str = $fieldIdName;
+	echo "<td class=\"fieldName\"><b>$str</ b></td>";
 	echo("<td>$inputField</td>");
 }
 
@@ -60,6 +63,9 @@ function echoField($fieldIdName)
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
+	<link href="skin/demo/menu.css" rel="stylesheet" type="text/css">
+	<link href="skin/stylesheet.css" rel="stylesheet" type="text/css">
+	<link href="skin/jquery-ui-1.10.3.custom.css" rel="stylesheet" type="text/css">
 	<title>Branch</title>
 </head>
 <body>
@@ -74,7 +80,7 @@ if ($action == 'c') {
 } else {
 	$val = 'Display';
 }
-echo sprintf('<div class="heading"><h1>%s a Branch</h1></div>', $val);
+echo sprintf('<div class="heading"><h2>%s a Branch</h2></div>', $val);
 ?>
 
 <form action="BranchAction.php" method="post">
@@ -101,6 +107,12 @@ echo sprintf('<div class="heading"><h1>%s a Branch</h1></div>', $val);
 			echo (string)drawSubmitButton("Delete", "Delete");
 		}
 		?>
+        <form>
+            <?php
+            echo (drawSubmitButton("Return", "Return"));
+            ?>
+
+        </form>
 	</div>
 </form>
 </body>

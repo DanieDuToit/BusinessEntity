@@ -1,6 +1,6 @@
 <?php
 	//$disabled = "";
-	//include_once "IncludesAndClasses/MabeEnum/Enum";
+	//include_once "Includes/MabeEnum/Enum";
 	/**
 	 * Returns the passed Request variable value, or the passed default if the Request is not set.
 	 *
@@ -8,15 +8,15 @@
 	 * @param text $defaultValue
 	 * @return text
 	 */
-	function getRequestVariable($paramName, $defaultValue = null)
-	{
-		$paramName = (string)$paramName;
-		if (isset($_REQUEST[$paramName])) {
-			return $_REQUEST[$paramName];
-		} else {
-			return $defaultValue;
-		}
-	}//getRequestVariable()
+	//	function getRequestVariable($paramName, $defaultValue = null)
+	//	{
+	//		$paramName = (string)$paramName;
+	//		if (isset($_REQUEST[$paramName])) {
+	//			return $_REQUEST[$paramName];
+	//		} else {
+	//			return $defaultValue;
+	//		}
+	//	}//getRequestVariable()
 
 	/**
 	 * Returns the passed Session variable value, or null if the Session variable is not set.
@@ -38,20 +38,20 @@
 	 * @param string $variableName
 	 * @param string $value
 	 */
-	function setSessionApplicationVariable($variableName, $value)
-	{
-		$_SESSION[ApplicationSettings::$applicationPrefix . "_" . $variableName] = $value;
-	}
+	//	function setSessionApplicationVariable($variableName, $value)
+	//	{
+	//		$_SESSION[ApplicationSettings::$applicationPrefix . "_" . $variableName] = $value;
+	//	}
 
 	/**
 	 * Unsets a Application $_SESSION variable.
 	 *
 	 * @param string $variableName
 	 */
-	function unsetSessionApplicationVariable($variableName)
-	{
-		unset($_SESSION[ApplicationSettings::$applicationPrefix . $variableName]);
-	}
+	//	function unsetSessionApplicationVariable($variableName)
+	//	{
+	//		unset($_SESSION[ApplicationSettings::$applicationPrefix . $variableName]);
+	//	}
 
 	/**
 	 * Draws a standard link
@@ -61,18 +61,18 @@
 	 * @param text $onClick
 	 * @return string
 	 */
-	function drawLink($action, $displayText, $class = null, $onClick = null)
-	{
-		if ($onClick) {
-			$onClick = "onClick=\"return " . (string)$onClick . "\"";
-		}
-		if ($class == null) {
-			$retVal = "<a href=\"default_old.php?action=" . (string)$action . "\" (string)$onClick >" . (string)$displayText . "</a>";
-		} else {
-			$retVal = "<a class=\"" . (string)$class . "\" href=\"default_old.php?action=" . (string)$action . "\" $onClick >" . (string)$displayText . "</a>";
-		}
-		return $retVal;
-	}//drawLink()
+	//	function drawLink($action, $displayText, $class = null, $onClick = null)
+	//	{
+	//		if ($onClick) {
+	//			$onClick = "onClick=\"return " . (string)$onClick . "\"";
+	//		}
+	//		if ($class == null) {
+	//			$retVal = "<a href=\"default_old.php?action=" . (string)$action . "\" (string)$onClick >" . (string)$displayText . "</a>";
+	//		} else {
+	//			$retVal = "<a class=\"" . (string)$class . "\" href=\"default_old.php?action=" . (string)$action . "\" $onClick >" . (string)$displayText . "</a>";
+	//		}
+	//		return $retVal;
+	//	}//drawLink()
 
 	/**
 	 * Return the html for standard input fields based on the passed parameters
@@ -377,71 +377,71 @@
 				$retVal .= $mandatoryFlag;
 				break;
 
-			/*			case "select":
-							//0 - ObjectName
-							//1 - First option blank
-							//2 - Form Submit on change
-							//3 - Extra Onchange
-							//4 - Filter Column
-							//5 - Filter Value
-							//6 - Width
-							//7 - Class
-							//8 - Make select2
-							if (isset($fieldParams[FieldParameters::onchange_par])) {
-								$extraOnChange = $fieldParams[FieldParameters::onchange_par];
-							} else {
-								$extraOnChange = "";
-							}
-							$autoRefresh = $fieldParams[FieldParameters::autoRefresh_par] == "True" ? "onChange=\"editFormStateChange(this); " . $extraOnChange . "; submit();\"" : "onChange=\"editFormStateChange(this); " . $extraOnChange . ";\" ";
-							if (isset($fieldParams[FieldParameters::width_par])) {
-								$width = "style=\"width: " . $fieldParams[FieldParameters::width_par] . "px;\"";
-							} else {
-								$width = "";
-							}
-							$param7 = isset($fieldParams[FieldParameters::isSelect2DropDown_par]) ? $fieldParams[FieldParameters::isSelect2DropDown_par] : '';
-							if ($param7 === "True") {
-								$select2 = "select2";
-							} else {
-								$select2 = "";
-							}
-							if (isset($fieldParams[FieldParameters::isSelect2DropDown_par])) {
-								$class = "class=\"" . $select2 . " " . $fieldParams[7] . " $class\"";
-							} else {
-								$class = "class=\"" . $select2 . " $class\"";
-							}
-							//Don't put an empty <option> unless the calling function wants it
-							$retVal .= "<div class=\"helpText\" $setHelpText><select id=$fieldIdName name=$fieldIdName $autoRefresh $width $class>";
-							if ($fieldParams[FieldParameters::value_par] <> "False") {
-								if ($fieldValue == $fieldParams[FieldParameters::value_par]) {
-									$selected = "selected";
-								} else {
-									$selected = "";
-								}
-								$retVal .= "<option value=\"" . $fieldParams[FieldParameters::value_par] . "\" $selected>" . $fieldParams[FieldParameters::value_par] . "</option>";
-							}
+			case "select":
+				//0 - ObjectName
+				//1 - First option blank
+				//2 - Form Submit on change
+				//3 - Extra Onchange
+				//4 - Filter Column
+				//5 - Filter Value
+				//6 - Width
+				//7 - Class
+				//8 - Make select2
+				if (isset($fieldParams[FieldParameters::onchange_par])) {
+					$extraOnChange = $fieldParams[FieldParameters::onchange_par];
+				} else {
+					$extraOnChange = "";
+				}
+				$autoRefresh = $fieldParams[FieldParameters::autoRefresh_par] == "True" ? "onChange=\"editFormStateChange(this); " . $extraOnChange . "; submit();\"" : "onChange=\"editFormStateChange(this); " . $extraOnChange . ";\" ";
+				if (isset($fieldParams[FieldParameters::width_par])) {
+					$width = "style=\"width: " . $fieldParams[FieldParameters::width_par] . "px;\"";
+				} else {
+					$width = "";
+				}
+				$param7 = isset($fieldParams[FieldParameters::isSelect2DropDown_par]) ? $fieldParams[FieldParameters::isSelect2DropDown_par] : '';
+				if ($param7 === "True") {
+					$select2 = "select2";
+				} else {
+					$select2 = "";
+				}
+				if (isset($fieldParams[FieldParameters::isSelect2DropDown_par])) {
+					$class = "class=\"" . $select2 . " " . $fieldParams[7] . " $class\"";
+				} else {
+					$class = "class=\"" . $select2 . " $class\"";
+				}
+				//Don't put an empty <option> unless the calling function wants it
+				$retVal .= "<div class=\"helpText\" $setHelpText><select id=$fieldIdName name=$fieldIdName $autoRefresh $width $class>";
+				if ($fieldParams[FieldParameters::value_par] <> "False") {
+					if ($fieldValue == $fieldParams[FieldParameters::value_par]) {
+						$selected = "selected";
+					} else {
+						$selected = "";
+					}
+					$retVal .= "<option value=\"" . $fieldParams[FieldParameters::value_par] . "\" $selected>" . $fieldParams[FieldParameters::value_par] . "</option>";
+				}
 
-							$selectObject = new $fieldParams[0];
-							if (isset($fieldParams[4])) {
-								$select = $selectObject->getSelectSelect($fieldParams[4], $fieldParams[5]);
-							} else {
-								$select = $selectObject->getSelectSelect();
-							}
-							$result = dbQuery($select);
-							if ($result) {
-								while ($arow = dbFetchArray($result)) {
-									if ($fieldValue == $arow["Id"]) {
-										$selected = "selected";
-									} else {
-										$selected = "";
-									}
-									$retVal .= "<option value=" . $arow["Id"] . " $selected>" . $arow["Name"] . "</option>";
-								}
-							} else {
-								$retVal .= "<option>ERROR" . dbGetErrorMsg() . "</option>";
-							}
-							$retVal .= "</select></div>";
-							$retVal .= $mandatoryFlag;
-							break;*/
+				$selectObject = new $fieldParams[0];
+				if (isset($fieldParams[4])) {
+					$select = $selectObject->getSelectSelect($fieldParams[4], $fieldParams[5]);
+				} else {
+					$select = $selectObject->getSelectSelect();
+				}
+				$result = dbQuery($select);
+				if ($result) {
+					while ($arow = dbFetchArray($result)) {
+						if ($fieldValue == $arow["Id"]) {
+							$selected = "selected";
+						} else {
+							$selected = "";
+						}
+						$retVal .= "<option value=" . $arow["Id"] . " $selected>" . $arow["Name"] . "</option>";
+					}
+				} else {
+					$retVal .= "<option>ERROR" . dbGetErrorMsg() . "</option>";
+				}
+				$retVal .= "</select></div>";
+				$retVal .= $mandatoryFlag;
+				break;
 
 			case "time":
 				//0 - OnChange()
