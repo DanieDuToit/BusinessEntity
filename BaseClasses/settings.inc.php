@@ -20,10 +20,10 @@ if (!class_exists('ApplicationSettings')) {
 			static $dbPass = "calm";
 
 			// At work
-			static $Server = "vmhost\sql2012";
+//			static $Server = "vmhost\sql2012";
 
 			// At home
-//			static $Server = "DANIE-HP";
+			static $Server = "DANIE-HP";
 		}
 	}
 ?>
