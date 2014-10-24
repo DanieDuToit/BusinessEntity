@@ -67,13 +67,13 @@
 					$idValue
 				);
 //				echo ($sqlCommand); die();
-				$stmt = sqlsrv_prepare($this->dbBaseClass->conn, $sqlCommand); // Prepares a Transact-SQL query without executing it. Implicitly binds parameters.
-				if (!$stmt) {
-					$msg = dbGetErrorMsg();
-					return array(printf('An error was received when the function sqlsrv_prepare was called.
-						The error message was: %s', $msg));
-				}
-				$result = sqlsrv_execute($stmt); // Executes a prepared statement.
+//				$stmt = sqlsrv_prepare($this->dbBaseClass->conn, $sqlCommand); // Prepares a Transact-SQL query without executing it. Implicitly binds parameters.
+//				if (!$stmt) {
+//					$msg = dbGetErrorMsg();
+//					return array(printf('An error was received when the function sqlsrv_prepare was called.
+//						The error message was: %s', $msg));
+//				}
+				$result = sqlsrv_query($this->dbBaseClass->conn, $sqlCommand); //sqlsrv_execute($stmt); // Executes a prepared statement.
 				if (!$result) {
 					$msg = dbGetErrorMsg();
 					return array(printf('An error was received when the function sqlsrv_execute was called.
@@ -113,13 +113,13 @@
 					$this::$BusinessLevel['Active']['Value']
 				);
 
-				$stmt = sqlsrv_prepare($this->dbBaseClass->conn, $sqlCommand); // Prepares a Transact-SQL query without executing it. Implicitly binds parameters.
-				if (!$stmt) {
-					$msg = dbGetErrorMsg();
-					return array(printf('An error was received when the function sqlsrv_prepare was called.
-						The error message was: %s', $msg));
-				}
-				$result = sqlsrv_execute($stmt); // Executes a prepared statement.
+//				$stmt = sqlsrv_prepare($this->dbBaseClass->conn, $sqlCommand); // Prepares a Transact-SQL query without executing it. Implicitly binds parameters.
+//				if (!$stmt) {
+//					$msg = dbGetErrorMsg();
+//					return array(printf('An error was received when the function sqlsrv_prepare was called.
+//						The error message was: %s', $msg));
+//				}
+				$result = sqlsrv_query($this->dbBaseClass->conn, $sqlCommand); //sqlsrv_execute($stmt); // Executes a prepared statement.
 				if (!$result) {
 					$msg = dbGetErrorMsg();
 					return array(printf('An error was received when the function sqlsrv_execute was called.

@@ -4,12 +4,12 @@
  {
      header("Location: CompanyDisplayGrid.php");
  }
-
+include "Header.inc.php";
 $action = '';
 	//include_once 'Includes/functions.inc.php';
 	//include_once 'Classes/BaseClasses/BaseDB.class.php';
 	//include_once 'Classes/BaseClasses/BaseCompany.class.php';
-	include "Header.inc.php";
+
 if (!isset($_POST['Create'])) {
     if (isset($_GET['id']) === false || isset($_GET['action']) === false) {
 
@@ -33,7 +33,7 @@ if ($dbBaseClass->conn === false) {
 // An existing record is expected when the action is not "Create"
 if ($action != 'c') {
     // Read the record
-    $records = $dbBaseClass->getAllByFieldName('Company', 'id', $id);
+    $records = $dbBaseClass->getAll('Company', "WHERE id = $id");
 
     if ($records === false) {
         die(dbGetErrorMsg());
@@ -44,24 +44,21 @@ if ($action != 'c') {
 }
 
 
-	$companyBase = BaseCompany::$company;
+ $companyBase = BaseCompany::$company;
 
-  function echoField($fieldIdName)
-  {
-      global $action;
-      global $record;
-      global $companyBase;
-
-		$fieldParams = initializeFieldParametersArray($fieldIdName, $companyBase);
-		if ($action == 'r' || $action == 'd') {
-          $fieldParams[FieldParameters::disabled_par] = 'Disabled';
-      }
-      $inputField = (string)drawInputField($fieldIdName, $companyBase[$fieldIdName]['Type'], $record[$fieldIdName], $fieldParams);
-
-		echo "<td class='' = \"fieldName\" ><b>$fieldIdName</b></td>";
-      echo("<td>$inputField</td>");
-    
-  }
+function echoField($fieldIdName)
+{
+    global $action;
+    global $record;
+    global $businessEntityBase;
+    $fieldParams = initializeFieldParametersArray($fieldIdName, $businessEntityBase);
+    if ($action == 'r' || $action == 'd') {
+        $fieldParams[FieldParameters::disabled_par] = 'Disabled';
+    }
+    $inputField = (string)drawInputField($fieldIdName, $businessEntityBase[$fieldIdName]['Type'], $record[$fieldIdName], $fieldParams);
+    echo "<td class=\"fieldName\"><b>$fieldIdName</ b></td>";
+    echo("<td>$inputField</td>");
+}
 
 ?>
 
@@ -85,7 +82,7 @@ if ($action != 'c') {
  } else {
      $val = 'Display';
  }
- echo sprintf('<div class="heading"><h1>%s a Branch</h1></div>', $val);
+ echo sprintf('<div class="heading"><h1>%s a Company</h1></div>', $val);
  ?>
 
 

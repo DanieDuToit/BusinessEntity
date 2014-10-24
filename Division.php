@@ -9,19 +9,16 @@
 	if (isset($_POST['Return'])) {
 		header("Location: DivisionDisplayGrid.php");
 	}
+	global $record;
+	global $action;
+	global $businessEntityRecords;
+	global $parentName;
+	global $selectList;
+
+	include "Header.inc.php";
 
 	$action = '';
-	include "Header.inc.php";
-//	include_once "BaseClasses/settings.inc.php";
-//	include_once "BaseClasses/BaseDB.class.php";
-//	include_once "BaseClasses/BaseBranch.class.php";
-//	include_once "BaseClasses/BaseBusinessLevel.class.php";
-//	include_once "BaseClasses/BaseDivision.class.php";
-//	include_once "BaseClasses/functions.inc.php";
-
-//	echo buildPostForDebug($_GET);
-//	die;
-
+	$dbBaseClass = new BaseDB();
 	if (!isset($_POST['Create'])) {
 		if (isset($_GET['id']) === false || isset($_GET['action']) === false) {
 			header("Location: DivisionDisplayGrid.php");
@@ -29,7 +26,24 @@
 		$id = (int)$_GET['id'];
 		$action = $_GET['action'];
 		sanitizeString($id);
+		$prep = $dbBaseClass->getFieldsForAll("BusinessEntity", array('BusinessEntityParentId'), "WHERE id = $id");
+		$rec = sqlsrv_fetch_array($prep, SQLSRV_FETCH_ASSOC);
+		$prep = $dbBaseClass->getFieldsForAll("BusinessEntity", array('Name'), "WHERE id = {$rec['BusinessEntityParentId']}");
+		if ($prep == false) {
+			echo '<script language="JavaScript">';
+			echo 'alert("This division does not have a related company.")';
+			echo '</script>';
+//			header("Location: DivisionDisplayGrid.php");
+		}
+		$rec = sqlsrv_fetch_array($prep, SQLSRV_FETCH_ASSOC);
+		$parentName = $rec['Name'];
 	} else {
+		// Get the BusinessEntity records
+		$businessEntityRecords = $dbBaseClass->getFieldsForAll("BusinessEntity", array('Id', 'Name'), "WHERE BusinessLevelId = 1");
+		$selectList = '';
+		while ($businessEntity = sqlsrv_fetch_array($businessEntityRecords, SQLSRV_FETCH_ASSOC)) {
+			$selectList .= "<option value='{$businessEntity['Id']}'>{$businessEntity['Name']}</option>";
+		}
 		$action = 'c';
 		$id = -1;
 	}
@@ -40,10 +54,6 @@
 	if ($dbBaseClass->conn === false) {
 		die("ERROR: Could not connect. " . printf('%s', dbGetErrorMsg()));
 	}
-
-	// Get the BusinessLevel records
-	$businessLevelBase = new BaseBusinessLevel();
-	$businessLevelRecords = $dbBaseClass->GetAll("BusinessLevel", "WHERE BusinessLevelId = 1");
 
 	// An existing record is expected when the action is not "Create"
 	if ($action != 'c') {
@@ -56,8 +66,9 @@
 
 		// Get the specific record
 		$record = sqlsrv_fetch_array($records, SQLSRV_FETCH_ASSOC);
+		$businessLevelId = $record['BusinessLevelId']['Value'];
 	}
-	$recordBase = BaseDivision::$Division;
+	$recordBase = BaseBusinessEntity::$BusinessEntity;
 
 	function echoField($fieldIdName)
 	{
@@ -69,18 +80,14 @@
 			$fieldParams[FieldParameters::disabled_par] = 'Disabled';
 		}
 		$inputField = (string)drawInputField($fieldIdName, $recordBase[$fieldIdName]['Type'], $record[$fieldIdName], $fieldParams);
-		echo "<td class=\"fieldName\"><b>$fieldIdName</ b></td>";
+		$str = (string)$recordBase[$fieldIdName]['FriendlyName'];
+		if ($str == "") $str = $fieldIdName;
+		echo "<td class=\"fieldName\"><b>$str</ b></td>";
 		echo("<td>$inputField</td>");
 	}
 
 ?>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-	<title>Division</title>
-</head>
 <body>
-
 <?php
 	if ($action == 'c') {
 		$val = 'Insert';
@@ -91,12 +98,10 @@
 	} else {
 		$val = 'Display';
 	}
-	echo sprintf('<div class="heading"><h1>%s a Division</h1></div>', $val);
+	echo sprintf('<div class="heading"><h2>%s a Division</h2></div>', $val);
 ?>
 <form action="DivisionAction.php" method="post">
 	<input type="hidden" value="<?php echo $id ?>" id="id" name="id">
-	<input type="hidden" value="<?php echo $id ?>" id="BusinessEntityParentId" name="BusinessEntityParentId">
-	<input type="hidden" value="<?php echo $id ?>" id="BusinessLevelId" name="BusinessLevelId">
 	<table width="200" border="0" cellspacing="2px" cellpadding="2px">
 		<tbody>
 		<tr>
@@ -113,6 +118,19 @@
 		</tr>
 		<tr>
 			<?php echoField("BusinessEntityShortName") ?>
+		</tr>
+		<tr>
+			<td class=\"fieldName\"><b>Companies</b></td>
+			<?php if ($action !== 'c') echo "<td>$parentName</td>";
+			else {
+				echo "<td>";
+				echo "<label for='BusinessEntityParentId'></label><select id='BusinessEntityParentId' name='BusinessEntityParentId'>
+					<option selected='selected' value=''></option>";
+				echo $selectList;
+				echo "</select>";
+				echo "<td>";
+			}
+			?>
 		</tr>
 		</tbody>
 	</table>
@@ -136,3 +154,4 @@
 		</form>
 	</div>
 </form>
+<script src="JavaScripts/jquery-2.0.2.js"

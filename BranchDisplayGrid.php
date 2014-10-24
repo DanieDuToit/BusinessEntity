@@ -12,27 +12,7 @@
 	 */
 
 ?>
-<html>
-<head>
-	<title>Branches</title>
-	<style>
-		.withBorder ,td ,th {
-			border: 1px solid black;
-		}
-
-		table {
-			border-collapse: collapse;
-		}
-
-		td, th {
-			padding: 1px;
-		}
-		.noBorder {
-			border: none;
-		}
-	</style>
-	<meta charset="utf-8">
-</head>
+<title>Branches</title>
 <body>
 <h1>Branches</h1>
 
@@ -68,9 +48,9 @@
 	}
 	if (isset($_POST["Search"])) {
 		$bc = $_POST['SearchBC'];
-		echo $bc;
+//		echo $bc;
 		$records = $dbBaseClass->getFieldsByFilter('Branch', array('id', 'BranchCode', 'Name', 'PhoneNumber', 'ContactPersonName', 'ContactPersonNumber', 'FaxNumber', 'ContactPersonEmail'),
-			"WHERE BranchCode LIKE %$bc%");
+			"WHERE BranchCode LIKE '%$bc%'");
 	} else {
 		$records = $dbBaseClass->getFieldsForAll('Branch', array('id', 'BranchCode', 'Name', 'PhoneNumber', 'ContactPersonName', 'ContactPersonNumber', 'FaxNumber', 'ContactPersonEmail'));
 	}
@@ -79,10 +59,8 @@
 	}
 	$numFields = sqlsrv_num_fields($records);
 	echo "<table class='withBorder'>";
-	echo '<thead>';
-	echo '<tr></tr><th>Branch</th><th>Name</th><th>Phone Number</th><th>ContactPersonName</th><th>ContactPersonNumber</th><th>FaxNumber</th><th>ContactPersonEmail</th><tr></tr>';
-	echo '<tr>';
-	echo '</tr>';
+	echo "<thead>";
+	echo "<tr><th>Branch</th><th>Name</th><th>Phone Number</th><th>ContactPersonName</th><th>ContactPersonNumber</th><th>FaxNumber</th><th>ContactPersonEmail</th><th colspan=\"3\">Actions</th></tr>";
 	echo '</thead>';
 	while ($record = sqlsrv_fetch_array($records, SQLSRV_FETCH_BOTH)) {
 		echo "<tr>";
@@ -93,9 +71,9 @@
 		echo "<td>{$record['ContactPersonNumber']}</td>";
 		echo "<td>{$record['FaxNumber']}</td>";
 		echo "<td>{$record['ContactPersonEmail']}</td>";
-		echo "<td><a href=Branch.php?action=r&id={$record['id']}>Read</a></td>";
-		echo "<td><a href=Branch.php?action=u&id={$record['id']}>Update</a></td>";
-		echo "<td><a href=Branch.php?action=d&id={$record['id']}>Delete</a></td>";
+		echo "<td><a href=Branch.php?action=r&id={$record['id']}><img src=\"images/icons/view.png\" /></a></td>";
+		echo "<td><a href=Branch.php?action=u&id={$record['id']}><img src=\"images/icons/edit.png\" /></a></td>";
+		echo "<td><a href=Branch.php?action=d&id={$record['id']}><img src=\"images/icons/delete.png\" /></a></td>";
 		echo "</tr>";
 	}
 	echo "</table>";

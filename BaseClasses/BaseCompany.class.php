@@ -8,35 +8,31 @@
 		private $dbBaseClass;
 
 		static $company = array(
-			'Name'             => '',
-			'CompanyCode'      => '',
-			'Active'           => 1,
-			'ShortName '       => '',
-			'BusinessEntityId' => ''
+			'Name'             =>
+                array('FieldName' => 'Name', 'FriendlyName' => 'Supply friendly name', 'Helptext' => 'Company Name', 'Type' => 'text', 'CheckValidFormat' => '', 'Value' => '', 'Meta' =>
+                    array(FieldParameters::required_par => true,FieldParameters::width_par => 250, FieldParameters::maxlength_par => 50)),
+			'CompanyCode'      =>
+                array('FieldName' => 'CompanyCode', 'FriendlyName' => 'Supply friendly name', 'Helptext' => 'Company code', 'Type' => 'text', 'CheckValidFormat' => '', 'Value' => '', 'Meta' =>
+                array(FieldParameters::width_par => 250, FieldParameters::maxlength_par => 50)),
+			'Active'           =>
+                array('FieldName' => 'Active', 'FriendlyName' => 'Supply friendly name', 'Helptext' => 'No Help Text', 'Type' => 'checkbox', 'CheckValidFormat' => '', 'Value' => 0, 'Meta' =>
+					array(FieldParameters::width_par => 250, FieldParameters::maxlength_par => 50)),
+			'ShortName'       =>
+                array('FieldName' => 'ShortName', 'FriendlyName' => 'Supply friendly name', 'Helptext' => 'Short Name', 'Type' => 'text', 'CheckValidFormat' => '', 'Value' => '', 'Meta' =>
+                    array(FieldParameters::width_par => 250, FieldParameters::maxlength_par => 10)),
+			'BusinessEntityId' =>
+                array('FieldName' => 'BusinessEntityId', 'FriendlyName' => 'Supply friendly name', 'Helptext' => 'No Help Text', 'Type' => 'int', 'CheckValidFormat' => 'isDigitOnly', 'Value' => '', 'Meta' =>
+                   array(FieldParameters::maxlength_par => 8, FieldParameters::nullIfZero_par => true))
 		);
 
 
 		// Default Constructor
 		function __construct()
 		{
-			$this->dbBaseClass = new DBBase();
+			$this->dbBaseClass = new BaseDB();
 		}
 
-		//Returns true if all mandatory fields in this instance have values
 
-//    function checkMandatoryFields(){
-//    
-//        if($this->Name === "" ||  $this->Name = " "){
-//            return "Name";
-//        }
-//        if($this->CompanyCode === "" || $this->CompanyCode= ""){
-//            return "Company Code";
-//        }
-//        if($this->Active == "" || $this->Active = ""){
-//            return "Active";
-//        }
-//        return true;
-//        }
 
 
 		public function insert($record)
@@ -56,28 +52,29 @@
 				[ShortName],
 				[BusinessEntityId] )
 				VALUES (
-				'%s',
-				'%s',
-				'%b',
-				'%s',
-				%d END)",
-				$this::$company['Name'],
-				$this::$company['CompanyCode'],
-				$this::$company['Active'],
-				$this::$company['ShortName'],
-				$this::$company['BusinessEntityId']);
+				 %s,
+				 %s,
+				 %b,
+				 %s,
+				 %d END)",
+				$this::$company['Name']['Value'],
+				$this::$company['CompanyCode']['Value'],
+				$this::$company['Active']['Value'],
+				$this::$company['ShortName']['Value'],
+				$this::$company['BusinessEntityId']['Value']
+            );
 
 			$stmt = sqlsrv_prepare($this->dbBaseClass->conn, $sqlCommand); // Prepares a Transact-SQL query without executing it. Implicitly binds parameters.
 			if (!$stmt) {
-				$msg = dbGetErrorMsg();
+
 				return array(printf('An error was received when the function sqlsrv_prepare was called.
-						The error message was: %s', $msg));
+						The error message was: %s', dbGetErrorMsg()));
 			}
 			$result = sqlsrv_execute($stmt); // Executes a prepared statement.
 			if (!$result) {
-				$msg = dbGetErrorMsg();
+
 				return array(printf('An error was received when the function sqlsrv_execute was called.
-						The error message was: %s', $msg));
+						The error message was: %s', dbGetErrorMsg()));
 			}
 			return array();
 		}
@@ -103,24 +100,24 @@
 				[BusinessEntityId] = %s
 				WHERE %S = %S
 				END",
-				$this::$company['Name'],
-				$this::$company['CompanyCode'],
-				$this::$company['Active'],
-				$this::$company['ShortName'],
-				$this::$company['BusinessEntityId'],
+				$this::$company['Name']['Value'],
+				$this::$company['CompanyCode']['Value'],
+				$this::$company['Active']['Value'],
+				$this::$company['ShortName']['Value'],
+				$this::$company['BusinessEntityId']['Value'],
 				$id,
 				$value);
 			$stmt = sqlsrv_prepare($this->dbBaseClass->conn, $sqlCommand); // Prepares a Transact-SQL query without executing it. Implicitly binds parameters.
 			if (!$stmt) {
-				$msg = dbGetErrorMsg();
+
 				return array(printf('An error was received when the function sqlsrv_prepare was called.
-						The error message was: %s', $msg));
+						The error message was: %s', dbGetErrorMsg()));
 			}
 			$result = sqlsrv_execute($stmt); // Executes a prepared statement.
 			if (!$result) {
-				$msg = dbGetErrorMsg();
+
 				return array(printf('An error was received when the function sqlsrv_execute was called.
-						The error message was: %s', $msg));
+						The error message was: %s', dbGetErrorMsg()));
 			}
 			return array();
 		}

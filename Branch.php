@@ -1,3 +1,16 @@
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$("#Company").change(function(){
+			params = {};
+			params.company = $(this).val();
+			$.get("ajax\\getDivisionsForCompany.php", params, function(data) {
+				$("#Division").html(data);
+			});
+		});
+	});
+</script>
+
 <?php
 	/**
 	 * Created by PhpStorm.
@@ -9,11 +22,9 @@
 		header("Location: BranchDisplayGrid.php");
 	}
 	include "Header.inc.php";
-//	include_once "BaseClasses/settings.inc.php";
-//	include_once "BaseClasses/BaseDB.class.php";
-//	include_once "BaseClasses/BaseBranch.class.php";
-//	include_once "BaseClasses/functions.inc.php";
 	$action = '';
+	$selectList = '';
+	$dbBaseClass = new BaseDB();
 	if (!isset($_POST['Create'])) {
 		if (isset($_GET['id']) === false || isset($_GET['action']) === false) {
 			header("Location: BranchDisplayGrid.php");
@@ -22,13 +33,16 @@
 		$action = $_GET['action'];
 		sanitizeString($id);
 	} else {
+		$companyRecords = $dbBaseClass->getFieldsForAll("Company", array('Id', 'Name'));
+		while ($company = sqlsrv_fetch_array($companyRecords, SQLSRV_FETCH_ASSOC)) {
+			$selectList .= "<option value='{$company['Id']}'>{$company['Name']}</option>";
+		}
 		$action = 'c';
 		$id = -1;
 	}
 	sanitizeString($action);
 
 	// Set up DB connection
-	$dbBaseClass = new BaseDB();
 	if ($dbBaseClass->conn === false) {
 		die("ERROR: Could not connect. " . printf('%s', dbGetErrorMsg()));
 	}
@@ -57,7 +71,9 @@
 			$fieldParams[FieldParameters::disabled_par] = 'Disabled';
 		}
 		$inputField = (string)drawInputField($fieldIdName, $recordBase[$fieldIdName]['Type'], $record[$fieldIdName], $fieldParams);
-		echo "<td class=\"fieldName\"><b>$fieldIdName</ b></td>";
+		$str = (string)$recordBase[$fieldIdName]['FriendlyName'];
+		if ($str == "") $str = $fieldIdName;
+		echo "<th class=\"fieldName\"><b>$str</ b></th>";
 		echo("<td>$inputField</td>");
 	}
 
@@ -65,6 +81,9 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
+	<link href="skin/demo/menu.css" rel="stylesheet" type="text/css">
+	<link href="skin/stylesheet.css" rel="stylesheet" type="text/css">
+	<link href="skin/jquery-ui-1.10.3.custom.css" rel="stylesheet" type="text/css">
 	<title>Branch</title>
 </head>
 <body>
@@ -79,13 +98,31 @@
 	} else {
 		$val = 'Display';
 	}
-	echo sprintf('<div class="heading"><h1>%s a Branch</h1></div>', $val);
+	echo sprintf('<div class="heading"><h2>%s a Branch</h2></div>', $val);
 ?>
 
 <form action="BranchAction.php" method="post">
 	<input type="hidden" value="<?php echo $id ?>" id="id" name="id">
 	<table width="200" border="0" cellspacing="2px" cellpadding="2px">
 		<tbody>
+		<tr>
+			<th>Company</th>
+			<td>
+				<label for='Company'></label>
+				<select id='Company' name='Company'>
+				<?php echo $selectList ?>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<th>Division</th>
+			<td>
+				<label for='Division'></label>
+				<select id='Division' name='Division'>
+					<option>Select</option>
+				</select>
+			</td>
+		</tr>
 		<tr>
 			<?php echoField("BranchCode") ?>
 		</tr>
@@ -189,7 +226,7 @@
 		?>
 		<form action="Division.php" method="post">
 			<?php
-				echo(drawSubmitButton("Return", "Return"));
+				echo (string)drawSubmitButton("Return", "Return");
 			?>
 		</form>
 	</div>

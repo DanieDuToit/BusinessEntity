@@ -1,29 +1,6 @@
-<!doctype html>
-<html>
-<head>
-<style>
-		.navbar {
-			display block;
-			background-color: #333;
-			font-family: Verdana;
-			padding: 0.5em;
-		}
-
-		.navbar a {
-			background-color: #999;
-			color: #fff;
-			padding: 0.2em;
-			text-decoration: none;
-		}
-
-		.navbar a:hover {
-			background-color: #666;
-			padding: 0.5em 0.2em 0.5em 0.2em
-		}
- </style>
-</head>
 <body>
 <?php
+	include "Header.inc.php";
 
 
 $menu = array(
@@ -54,4 +31,3 @@ $menu = array(
 
 ?>
 </body>
-</html>

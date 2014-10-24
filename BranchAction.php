@@ -11,11 +11,6 @@
 	 * Time: 07:25 PM
 	 */
 	include "Header.inc.php";
-//	include_once "Classes/BaseClasses/BaseDB.class.php";
-//	include_once "Classes/BaseClasses/BaseBranch.class.php";
-//	include_once "Includes/functions.inc.php";
-	//	echo buildPostForDebug($_POST);
-	//	die();
 	$recordBase = new BaseBranch();
 	if ($recordBase->conn === false) {
 		die("ERROR: Could not connect. " . printf('%s', dbGetErrorMsg()));
