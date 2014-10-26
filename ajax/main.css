@@ -1,0 +1,15 @@
+/*
+    Document   : main.css
+    Created on : 27 May 2012, 16:46
+    Author     : Robert Steyn
+    Description: Background image stylesheet
+*/
+
+body
+{
+    background-image: url("background.png");
+    background-position: top center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-color: #C3F3E4;
+}
