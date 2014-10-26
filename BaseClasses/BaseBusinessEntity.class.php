@@ -17,20 +17,20 @@
                 array('FieldName' => 'BusinessEntityCode', 'FriendlyName' => 'Code', 'Helptext' => 'Business Entity code', 'Type' => 'text', 'CheckValidFormat' => '', 'Value' => '', 'Meta' =>
                     array(FieldParameters::width_par => 250, FieldParameters::maxlength_par => 50)),
             'BusinessEntityDescription' =>
-                array('FieldName' => 'BusinessEntityDescription', 'FriendlyName' => 'Description', 'Helptext' => 'No Help Text', 'Type' => 'text', 'CheckValidFormat' => '', 'Value' => '', 'Meta' =>
-                    array(FieldParameters::width_par => 250, FieldParameters::maxlength_par => 50)),
+                array('FieldName' => 'BusinessEntityDescription', 'FriendlyName' => 'Description', 'Helptext' => '', 'Type' => 'text', 'CheckValidFormat' => '', 'Value' => '', 'Meta' =>
+                    array(FieldParameters::width_par => 250, FieldParameters::maxlength_par => 250)),
             'BusinessEntityParentId' =>
-                array('FieldName' => 'BusinessEntityParentId', 'FriendlyName' => 'Parent Id', 'Helptext' => 'No Help Text', 'Type' => 'int', 'CheckValidFormat' => 'isDigitOnly', 'Value' => '', 'Meta' =>
+                array('FieldName' => 'BusinessEntityParentId', 'FriendlyName' => 'Parent Id', 'Helptext' => '', 'Type' => 'int', 'CheckValidFormat' => 'isDigitOnly', 'Value' => '', 'Meta' =>
                     array(FieldParameters::maxlength_par => 8, FieldParameters::nullIfZero_par => true)),
             'BusinessLevelId' =>
-                array('FieldName' => 'BusinessLevelId', 'FriendlyName' => 'Business Level Id', 'Helptext' => 'No Help Text', 'Type' => 'int', 'CheckValidFormat' => 'isDigitOnly', 'Value' => '', 'Meta' =>
+                array('FieldName' => 'BusinessLevelId', 'FriendlyName' => 'Business Level Id', 'Helptext' => '', 'Type' => 'int', 'CheckValidFormat' => 'isDigitOnly', 'Value' => '', 'Meta' =>
                     array(FieldParameters::maxlength_par => 8)),
             'Active' =>
-                array('FieldName' => 'Active', 'FriendlyName' => 'Active', 'Helptext' => 'No Help Text', 'Type' => 'checkbox', 'CheckValidFormat' => '', 'Value' => 0, 'Meta' =>
+                array('FieldName' => 'Active', 'FriendlyName' => 'Active', 'Helptext' => '', 'Type' => 'checkbox', 'CheckValidFormat' => '', 'Value' => 0, 'Meta' =>
                     array(FieldParameters::width_par => 250, FieldParameters::maxlength_par => 50)),
             'BusinessEntityShortName' =>
                 array('FieldName' => 'BusinessEntityShortName', 'FriendlyName' => 'Short Name', 'Helptext' => 'Short Name', 'Type' => 'text', 'CheckValidFormat' => '', 'Value' => '', 'Meta' =>
-                    array(FieldParameters::width_par => 250, FieldParameters::maxlength_par => 10))
+                    array(FieldParameters::width_par => 250, FieldParameters::maxlength_par => 6))
 
         );
 
@@ -79,7 +79,7 @@
                 $this::$BusinessEntity['BusinessEntityId']['Value']
             );
 
-            $stmt = sqlsrv_prepare($this->dbBaseClass->conn, $sqlCommand); // Prepares a Transact-SQL query without executing it. Implicitly binds parameters.
+            $stmt = sqlsrv_prepare(Database::getConnection(), $sqlCommand); // Prepares a Transact-SQL query without executing it. Implicitly binds parameters.
             if (!$stmt) {
 
                 return array(printf('An error was received when the function sqlsrv_prepare was called.
@@ -122,7 +122,7 @@
             $this::$BusinessEntity['BusinessEntityShortName']['Value'],
             $id,
             $value);
-            $stmt = sqlsrv_prepare($this->dbBaseClass->conn, $sqlCommand); // Prepares a Transact-SQL query without executing it. Implicitly binds parameters.
+            $stmt = sqlsrv_prepare(Database::getConnection(), $sqlCommand); // Prepares a Transact-SQL query without executing it. Implicitly binds parameters.
             if (!$stmt) {
 
                 return array(printf('An error was received when the function sqlsrv_prepare was called.

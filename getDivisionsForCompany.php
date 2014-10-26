@@ -12,23 +12,36 @@
         echo 'alert("No Company was selected.")';
         echo '</script>';
     }
-    $company = $_GET['company'];
+    $division = $_GET['company'];
+    $divisionId = $_GET['divisionId'];
+    $displayType = $_GET['displayType'];
 
     try {
         $dbBaseClass = new BaseDB();
-    }
-    catch (Exception $exc) {
-    if ($dbBaseClass->conn === false) {
-        die("ERROR: Could not connect. " . printf('%s', dbGetErrorMsg()));
-    }
+    } catch (Exception $exc) {
+        if (Database::getConnection() === false) {
+            die("ERROR: Could not connect. " . printf('%s', dbGetErrorMsg()));
+        }
 
-}
+    }
 
     $divisionBase = new BaseBusinessEntity();
-    $companyBase = new BaseCompany();
-    $prep = $dbBaseClass->getFieldsForAll("BusinessEntity", array('Id', 'Name'), "WHERE BusinessEntityParentId = $company");
-    while ($company = sqlsrv_fetch_array($prep, SQLSRV_FETCH_ASSOC)) {
-        echo "<option value=" . $company['Id'] . ">${company['Name']}</option>";
+//    $companyBase = new BaseCompany();
+    $prep = $dbBaseClass->getFieldsForAll("BusinessEntity", array('Id', 'Name'), "WHERE BusinessEntityParentId = $division");
+    if ($displayType == 'd' || $displayType == 'r') {
+        while ($division = sqlsrv_fetch_array($prep, SQLSRV_FETCH_ASSOC)) {
+            if ($division['Id'] == $divisionId) {
+                echo "<option selected = \"selected\" value=" . $division['Id'] . ">${division['Name']}</option>";
+                return;
+            }
+        }
     }
-        $err = printf('%s', dbGetErrorMsg());
+    while ($division = sqlsrv_fetch_array($prep, SQLSRV_FETCH_ASSOC)) {
+        if ($division['Id'] == $divisionId) {
+            echo "<option selected = \"selected\" value=" . $division['Id'] . ">${division['Name']}</option>";
+        } else {
+            echo "<option value=" . $division['Id'] . ">${division['Name']}</option>";
+        }
+    }
+    $err = printf('%s', dbGetErrorMsg());
 

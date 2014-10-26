@@ -1,8 +1,8 @@
 <script type="text/javascript" src="JavaScripts/jquery-2.0.2.js"></script>
 <script>
-    var initId = setTimer();
+    var initId;
     function setTimer() {
-        i = setInterval(startTimer, 500);
+        i = setInterval(startTimer, 100);
         return i;
     }
     function startTimer() {
@@ -14,16 +14,19 @@
         clearInterval(initId);
     }
     $(document).ready(function () {
-//        alert($("#displayType").val());
+        var displayType = $("#displayType").val();
+        var divisionId = $("#divisionId").val();
         $("#Company").change(function () {
-            if ($("#displayType").val() != 'r' && $("#displayType").val() != 'd') {
-                params = {};
-                params.company = $(this).val();
-                $.get("getDivisionsForCompany.php", params, function (data) {
-                    $("#Division").html(data);
-                });
-            }
+            params = {};
+            params.company = $(this).val();
+            params.divisionId = divisionId;
+            params.displayType = displayType;
+            $.get("getDivisionsForCompany.php", params, function (data) {
+                $("#Division").html(data);
+            });
         });
+        console.log("settimer called");
+        initId = setTimer();
     });
 </script>
 
@@ -42,6 +45,7 @@
     $selectList = '';
     $dbBaseClass = new BaseDB();
     $companyName = '';
+    $divisionId = '';
     if (!isset($_POST['Create'])) {
         if (isset($_GET['id']) === false || isset($_GET['action']) === false) {
             header("Location: BranchDisplayGrid.php");
@@ -68,9 +72,9 @@
 
         // TODO
         // Get the Division that this branch is related with and make it the only available selection
-        if ($action == 'r' || $action == 'd') {
-            $divisionSelectList = "<option selected=\"selected\" value='{$companyRecord['Id']}'>{$companyRecord['Name']}</option>";
-        }
+//        if ($action == 'r' || $action == 'd') {
+//            $divisionSelectList = "<option selected=\"selected\" value='{$companyRecord['Id']}'>{$companyRecord['Name']}</option>";
+//        }
     } else {
         $companyRecords = $dbBaseClass->getFieldsForAll("BusinessEntity", array('Id', 'Name'), 'WHERE BusinessLevelId = 1');
         while ($company = sqlsrv_fetch_array($companyRecords, SQLSRV_FETCH_ASSOC)) {
@@ -82,7 +86,7 @@
     sanitizeString($action);
 
     // Set up DB connection
-    if ($dbBaseClass->conn === false) {
+    if (Database::getConnection() === false) {
         die("ERROR: Could not connect. " . printf('%s', dbGetErrorMsg()));
     }
 
@@ -100,7 +104,7 @@
     }
 
     $recordBase = BaseBranch::$Branch;
-    function echoField($fieldIdName)
+    function echoField($fieldIdName, $hidden = false)
     {
         global $action;
         global $record;
@@ -109,11 +113,16 @@
         if ($action == 'r' || $action == 'd') {
             $fieldParams[FieldParameters::disabled_par] = 'Disabled';
         }
-        $inputField = (string)drawInputField($fieldIdName, $recordBase[$fieldIdName]['Type'], $record[$fieldIdName], $fieldParams);
-        $str = (string)$recordBase[$fieldIdName]['FriendlyName'];
-        if ($str == "") $str = $fieldIdName;
-        echo "<th class=\"fieldName\">$str</th>";
-        echo("<td>$inputField</td>");
+        if ($hidden) {
+            echo "<input type=\"hidden\" value=\"$record[$fieldIdName]\" id=\"$fieldIdName\"  name=\"$fieldIdName\">";
+        } else {
+            $inputField = (string)drawInputField($fieldIdName, $recordBase[$fieldIdName]['Type'], $record[$fieldIdName],
+                $fieldParams, $recordBase[$fieldIdName]['FriendlyName'], $recordBase[$fieldIdName]['Helptext']);
+            $str = (string)$recordBase[$fieldIdName]['FriendlyName'];
+            if ($str == "") $str = $fieldIdName;
+            echo "<th class=\"fieldName\">$str</th>";
+            echo("<td>$inputField</td>");
+        }
     }
 
 ?>
@@ -141,8 +150,9 @@
 ?>
 
 <form action="BranchAction.php" method="post">
-    <input type="hidden" value="<?php echo $action ?>" id="displayType" name="displayType">
+    <input type="hidden" value="<?php echo $action ?>" id="displayType">
     <input type="hidden" value="<?php echo $id ?>" id="id" name="id">
+    <input type="hidden" value="<?php echo $divisionId ?>" id="divisionId">
     <table width="200" border="0" cellspacing="2px" cellpadding="2px">
         <tbody>
         <tr>
@@ -157,19 +167,10 @@
         <tr>
             <th>Division</th>
             <td>
-                <?php
-                    if ($action == 'r' || $action == 'd') {
-                        echo "<label for='Division'></label>";
-                        echo "<select id='Division' name='Division'>";
-                        echo $divisionSelectList;
-                        echo "</select>";
-                    } else {
-                        echo "<label for='Division'></label>";
-                        echo "<select id='Division' name='Division'>";
-                        echo "<option>Select</option>";
-                        echo "</select>";
-                    }
-                ?>
+                <label for='Division'></label>
+                <select id='Division' name='Division'>
+                    <option>Select</option>
+                </select>
             </td>
         </tr>
         <tr>
@@ -256,7 +257,7 @@
             <?php echoField("Latitude") ?>
         </tr>
         <tr>
-            <?php echoField("BusinessEntityId") ?>
+            <?php echoField("BusinessEntityId", true) ?>
         </tr>
         </tbody>
     </table>

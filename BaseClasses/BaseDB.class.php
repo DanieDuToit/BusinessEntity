@@ -9,23 +9,12 @@
 	if (!class_exists('BaseDB')) {
 		class BaseDB
 		{
-			public $conn;
-
-			function __construct()
-			{
-				$connectionInfo = array("UID"                  => DBSettings::$dbUser,
-				                        "PWD"                  => DBSettings::$dbPass,
-				                        "Database"             => DBSettings::$database,
-				                        "ReturnDatesAsStrings" => true);
-				$this->conn = sqlsrv_connect(DBSettings::$Server, $connectionInfo); // Creates and opens a connection.
-			}
-
 			/**
 			 * Closes the current SQL connection
 			 */
 			public function close()
 			{
-				sqlsrv_close($this->conn);
+				sqlsrv_close(Database::getConnection());
 			}
 
 			/**
@@ -35,7 +24,7 @@
 			 */
 			function dbTransactionBegin()
 			{
-				return sqlsrv_begin_transaction($this->conn); // Begins a transaction.
+				return sqlsrv_begin_transaction(Database::getConnection()); // Begins a transaction.
 			}
 
 			/**
@@ -45,7 +34,7 @@
 			 */
 			function dbTransactionCommit()
 			{
-				return sqlsrv_commit($this->conn); // Commits a transaction.
+				return sqlsrv_commit(Database::getConnection()); // Commits a transaction.
 			}
 
 			/**
@@ -55,7 +44,7 @@
 			 */
 			function dbTransactionRollback()
 			{
-				return sqlsrv_rollback($this->conn); // Rolls back a transaction.
+				return sqlsrv_rollback(Database::getConnection()); // Rolls back a transaction.
 			}
 
 			/**
@@ -69,7 +58,7 @@
 				if (empty($sql)) {
 					return false;
 				}
-				$result = sqlsrv_query($this->conn, $sql); // Prepares and executes a Transact-SQL query.
+				$result = sqlsrv_query(Database::getConnection(), $sql); // Prepares and executes a Transact-SQL query.
 				return $result;
 			}
 
@@ -171,7 +160,7 @@
 					$sql = "BEGIN DELETE FROM $tableName WHERE $searchFieldName = $searchValue END";
 				}
 				// Prepare the statement
-				$stmt = sqlsrv_prepare($this->conn, $sql); // Prepares a Transact-SQL query without executing it. Implicitly binds parameters.
+				$stmt = sqlsrv_prepare(Database::getConnection(), $sql); // Prepares a Transact-SQL query without executing it. Implicitly binds parameters.
 				if (!$stmt) {
 					return false;
 				}
@@ -201,7 +190,7 @@
 					$sql = 'UPDATE' . $tableName . 'SET Active =' . $active . 'WHERE' . $searchFieldName . " = '" . $searchValue . "'";
 				}
 				//prepare statement
-				$stmt = sqlsrv_prepare($this->conn, $sql);
+				$stmt = sqlsrv_prepare(Database::getConnection(), $sql);
 				if (!$stmt) {
 					return false;
 				}

@@ -17,7 +17,7 @@
 //    die;
 
     $recordBase = new BaseBranch();
-    if ($recordBase->conn === false) {
+    if (Database::getConnection() === false) {
         die("ERROR: Could not connect. " . printf('%s', dbGetErrorMsg()));
     }
     $recordTemplate = BaseBranch::$Branch;
@@ -30,7 +30,7 @@
         // Get BusinessEntity with id = $_POST['BusinessEntityId'] and update BusinessParentId with $_POST['Division']
         // Get the BusinessEntity record
         $sqlCommand = "BEGIN UPDATE BusinessEntity SET BusinessEntityParentId = {$_POST['Division']} WHERE Id = {$_POST['BusinessEntityId']} END";
-        $result = sqlsrv_query($recordBase->dbBaseClass->conn, $sqlCommand);
+        $result = sqlsrv_query(Database::getConnection(), $sqlCommand);
         if (!$result) {
             die(printf('An error was received when the function sqlsrv_query was called.
 						The error message was: %s', dbGetErrorMsg()));
@@ -81,10 +81,10 @@
                        ,{$_POST['Division']}
                        ,3
                        ,$active ,'') END";
-        $result =  sqlsrv_query($businessEntityBase->dbBaseClass->conn, $sqlCommand);
+        $result =  sqlsrv_query(Database::getConnection(), $sqlCommand);
         if ($result) {
             $sqlIdentity = "select @@identity as EntityId";
-            $resultIdentity = sqlsrv_query($businessEntityBase->dbBaseClass->conn,$sqlIdentity);
+            $resultIdentity = sqlsrv_query(Database::getConnection(),$sqlIdentity);
             $rowIdentity = sqlsrv_fetch_array($resultIdentity);
             $entityId = $rowIdentity["EntityId"];
         }else{

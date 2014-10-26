@@ -43,7 +43,7 @@
 <br>
 <?php
 	$dbBaseClass = new BaseDB();
-	if ($dbBaseClass->conn === false) {
+	if (Database::getConnection() === false) {
 		die("ERROR: Could not connect. " . printf('%s', dbGetErrorMsg()));
 	}
 	if (isset($_POST["Search"])) {

@@ -8,7 +8,7 @@
 	include "Header.inc.php";
 
 	$recordBase = new BaseBusinessEntity();
-	if ($recordBase->conn === false) {
+	if (Database::getConnection() === false) {
 		die("ERROR: Could not connect. " . printf('%s', dbGetErrorMsg()));
 	}
 	$recordTemplate = BaseBusinessEntity::$BusinessEntity;

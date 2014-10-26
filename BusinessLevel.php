@@ -25,7 +25,7 @@ sanitizeString($action);
 
 // Set up DB connection
 	$dbBaseClass = new BaseDB();
-if ($dbBaseClass->conn === false) {
+if (Database::getConnection() === false) {
 	die("ERROR: Could not connect. " . printf('%s', dbGetErrorMsg()));
 }
 
@@ -52,7 +52,9 @@ function echoField($fieldIdName)
 	if ($action == 'r' || $action == 'd') {
 		$fieldParams[FieldParameters::disabled_par] = 'Disabled';
 	}
-	$inputField = (string)drawInputField($fieldIdName, $recordBase[$fieldIdName]['Type'], $record[$fieldIdName], $fieldParams);
+    $inputField = (string)drawInputField($fieldIdName, $recordBase[$fieldIdName]['Type'], $record[$fieldIdName],
+        $fieldParams, $recordBase[$fieldIdName]['FriendlyName'], $recordBase[$fieldIdName]['Helptext']);
+//	$inputField = (string)drawInputField($fieldIdName, $recordBase[$fieldIdName]['Type'], $record[$fieldIdName], $fieldParams);
 	$str = (string)$recordBase[$fieldIdName]['FriendlyName'];
 	if ($str == "") $str = $fieldIdName;
 	echo "<td class=\"fieldName\"><b>$str</ b></td>";

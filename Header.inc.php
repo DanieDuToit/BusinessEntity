@@ -5,6 +5,7 @@
         		rel="stylesheet" includes defined css classes and customised styling
     It might be better to include this after php in the event that sessions are created.
 -->
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -34,4 +35,6 @@
 	include_once "BaseClasses/BaseBusinessLevel.class.php";
 	include_once "BaseClasses/BaseCompany.class.php";
 	include_once "BaseClasses/BaseBusinessEntity.class.php";
-	include_once "BaseClasses/functions.inc.php";
+    include_once "BaseClasses/functions.inc.php";
+    include_once "BaseClasses/Database.class.php";
+?>

@@ -1,8 +1,13 @@
 <?php
+    // Start the session
+    session_start();
+?>
+<?php
 if (isset($_POST['Return'])) {
     header("Location: Default.php");
 }
 include "Header.inc.php";
+$conn = Database::getConnection();
 
 /**
  * Created by PhpStorm.
@@ -42,14 +47,14 @@ include "Header.inc.php";
 <br>
 <?php
 $dbBaseClass = new BaseDB();
-if ($dbBaseClass->conn === false) {
+if (Database::getConnection() === false) {
     die("ERROR: Could not connect. " . printf('%s', dbGetErrorMsg()));
 }
 if (isset($_POST["Search"])) {
     $bc = $_POST['SearchN'];
-    echo $bc;
+//    echo $bc;
     $records = $dbBaseClass->getFieldsByFilter('Company', array('id','Name','CompanyCode','Active','ShortName'),
-        "WHERE Name LIKE %$bc%");
+        "WHERE Name LIKE '%$bc%'");
 } else {
     $records = $dbBaseClass->getFieldsForAll('Company', array('id', 'Name','CompanyCode','Active','ShortName'));
 }

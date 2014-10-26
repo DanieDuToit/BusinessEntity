@@ -23,91 +23,91 @@
 			public $dbBaseClass;
 			static $Branch = array(
 				'BranchCode'               =>
-					array('FieldName' => 'BranchCode', 'FriendlyName' => 'Branch Code', 'Helptext' => 'The branch code', 'Type' => 'text', 'CheckValidFormat' => '', 'Value' => '', 'Meta' =>
+					array('FieldName' => 'BranchCode', 'FriendlyName' => 'Branch Code', 'Helptext' => '', 'Type' => 'text', 'CheckValidFormat' => '', 'Value' => '', 'Meta' =>
 						array(FieldParameters::required_par => true, FieldParameters::width_par => 250, FieldParameters::maxlength_par => 10)),
 				'Name'                     =>
 					array('FieldName' => 'Name', 'FriendlyName' => '', 'Helptext' => 'Branch Name', 'Type' => 'text', 'CheckValidFormat' => '', 'Value' => '', 'Meta' =>
 						array(FieldParameters::width_par => 250, FieldParameters::maxlength_par => 50)),
 				'Active'                   =>
-					array('FieldName' => 'Active', 'FriendlyName' => '', 'Helptext' => 'No Help Text', 'Type' => 'checkbox', 'CheckValidFormat' => '', 'Value' => 0, 'Meta' =>
+					array('FieldName' => 'Active', 'FriendlyName' => '', 'Helptext' => 'Tick for Active', 'Type' => 'checkbox', 'CheckValidFormat' => '', 'Value' => 0, 'Meta' =>
 						array(FieldParameters::width_par => 250, FieldParameters::maxlength_par => 50)),
 				'CustomMessage'            =>
-					array('FieldName' => 'CustomMessage', 'FriendlyName' => 'Message', 'Helptext' => 'No Help Text', 'Type' => 'text', 'CheckValidFormat' => '', 'Value' => '', 'Meta' =>
+					array('FieldName' => 'CustomMessage', 'FriendlyName' => 'Message', 'Helptext' => '', 'Type' => 'text', 'CheckValidFormat' => '', 'Value' => '', 'Meta' =>
 						array(FieldParameters::width_par => 500, FieldParameters::maxlength_par => 800)),
 				'PhoneNumber'              =>
-					array('FieldName' => 'PhoneNumber', 'FriendlyName' => 'Phone #', 'Helptext' => 'No Help Text', 'Type' => 'text', 'CheckValidFormat' => 'isValidPhoneNumber', 'Value' => '', 'Meta' =>
+					array('FieldName' => 'PhoneNumber', 'FriendlyName' => 'Phone #', 'Helptext' => '', 'Type' => 'text', 'CheckValidFormat' => 'isValidPhoneNumber', 'Value' => '', 'Meta' =>
 						array(FieldParameters::width_par => 250, FieldParameters::maxlength_par => 50)),
 				'FaxNumber'                =>
-					array('FieldName' => 'FaxNumber', 'FriendlyName' => 'Fax #', 'Helptext' => 'No Help Text', 'Type' => 'text', 'CheckValidFormat' => 'isValidPhoneNumber', 'Value' => '', 'Meta' =>
+					array('FieldName' => 'FaxNumber', 'FriendlyName' => 'Fax #', 'Helptext' => '', 'Type' => 'text', 'CheckValidFormat' => 'isValidPhoneNumber', 'Value' => '', 'Meta' =>
 						array(FieldParameters::width_par => 250, FieldParameters::maxlength_par => 50)),
 				'PhysicalAddressLine1'     =>
-					array('FieldName' => 'PhysicalAddressLine1', 'FriendlyName' => 'Phys. Address Line 1', 'Helptext' => 'No Help Text', 'Type' => 'text', 'CheckValidFormat' => '', 'Value' => '', 'Meta' =>
+					array('FieldName' => 'PhysicalAddressLine1', 'FriendlyName' => 'Phys. Address Line 1', 'Helptext' => '', 'Type' => 'text', 'CheckValidFormat' => '', 'Value' => '', 'Meta' =>
 						array(FieldParameters::width_par => 250, FieldParameters::maxlength_par => 50)),
 				'PhysicalAddressLine2'     =>
-					array('FieldName' => 'PhysicalAddressLine2', 'FriendlyName' => 'Phys. Address Line 2', 'Helptext' => 'No Help Text', 'Type' => 'text', 'CheckValidFormat' => '', 'Value' => '', 'Meta' =>
+					array('FieldName' => 'PhysicalAddressLine2', 'FriendlyName' => 'Phys. Address Line 2', 'Helptext' => '', 'Type' => 'text', 'CheckValidFormat' => '', 'Value' => '', 'Meta' =>
 						array(FieldParameters::width_par => 250, FieldParameters::maxlength_par => 50)),
 				'PhysicalAddressLine3'     =>
-					array('FieldName' => 'PhysicalAddressLine3', 'FriendlyName' => 'Phys. Address Line 3', 'Helptext' => 'No Help Text', 'Type' => 'text', 'CheckValidFormat' => '', 'Value' => '', 'Meta' =>
+					array('FieldName' => 'PhysicalAddressLine3', 'FriendlyName' => 'Phys. Address Line 3', 'Helptext' => '', 'Type' => 'text', 'CheckValidFormat' => '', 'Value' => '', 'Meta' =>
 						array(FieldParameters::width_par => 250, FieldParameters::maxlength_par => 50)),
 				'PhysicalAddressLine4'     =>
-					array('FieldName' => 'PhysicalAddressLine4', 'FriendlyName' => 'Phys. Address Line 4', 'Helptext' => 'No Help Text', 'Type' => 'text', 'CheckValidFormat' => '', 'Value' => '', 'Meta' =>
+					array('FieldName' => 'PhysicalAddressLine4', 'FriendlyName' => 'Phys. Address Line 4', 'Helptext' => '', 'Type' => 'text', 'CheckValidFormat' => '', 'Value' => '', 'Meta' =>
 						array(FieldParameters::width_par => 250, FieldParameters::maxlength_par => 50)),
 				'PhysicalAddressLine5'     =>
-					array('FieldName' => 'PhysicalAddressLine5', 'FriendlyName' => 'Phys. Address Line 5', 'Helptext' => 'No Help Text', 'Type' => 'text', 'CheckValidFormat' => '', 'Value' => '', 'Meta' =>
+					array('FieldName' => 'PhysicalAddressLine5', 'FriendlyName' => 'Phys. Address Line 5', 'Helptext' => '', 'Type' => 'text', 'CheckValidFormat' => '', 'Value' => '', 'Meta' =>
 						array(FieldParameters::width_par => 250, FieldParameters::maxlength_par => 50)),
 				'PostalAddressLine1'       =>
-					array('FieldName' => 'PostalAddressLine1', 'FriendlyName' => 'Pos. Address Line 1', 'Helptext' => 'No Help Text', 'Type' => 'text', 'CheckValidFormat' => '', 'Value' => '', 'Meta' =>
+					array('FieldName' => 'PostalAddressLine1', 'FriendlyName' => 'Pos. Address Line 1', 'Helptext' => '', 'Type' => 'text', 'CheckValidFormat' => '', 'Value' => '', 'Meta' =>
 						array(FieldParameters::width_par => 250, FieldParameters::maxlength_par => 600)),
 				'PostalAddressLine2'       =>
-					array('FieldName' => 'PostalAddressLine2', 'FriendlyName' => 'Pos. Address Line 2', 'Helptext' => 'No Help Text', 'Type' => 'text', 'CheckValidFormat' => '', 'Value' => '', 'Meta' =>
+					array('FieldName' => 'PostalAddressLine2', 'FriendlyName' => 'Pos. Address Line 2', 'Helptext' => '', 'Type' => 'text', 'CheckValidFormat' => '', 'Value' => '', 'Meta' =>
 						array(FieldParameters::width_par => 250, FieldParameters::maxlength_par => 50)),
 				'PostalAddressLine3'       =>
-					array('FieldName' => 'PostalAddressLine3', 'FriendlyName' => 'Pos. Address Line 3', 'Helptext' => 'No Help Text', 'Type' => 'text', 'CheckValidFormat' => '', 'Value' => '', 'Meta' =>
+					array('FieldName' => 'PostalAddressLine3', 'FriendlyName' => 'Pos. Address Line 3', 'Helptext' => '', 'Type' => 'text', 'CheckValidFormat' => '', 'Value' => '', 'Meta' =>
 						array(FieldParameters::width_par => 250, FieldParameters::maxlength_par => 50)),
 				'PostalAddressLine4'       =>
-					array('FieldName' => 'PostalAddressLine4', 'FriendlyName' => 'Pos. Address Line 4', 'Helptext' => 'No Help Text', 'Type' => 'text', 'CheckValidFormat' => '', 'Value' => '', 'Meta' =>
+					array('FieldName' => 'PostalAddressLine4', 'FriendlyName' => 'Pos. Address Line 4', 'Helptext' => '', 'Type' => 'text', 'CheckValidFormat' => '', 'Value' => '', 'Meta' =>
 						array(FieldParameters::width_par => 250, FieldParameters::maxlength_par => 50)),
 				'PostalAddressLine5'       =>
-					array('FieldName' => 'PostalAddressLine5', 'FriendlyName' => 'Pos. Address Line 5', 'Helptext' => 'No Help Text', 'Type' => 'text', 'CheckValidFormat' => '', 'Value' => '', 'Meta' =>
+					array('FieldName' => 'PostalAddressLine5', 'FriendlyName' => 'Pos. Address Line 5', 'Helptext' => '', 'Type' => 'text', 'CheckValidFormat' => '', 'Value' => '', 'Meta' =>
 						array(FieldParameters::width_par => 250, FieldParameters::maxlength_par => 50)),
 				'BankName'                 =>
-					array('FieldName' => 'BankName', 'FriendlyName' => 'Bank Name', 'Helptext' => 'No Help Text', 'Type' => 'text', 'CheckValidFormat' => '', 'Value' => '', 'Meta' =>
+					array('FieldName' => 'BankName', 'FriendlyName' => 'Bank Name', 'Helptext' => '', 'Type' => 'text', 'CheckValidFormat' => '', 'Value' => '', 'Meta' =>
 						array(FieldParameters::width_par => 250, FieldParameters::maxlength_par => 50)),
 				'BankBranchName'           =>
-					array('FieldName' => 'BankBranchName', 'FriendlyName' => 'Bank Branch', 'Helptext' => 'No Help Text', 'Type' => 'text', 'CheckValidFormat' => '', 'Value' => '', 'Meta' =>
+					array('FieldName' => 'BankBranchName', 'FriendlyName' => 'Bank Branch', 'Helptext' => '', 'Type' => 'text', 'CheckValidFormat' => '', 'Value' => '', 'Meta' =>
 						array(FieldParameters::width_par => 250, FieldParameters::maxlength_par => 50)),
 				'BankBranchCode'           =>
-					array('FieldName' => 'BankBranchCode', 'FriendlyName' => 'Bank Branch Code', 'Helptext' => 'No Help Text', 'Type' => 'text', 'CheckValidFormat' => '', 'Value' => '', 'Meta' =>
+					array('FieldName' => 'BankBranchCode', 'FriendlyName' => 'Bank Branch Code', 'Helptext' => '', 'Type' => 'text', 'CheckValidFormat' => '', 'Value' => '', 'Meta' =>
 						array(FieldParameters::width_par => 250, FieldParameters::maxlength_par => 50)),
 				'BankAccountNumber'        =>
-					array('FieldName' => 'BankAccountNumber', 'FriendlyName' => 'Bank Acc #', 'Helptext' => 'No Help Text', 'Type' => 'text', 'CheckValidFormat' => '', 'Value' => '', 'Meta' =>
+					array('FieldName' => 'BankAccountNumber', 'FriendlyName' => 'Bank Acc #', 'Helptext' => '', 'Type' => 'text', 'CheckValidFormat' => '', 'Value' => '', 'Meta' =>
 						array(FieldParameters::width_par => 250, FieldParameters::maxlength_par => 50)),
 				'ContactPersonName'        =>
-					array('FieldName' => 'ContactPersonName', 'FriendlyName' => 'Contact Person Name', 'Helptext' => 'No Help Text', 'Type' => 'text', 'CheckValidFormat' => '', 'Value' => '', 'Meta' =>
+					array('FieldName' => 'ContactPersonName', 'FriendlyName' => 'Contact Person Name', 'Helptext' => '', 'Type' => 'text', 'CheckValidFormat' => '', 'Value' => '', 'Meta' =>
 						array(FieldParameters::width_par => 250, FieldParameters::maxlength_par => 50)),
 				'ContactPersonNumber'      =>
-					array('FieldName' => 'ContactPersonNumber', 'FriendlyName' => 'Contact Person Number', 'Helptext' => 'No Help Text', 'Type' => 'text', 'CheckValidFormat' => 'isValidPhoneNumber', 'Value' => '', 'Meta' =>
+					array('FieldName' => 'ContactPersonNumber', 'FriendlyName' => 'Contact Person Number', 'Helptext' => '', 'Type' => 'text', 'CheckValidFormat' => 'isValidPhoneNumber', 'Value' => '', 'Meta' =>
 						array(FieldParameters::width_par => 250, FieldParameters::maxlength_par => 50)),
 				'ContactPersonEmail'       =>
-					array('FieldName' => 'ContactPersonEmail', 'FriendlyName' => 'Contact Person E-mail', 'Helptext' => 'No Help Text', 'Type' => 'text', 'CheckValidFormat' => 'isValidEmail', 'Value' => '', 'Meta' =>
+					array('FieldName' => 'ContactPersonEmail', 'FriendlyName' => 'Contact Person E-mail', 'Helptext' => '', 'Type' => 'text', 'CheckValidFormat' => 'isValidEmail', 'Value' => '', 'Meta' =>
 						array(FieldParameters::width_par => 250, FieldParameters::maxlength_par => 50)),
 				'AdminContactPersonName'   =>
-					array('FieldName' => 'AdminContactPersonName', 'FriendlyName' => 'Admin Contact Person Name', 'Helptext' => 'No Help Text', 'Type' => 'text', 'CheckValidFormat' => '', 'Value' => '', 'Meta' =>
+					array('FieldName' => 'AdminContactPersonName', 'FriendlyName' => 'Admin Contact Person Name', 'Helptext' => '', 'Type' => 'text', 'CheckValidFormat' => '', 'Value' => '', 'Meta' =>
 						array(FieldParameters::width_par => 250, FieldParameters::maxlength_par => 50)),
 				'AdminContactPersonNumber' =>
-					array('FieldName' => 'AdminContactPersonNumber', 'FriendlyName' => 'Admin Contact Person Number', 'Helptext' => 'No Help Text', 'Type' => 'text', 'CheckValidFormat' => '', 'Value' => '', 'Meta' =>
+					array('FieldName' => 'AdminContactPersonNumber', 'FriendlyName' => 'Admin Contact Person Number', 'Helptext' => '', 'Type' => 'text', 'CheckValidFormat' => '', 'Value' => '', 'Meta' =>
 						array(FieldParameters::width_par => 250, FieldParameters::maxlength_par => 50)),
 				'AdminContactPersonEmail'  =>
-					array('FieldName' => 'AdminContactPersonEmail', 'FriendlyName' => 'Admin Contact Person E-mail', 'Helptext' => 'No Help Text', 'Type' => 'text', 'CheckValidFormat' => 'isValidEmail', 'Value' => '', 'Meta' =>
+					array('FieldName' => 'AdminContactPersonEmail', 'FriendlyName' => 'Admin Contact Person E-mail', 'Helptext' => '', 'Type' => 'text', 'CheckValidFormat' => 'isValidEmail', 'Value' => '', 'Meta' =>
 						array(FieldParameters::width_par => 250, FieldParameters::maxlength_par => 50)),
 				'Longitude'                =>
-					array('FieldName' => 'Longitude', 'FriendlyName' => '', 'Helptext' => 'No Help Text', 'Type' => 'decimal', 'CheckValidFormat' => 'isValidCoordinate', 'Value' => 0.0000, 'Meta' =>
+					array('FieldName' => 'Longitude', 'FriendlyName' => '', 'Helptext' => '', 'Type' => 'decimal', 'CheckValidFormat' => 'isValidCoordinate', 'Value' => 0.0000, 'Meta' =>
 						array(FieldParameters::precision_par => 4)),
 				'Latitude'                 =>
-					array('FieldName' => 'Latitude', 'FriendlyName' => '', 'Helptext' => 'No Help Text', 'Type' => 'decimal', 'CheckValidFormat' => 'isValidCoordinate', 'Value' => 0.0000, 'Meta' =>
+					array('FieldName' => 'Latitude', 'FriendlyName' => '', 'Helptext' => '', 'Type' => 'decimal', 'CheckValidFormat' => 'isValidCoordinate', 'Value' => 0.0000, 'Meta' =>
 						array(FieldParameters::precision_par => 4)),
 				'BusinessEntityId'         =>
-					array('FieldName' => 'BusinessEntityId', 'FriendlyName' => 'Entity Id', 'Helptext' => 'No Help Text', 'Type' => 'int', 'CheckValidFormat' => 'isDigitOnly', 'Value' => '', 'Meta' =>
+					array('FieldName' => 'BusinessEntityId', 'FriendlyName' => 'Entity Id', 'Helptext' => '', 'Type' => 'int', 'CheckValidFormat' => 'isDigitOnly', 'Value' => '', 'Meta' =>
 						array(FieldParameters::maxlength_par => 8, FieldParameters::nullIfZero_par => true))
 			);
 
@@ -205,7 +205,7 @@
 //					return array(printf('An error was received when the function sqlsrv_prepare was called.
 //						The error message was: %s', dbGetErrorMsg()));
 //				}
-				$result = sqlsrv_query($this->dbBaseClass->conn, $sqlCommand); //sqlsrv_execute($stmt); // Executes a prepared statement.
+				$result = sqlsrv_query(Database::getConnection(), $sqlCommand); //sqlsrv_execute($stmt); // Executes a prepared statement.
 				if (!$result) {
 					return array(printf('An error was received when the function sqlsrv_execute was called.
 						The error message was: %s', dbGetErrorMsg()));
@@ -331,7 +331,7 @@
 //					return array(printf('An error was received when the function sqlsrv_prepare was called.
 //						The error message was: %s', dbGetErrorMsg()));
 //				}
-				$result = sqlsrv_query($this->dbBaseClass->conn, $sqlCommand); //sqlsrv_execute($stmt); // Executes a prepared statement.
+				$result = sqlsrv_query(Database::getConnection(), $sqlCommand); //sqlsrv_execute($stmt); // Executes a prepared statement.
 				if (!$result) {
 					return array(printf('An error was received when the function sqlsrv_execute was called.
 						The error message was: %s', dbGetErrorMsg()));
