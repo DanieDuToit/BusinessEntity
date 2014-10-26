@@ -49,10 +49,10 @@
 	if (isset($_POST["Search"])) {
 		$bc = $_POST['SearchBC'];
 //		echo $bc;
-		$records = $dbBaseClass->getFieldsByFilter('Branch', array('id', 'BranchCode', 'Name', 'PhoneNumber', 'ContactPersonName', 'ContactPersonNumber', 'FaxNumber', 'ContactPersonEmail'),
+		$records = $dbBaseClass->getFieldsByFilter('Branch', array('id', 'BranchCode', 'Name', 'PhoneNumber', 'ContactPersonName', 'ContactPersonNumber', 'FaxNumber', 'ContactPersonEmail', 'BusinessEntityId'),
 			"WHERE BranchCode LIKE '%$bc%'");
 	} else {
-		$records = $dbBaseClass->getFieldsForAll('Branch', array('id', 'BranchCode', 'Name', 'PhoneNumber', 'ContactPersonName', 'ContactPersonNumber', 'FaxNumber', 'ContactPersonEmail'));
+		$records = $dbBaseClass->getFieldsForAll('Branch', array('id', 'BranchCode', 'Name', 'PhoneNumber', 'ContactPersonName', 'ContactPersonNumber', 'FaxNumber', 'ContactPersonEmail', 'BusinessEntityId'));
 	}
 	if ($records === false) {
 		die(dbGetErrorMsg());
@@ -71,9 +71,9 @@
 		echo "<td>{$record['ContactPersonNumber']}</td>";
 		echo "<td>{$record['FaxNumber']}</td>";
 		echo "<td>{$record['ContactPersonEmail']}</td>";
-		echo "<td><a href=Branch.php?action=r&id={$record['id']}><img src=\"images/icons/view.png\" /></a></td>";
-		echo "<td><a href=Branch.php?action=u&id={$record['id']}><img src=\"images/icons/edit.png\" /></a></td>";
-		echo "<td><a href=Branch.php?action=d&id={$record['id']}><img src=\"images/icons/delete.png\" /></a></td>";
+		echo "<td><a href=Branch.php?action=r&id={$record['id']}&entityId={$record['BusinessEntityId']}><img src=\"images/icons/view.png\" /></a></td>";
+		echo "<td><a href=Branch.php?action=u&id={$record['id']}&entityId={$record['BusinessEntityId']}><img src=\"images/icons/edit.png\" /></a></td>";
+		echo "<td><a href=Branch.php?action=d&id={$record['id']}&entityId={$record['BusinessEntityId']}><img src=\"images/icons/delete.png\" /></a></td>";
 		echo "</tr>";
 	}
 	echo "</table>";

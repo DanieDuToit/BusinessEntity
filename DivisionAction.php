@@ -19,6 +19,7 @@
 
 
 	if (isset($_POST['Update'])) {
+
 //	$action = 'Update';
 		$record = PopulateRecord($_POST, $recordTemplate);
 		$validateErrors = ValidateRecord($record);

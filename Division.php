@@ -19,6 +19,11 @@
 
 	$action = '';
 	$dbBaseClass = new BaseDB();
+    // Get the BusinessEntity records
+    $businessEntityRecords = $dbBaseClass->getFieldsForAll("BusinessEntity", array('Id', 'Name'), "WHERE BusinessLevelId = 1");
+
+    $selectList = '';
+
 	if (!isset($_POST['Create'])) {
 		if (isset($_GET['id']) === false || isset($_GET['action']) === false) {
 			header("Location: DivisionDisplayGrid.php");
@@ -28,6 +33,7 @@
 		sanitizeString($id);
 		$prep = $dbBaseClass->getFieldsForAll("BusinessEntity", array('BusinessEntityParentId'), "WHERE id = $id");
 		$rec = sqlsrv_fetch_array($prep, SQLSRV_FETCH_ASSOC);
+        $businessEntityParentId = $rec['BusinessEntityParentId'];
 		$prep = $dbBaseClass->getFieldsForAll("BusinessEntity", array('Name'), "WHERE id = {$rec['BusinessEntityParentId']}");
 		if ($prep == false) {
 			echo '<script language="JavaScript">';
@@ -37,10 +43,14 @@
 		}
 		$rec = sqlsrv_fetch_array($prep, SQLSRV_FETCH_ASSOC);
 		$parentName = $rec['Name'];
+        while ($businessEntity = sqlsrv_fetch_array($businessEntityRecords, SQLSRV_FETCH_ASSOC)) {
+            if ($businessEntity['Id'] == $businessEntityParentId) {
+                $selectList .= "<option selected=\"selected\" value='{$businessEntity['Id']}'>{$businessEntity['Name']}</option>";
+            } else {
+                $selectList .= "<option value='{$businessEntity['Id']}'>{$businessEntity['Name']}</option>";
+            }
+        }
 	} else {
-		// Get the BusinessEntity records
-		$businessEntityRecords = $dbBaseClass->getFieldsForAll("BusinessEntity", array('Id', 'Name'), "WHERE BusinessLevelId = 1");
-		$selectList = '';
 		while ($businessEntity = sqlsrv_fetch_array($businessEntityRecords, SQLSRV_FETCH_ASSOC)) {
 			$selectList .= "<option value='{$businessEntity['Id']}'>{$businessEntity['Name']}</option>";
 		}
@@ -102,6 +112,7 @@
 ?>
 <form action="DivisionAction.php" method="post">
 	<input type="hidden" value="<?php echo $id ?>" id="id" name="id">
+<!--    <input type="hidden" value="--><?php //echo $record['BusinessEntityParentId']?><!--" id="BusinessEntityParentId" name="BusinessEntityParentId">-->
 	<table width="200" border="0" cellspacing="2px" cellpadding="2px">
 		<tbody>
 		<tr>
@@ -121,7 +132,7 @@
 		</tr>
 		<tr>
 			<td class=\"fieldName\"><b>Companies</b></td>
-			<?php if ($action !== 'c') echo "<td>$parentName</td>";
+			<?php if ($action == 'r' || $action == 'd') echo "<td>$parentName</td>";
 			else {
 				echo "<td>";
 				echo "<label for='BusinessEntityParentId'></label><select id='BusinessEntityParentId' name='BusinessEntityParentId'>

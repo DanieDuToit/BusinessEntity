@@ -208,29 +208,6 @@
 				$result = sqlsrv_execute($stmt);
 				return $result;
 			}
-
-
-			function updateById($tableName, $id, $value)
-			{
-
-				$sql = "BEGIN SELECT * FROM $tableName WHERE $id = $value END";
-
-				$stmt = sqlsrv_query($this->conn, $sql);
-
-				$row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC);
-
-				$sqlUpdate = "BEGIN UPDATE $tableName SET $row WHERE $id = $value END";
-
-				//prepare statement
-				$stmtUpdate = sqlsrv_prepare($this->conn, $sqlUpdate);
-				if (!$stmtUpdate) {
-					return false;
-				}
-
-				$result = sqlsrv_execute($stmtUpdate);
-				return $result;
-
-			}
-		}
+        }
 	}
 ?>
