@@ -1,138 +1,125 @@
 <?php
-
- if(isset($_POST['Return']))
- {
-     header("Location: CompanyDisplayGrid.php");
- }
-include "Header.inc.php";
-$action = '';
-	//include_once 'Includes/functions.inc.php';
-	//include_once 'Classes/BaseClasses/BaseDB.class.php';
-	//include_once 'Classes/BaseClasses/BaseCompany.class.php';
-
-if (!isset($_POST['Create'])) {
-    if (isset($_GET['id']) === false || isset($_GET['action']) === false) {
-
-       header("Location: CompanyDisplayGrid.php");
+    // Start the session
+    session_start();
+?>
+<?php
+    if (isset($_POST['Return'])) {
+        header("Location: CompanyDisplayGrid.php");
     }
-    $id = (int)$_GET['id'];
-    $action = $_GET['action'];
-    sanitizeString($id);
-} else {
-    $action = 'c';
-    $id = -1;
-}
-sanitizeString($action);
+    include "Header.inc.php";
+    $action = '';
 
-// Set up DB connection
-	$dbBaseClass = new BaseDB();
-if ($dbBaseClass->conn === false) {
-    die("ERROR: Could not connect. " . printf('%s', dbGetErrorMsg()));
-}
+    if (!isset($_POST['Create'])) {
+        if (isset($_GET['id']) === false || isset($_GET['action']) === false) {
 
-// An existing record is expected when the action is not "Create"
-if ($action != 'c') {
-    // Read the record
-    $records = $dbBaseClass->getAll('Company', "WHERE id = $id");
+            header("Location: CompanyDisplayGrid.php");
+        }
+        $id = (int)$_GET['id'];
+        $action = $_GET['action'];
+        sanitizeString($id);
+    } else {
+        $action = 'c';
+        $id = -1;
+    }
+    sanitizeString($action);
 
-    if ($records === false) {
-        die(dbGetErrorMsg());
+    // Set up DB connection
+    $dbBaseClass = new BaseDB();
+    $recordBase = BaseCompany::$company;
+    if (Database::getConnection() === false) {
+        die("ERROR: Could not connect. " . printf('%s', dbGetErrorMsg()));
     }
 
-    // Get the specific record
-    $record = sqlsrv_fetch_array($records, SQLSRV_FETCH_ASSOC);
-}
+    // An existing record is expected when the action is not "Create"
+    if ($action != 'c') {
+        // Read the record
+        $records = $dbBaseClass->getAll('Company', "WHERE id = $id");
 
+        if ($records === false) {
+            die(dbGetErrorMsg());
+        }
 
- $companyBase = BaseCompany::$company;
-
-function echoField($fieldIdName)
-{
-    global $action;
-    global $record;
-    global $businessEntityBase;
-    $fieldParams = initializeFieldParametersArray($fieldIdName, $businessEntityBase);
-    if ($action == 'r' || $action == 'd') {
-        $fieldParams[FieldParameters::disabled_par] = 'Disabled';
+        // Get the specific record
+        $record = sqlsrv_fetch_array($records, SQLSRV_FETCH_ASSOC);
     }
-    $inputField = (string)drawInputField($fieldIdName, $businessEntityBase[$fieldIdName]['Type'], $record[$fieldIdName], $fieldParams);
-    echo "<td class=\"fieldName\"><b>$fieldIdName</ b></td>";
-    echo("<td>$inputField</td>");
-}
+
+
+    $companyBase = BaseCompany::$company;
+
+    function echoField($fieldIdName)
+    {
+        global $action;
+        global $record;
+        global $recordBase;
+        $fieldParams = initializeFieldParametersArray($fieldIdName, $recordBase);
+        if ($action == 'r' || $action == 'd') {
+            $fieldParams[FieldParameters::disabled_par] = 'Disabled';
+        }
+        $inputField = (string)drawInputField($fieldIdName, $recordBase[$fieldIdName]['Type'], $record[$fieldIdName],
+            $fieldParams, $recordBase[$fieldIdName]['FriendlyName'], $recordBase[$fieldIdName]['Helptext']);
+        $str = (string)$recordBase[$fieldIdName]['FriendlyName'];
+        if ($str == "") $str = $fieldIdName;
+        echo "<td class=\"fieldName\"><b>$str</ b></td>";
+        echo("<td>$inputField</td>");
+    }
 
 ?>
 
-
-
-<!DOCTYPE HTML PUBLIC  "-//W3C//DTD HTML 4.0.1//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-    <meta charset="utf-8">
-    <title>company</title>
- </head>
- <body>
-
- <?php
- if ($action == 'c') {
-     $val = 'Insert';
- } elseif ($action == 'u') {
-     $val = 'Update';
- } elseif ($action == 'd') {
-     $val = 'Remove';
- } else {
-     $val = 'Display';
- }
- echo sprintf('<div class="heading"><h1>%s a Company</h1></div>', $val);
- ?>
+<?php
+    if ($action == 'c') {
+        $val = 'Insert';
+    } elseif ($action == 'u') {
+        $val = 'Update';
+    } elseif ($action == 'd') {
+        $val = 'Remove';
+    } else {
+        $val = 'Display';
+    }
+    echo sprintf('<div class="heading"><h1>%s a Company</h1></div>', $val);
+?>
 
 
 <form action="CompanyAction.php" method="post">
-     <input type="hidden" value="<? echo $id ?>" id="id" name="id">
-	<table width="200" border="0" cellspacing="2px" cellpadding="2px">
-         <tr>
-             <?php echoField("Name") ?>
-         </tr>
-         <tr>
-             <?php echoField("CompanyCode") ?>
-         </tr>
-         <tr>
-             <?php echoField("Active") ?>
-         </tr>
-         <tr>
-             <?php echoField("ShortName") ?>
-         </tr>
-         <tr>
-             <?php echoField("BusinessEntityId") ?>
-         </tr>
-  
-     </table>
-     <div>
+    <input type="hidden" value="<?php echo $id ?>" id="id" name="id">
+    <table width="200" border="0" cellspacing="2px" cellpadding="2px">
+        <tr>
+            <?php echoField("Name") ?>
+        </tr>
+        <tr>
+            <?php echoField("CompanyCode") ?>
+        </tr>
+        <tr>
+            <?php echoField("Active") ?>
+        </tr>
+        <tr>
+            <?php echoField("ShortName") ?>
+        </tr>
+        <tr>
+            <?php echoField("BusinessEntityId") ?>
+        </tr>
 
-         <?php
-			if ($action == 'c') {
-				echo (string)drawSubmitButton("Create", "Create");
+    </table>
+    <div>
+        <?php
+            if ($action == 'c') {
+                echo (string)drawSubmitButton("Create", "Create");
             }
-			if ($action == 'u') {
-                echo drawSubmitButton("Update", "Update");
+            if ($action == 'u') {
+                echo (string)drawSubmitButton("Update", "Update");
             }
-			if ($action == 'd') {
-                echo drawSubmitButton("Delete", "Delete");
+            if ($action == 'd') {
+                echo (string)drawSubmitButton("Delete", "Delete");
             }
-          ?>
-         <form>
-             <?php
-               echo (drawSubmitButton("Return", "Return"));
+        ?>
+        <form action="Company.php" method="post">
+            <?php
+                echo((string)drawSubmitButton("Return", "Return"));
             ?>
 
-         </form>
-     </div>
-
- </form>
-
-
- </body>
-</html>
-
+        </form>
+    </div>
+</form>
+<script src="JavaScripts/jquery-2.0.2.js"
 
 
 

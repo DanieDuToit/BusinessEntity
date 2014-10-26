@@ -18,6 +18,7 @@
 	include "Header.inc.php";
 
 	$action = '';
+    $recordBase = BaseBusinessEntity::$BusinessEntity;
 	$dbBaseClass = new BaseDB();
     // Get the BusinessEntity records
     $businessEntityRecords = $dbBaseClass->getFieldsForAll("BusinessEntity", array('Id', 'Name'), "WHERE BusinessLevelId = 1");
@@ -61,7 +62,7 @@
 
 	// Set up DB connection
 	$dbBaseClass = new BaseDB();
-	if ($dbBaseClass->conn === false) {
+	if (Database::getConnection() === false) {
 		die("ERROR: Could not connect. " . printf('%s', dbGetErrorMsg()));
 	}
 
@@ -89,7 +90,9 @@
 		if ($action == 'r' || $action == 'd') {
 			$fieldParams[FieldParameters::disabled_par] = 'Disabled';
 		}
-		$inputField = (string)drawInputField($fieldIdName, $recordBase[$fieldIdName]['Type'], $record[$fieldIdName], $fieldParams);
+        $inputField = (string)drawInputField($fieldIdName, $recordBase[$fieldIdName]['Type'], $record[$fieldIdName],
+            $fieldParams, $recordBase[$fieldIdName]['FriendlyName'], $recordBase[$fieldIdName]['Helptext']);
+//		$inputField = (string)drawInputField($fieldIdName, $recordBase[$fieldIdName]['Type'], $record[$fieldIdName], $fieldParams);
 		$str = (string)$recordBase[$fieldIdName]['FriendlyName'];
 		if ($str == "") $str = $fieldIdName;
 		echo "<td class=\"fieldName\"><b>$str</ b></td>";
@@ -112,7 +115,6 @@
 ?>
 <form action="DivisionAction.php" method="post">
 	<input type="hidden" value="<?php echo $id ?>" id="id" name="id">
-<!--    <input type="hidden" value="--><?php //echo $record['BusinessEntityParentId']?><!--" id="BusinessEntityParentId" name="BusinessEntityParentId">-->
 	<table width="200" border="0" cellspacing="2px" cellpadding="2px">
 		<tbody>
 		<tr>
@@ -145,7 +147,6 @@
 		</tr>
 		</tbody>
 	</table>
-	<?php if ($action == 'c') ?>
 	<div>
 		<?php
 			if ($action == 'c') {

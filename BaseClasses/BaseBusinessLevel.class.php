@@ -73,7 +73,7 @@
 //					return array(printf('An error was received when the function sqlsrv_prepare was called.
 //						The error message was: %s', $msg));
 //				}
-				$result = sqlsrv_query($this->dbBaseClass->conn, $sqlCommand); //sqlsrv_execute($stmt); // Executes a prepared statement.
+				$result = sqlsrv_query(Database::getConnection(), $sqlCommand); //sqlsrv_execute($stmt); // Executes a prepared statement.
 				if (!$result) {
 					$msg = dbGetErrorMsg();
 					return array(printf('An error was received when the function sqlsrv_execute was called.
@@ -119,7 +119,7 @@
 //					return array(printf('An error was received when the function sqlsrv_prepare was called.
 //						The error message was: %s', $msg));
 //				}
-				$result = sqlsrv_query($this->dbBaseClass->conn, $sqlCommand); //sqlsrv_execute($stmt); // Executes a prepared statement.
+				$result = sqlsrv_query(Database::getConnection(), $sqlCommand); //sqlsrv_execute($stmt); // Executes a prepared statement.
 				if (!$result) {
 					$msg = dbGetErrorMsg();
 					return array(printf('An error was received when the function sqlsrv_execute was called.

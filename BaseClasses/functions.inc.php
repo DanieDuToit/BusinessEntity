@@ -85,7 +85,7 @@
 	 * @param text $class
 	 * @return html
 	 */
-	function drawInputField($fieldIdName, $fieldType, $fieldValue, $fieldParams, $helpText = null, $isMandatory = null, $class = null)
+	function drawInputField($fieldIdName, $fieldType, $fieldValue, $fieldParams, $friendlyName = null, $helpText = null, $isMandatory = null, $class = null)
 	{
 		global $disabled;
 		$fieldIdName = (string)$fieldIdName;
@@ -94,8 +94,12 @@
 		if (!$fieldParams) {
 			$fieldParams = array();
 		}
-		if (!$helpText) {
-			$helpText = 'help text not set yet';
+		if (!$helpText || $helpText == '') {
+            if (!$friendlyName && $friendlyName != '') {
+                $helpText = $fieldIdName;
+            } else {
+                $helpText = $friendlyName;
+            }
 		}
 
 		if ($isMandatory == "1") {

@@ -79,7 +79,7 @@ table {
 	include "Header.inc.php";
 
 	$dbBaseClass = new BaseDB();
-	if ($dbBaseClass->conn === false) {
+	if (Database::getConnection() === false) {
     die("ERROR: could not connect." . printf('%s', dbGetErrorMsg()));
 }
 	if (isset($_POST["Search"])) {
