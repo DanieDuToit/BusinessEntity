@@ -1,0 +1,19 @@
+
+<html>
+<head>
+    <script>
+        $(document).ready(function(){
+            $("#Company").change(function(){
+                params = {};
+                params.company = $(this).val();
+                $.get("ajax\\getDivisionsForCompany.php", params, function(data) {
+                    $("#Division").html(data);
+                });
+            });
+        });
+    </script>
+</head>
+<bod>
+
+</bod>
+</html>

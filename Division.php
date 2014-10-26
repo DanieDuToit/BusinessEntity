@@ -18,7 +18,13 @@
 	include "Header.inc.php";
 
 	$action = '';
+    $recordBase = BaseBusinessEntity::$BusinessEntity;
 	$dbBaseClass = new BaseDB();
+    // Get the BusinessEntity records
+    $businessEntityRecords = $dbBaseClass->getFieldsForAll("BusinessEntity", array('Id', 'Name'), "WHERE BusinessLevelId = 1");
+
+    $selectList = '';
+
 	if (!isset($_POST['Create'])) {
 		if (isset($_GET['id']) === false || isset($_GET['action']) === false) {
 			header("Location: DivisionDisplayGrid.php");
@@ -28,6 +34,7 @@
 		sanitizeString($id);
 		$prep = $dbBaseClass->getFieldsForAll("BusinessEntity", array('BusinessEntityParentId'), "WHERE id = $id");
 		$rec = sqlsrv_fetch_array($prep, SQLSRV_FETCH_ASSOC);
+        $businessEntityParentId = $rec['BusinessEntityParentId'];
 		$prep = $dbBaseClass->getFieldsForAll("BusinessEntity", array('Name'), "WHERE id = {$rec['BusinessEntityParentId']}");
 		if ($prep == false) {
 			echo '<script language="JavaScript">';
@@ -37,10 +44,14 @@
 		}
 		$rec = sqlsrv_fetch_array($prep, SQLSRV_FETCH_ASSOC);
 		$parentName = $rec['Name'];
+        while ($businessEntity = sqlsrv_fetch_array($businessEntityRecords, SQLSRV_FETCH_ASSOC)) {
+            if ($businessEntity['Id'] == $businessEntityParentId) {
+                $selectList .= "<option selected=\"selected\" value='{$businessEntity['Id']}'>{$businessEntity['Name']}</option>";
+            } else {
+                $selectList .= "<option value='{$businessEntity['Id']}'>{$businessEntity['Name']}</option>";
+            }
+        }
 	} else {
-		// Get the BusinessEntity records
-		$businessEntityRecords = $dbBaseClass->getFieldsForAll("BusinessEntity", array('Id', 'Name'), "WHERE BusinessLevelId = 1");
-		$selectList = '';
 		while ($businessEntity = sqlsrv_fetch_array($businessEntityRecords, SQLSRV_FETCH_ASSOC)) {
 			$selectList .= "<option value='{$businessEntity['Id']}'>{$businessEntity['Name']}</option>";
 		}
@@ -51,7 +62,7 @@
 
 	// Set up DB connection
 	$dbBaseClass = new BaseDB();
-	if ($dbBaseClass->conn === false) {
+	if (Database::getConnection() === false) {
 		die("ERROR: Could not connect. " . printf('%s', dbGetErrorMsg()));
 	}
 
@@ -79,7 +90,9 @@
 		if ($action == 'r' || $action == 'd') {
 			$fieldParams[FieldParameters::disabled_par] = 'Disabled';
 		}
-		$inputField = (string)drawInputField($fieldIdName, $recordBase[$fieldIdName]['Type'], $record[$fieldIdName], $fieldParams);
+        $inputField = (string)drawInputField($fieldIdName, $recordBase[$fieldIdName]['Type'], $record[$fieldIdName],
+            $fieldParams, $recordBase[$fieldIdName]['FriendlyName'], $recordBase[$fieldIdName]['Helptext']);
+//		$inputField = (string)drawInputField($fieldIdName, $recordBase[$fieldIdName]['Type'], $record[$fieldIdName], $fieldParams);
 		$str = (string)$recordBase[$fieldIdName]['FriendlyName'];
 		if ($str == "") $str = $fieldIdName;
 		echo "<td class=\"fieldName\"><b>$str</ b></td>";
@@ -121,7 +134,7 @@
 		</tr>
 		<tr>
 			<td class=\"fieldName\"><b>Companies</b></td>
-			<?php if ($action !== 'c') echo "<td>$parentName</td>";
+			<?php if ($action == 'r' || $action == 'd') echo "<td>$parentName</td>";
 			else {
 				echo "<td>";
 				echo "<label for='BusinessEntityParentId'></label><select id='BusinessEntityParentId' name='BusinessEntityParentId'>
@@ -134,7 +147,6 @@
 		</tr>
 		</tbody>
 	</table>
-	<?php if ($action == 'c') ?>
 	<div>
 		<?php
 			if ($action == 'c') {

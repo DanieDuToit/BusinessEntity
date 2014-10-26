@@ -8,7 +8,7 @@
 	include "Header.inc.php";
 
 	$recordBase = new BaseBusinessEntity();
-	if ($recordBase->conn === false) {
+	if (Database::getConnection() === false) {
 		die("ERROR: Could not connect. " . printf('%s', dbGetErrorMsg()));
 	}
 	$recordTemplate = BaseBusinessEntity::$BusinessEntity;
@@ -19,6 +19,7 @@
 
 
 	if (isset($_POST['Update'])) {
+
 //	$action = 'Update';
 		$record = PopulateRecord($_POST, $recordTemplate);
 		$validateErrors = ValidateRecord($record);

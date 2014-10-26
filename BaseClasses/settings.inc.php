@@ -18,7 +18,7 @@ if (!class_exists('ApplicationSettings')) {
 			static $database = "CALM";
 			static $dbUser = "calm";
 			static $dbPass = "calm";
-
+            static $conn = null;
 			// At work
 //			static $Server = "vmhost\sql2012";
 

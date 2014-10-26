@@ -13,7 +13,7 @@
 	include "Header.inc.php";
 
 	$businessLevel = new BaseBusinessLevel();
-	if ($businessLevel->conn === false) {
+	if (Database::getConnection() === false) {
 		die("ERROR: could not connect . " . printf('%s', dbGetErrorMsg()));
 	}
 

@@ -85,7 +85,7 @@
 	 * @param text $class
 	 * @return html
 	 */
-	function drawInputField($fieldIdName, $fieldType, $fieldValue, $fieldParams, $helpText = null, $isMandatory = null, $class = null)
+	function drawInputField($fieldIdName, $fieldType, $fieldValue, $fieldParams, $friendlyName = null, $helpText = null, $isMandatory = null, $class = null)
 	{
 		global $disabled;
 		$fieldIdName = (string)$fieldIdName;
@@ -94,8 +94,12 @@
 		if (!$fieldParams) {
 			$fieldParams = array();
 		}
-		if (!$helpText) {
-			$helpText = 'help text not set yet';
+		if (!$helpText || $helpText == '') {
+            if (!$friendlyName && $friendlyName != '') {
+                $helpText = $fieldIdName;
+            } else {
+                $helpText = $friendlyName;
+            }
 		}
 
 		if ($isMandatory == "1") {
@@ -738,7 +742,7 @@
 			case null:
 				break;
 			case "checkbox":
-				if ($fieldValue == "Active") {
+				if ($fieldValue == "Active" || $fieldValue == 1) {
 					$retVal = "1";
 				} else {
 					$retVal = "0";
@@ -788,7 +792,8 @@
 				}
 				break;
 			default:
-				$retVal = "'" . str_replace("'", "''", htmlentities($fieldValue)) . "'";
+//				$retVal = "'" . str_replace("'", "''", htmlentities($fieldValue)) . "'";
+				$retVal = $fieldValue;
 		}
 		return $retVal;
 	}//formatForSql()
@@ -1123,6 +1128,7 @@
 	 */
 	function isValidPhoneNumber($phoneNumber)
 	{
+        $phoneNumber = str_replace("'", "", $phoneNumber);
 		if (preg_match('/\(?\b[0-9]{3}\)?[-. ]?[0-9]{3}[-. ]?[0-9]{4}\b/', $phoneNumber)) {
 			return '';
 		}
@@ -1141,6 +1147,7 @@
 	 */
 	function isValidEmail($emailAddress)
 	{
+        $emailAddress = str_replace("'", "", $emailAddress);
 		if (preg_match('/\b[A-Z0-9._%+-]+@(?:[A-Z0-9-]+\.)+[A-Z]{2,4}\b/i', $emailAddress)) {
 			return '';
 		}
@@ -1159,6 +1166,7 @@
 	 */
 	function isValidCoordinate($coordinate)
 	{
+        $coordinate = str_replace("'", "", $coordinate);
 		if (preg_match('/^[-]?[0-9]*[.]{0,1}[0-9]{4}/', $coordinate)) {
 			return '';
 		}
@@ -1175,6 +1183,7 @@
 	 */
 	function isDigitOnly($number)
 	{
+        $number = str_replace("'", "", $number);
 		if (preg_match('/^\d+$/', $number)) {
 			return '';
 		}
@@ -1275,7 +1284,9 @@
 	function PopulateRecord($postArray, $recordBase)
 	{
 		foreach ($postArray as $key => $value) {
-			$recordBase[$key]['Value'] = $value;
+            if (array_key_exists($key, $recordBase)) {
+                $recordBase[$key]['Value'] = formatForSql($value, $recordBase[$key]['Type']);
+            }
 		}
 		return $recordBase;
 	}
@@ -1298,6 +1309,10 @@
 				}
 			}
 			if ($required || $field['Value'] != null) {
+                if (!$required && str_replace("'", "", $field['Value']) == "") {
+                    continue;
+                }
+
 				// Must field be checked for syntax errors?
 				if (isset($field['CheckValidFormat'])) {
 					$syntaxCheck = $field['CheckValidFormat'];

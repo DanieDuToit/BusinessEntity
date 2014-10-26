@@ -15,7 +15,7 @@
 	//echo $post;
 	//die;
 	$companyBase = new BaseCompany();
-	if ($companyBase->conn === false) {
+	if (Database::getConnection() === false) {
 		die("ERROR: could not connect . " . printf('%s', dbGetErrorMsg()));
 
 	}
@@ -30,7 +30,7 @@
 
 		$record = PopulateRecord($_POST, $companyTemplate);
 		$validateErrors = ValidateRecord($record);
-		$updateErrors = $companyBase->update("Company", "id", $_POST['id'], $record);
+		$updateErrors = $companyBase->update("id", $_POST['id'], $record);
 		if ($validateErrors) {
 			foreach ($validateErrors as $error) {
 				echo "<div class='error'><h3>$error</h3></div><br>";
@@ -48,11 +48,47 @@
 
 	} elseif (isset($_POST['Create'])) {
 		//action = create
+        // Create a  BusinessEntity record for the company
+        if ($_POST['Active'] == 'Active') {
+            $active = 1;
+        } else {
+            $active = 0;
+        }
+        $businessEntityBase = new BaseBusinessEntity();
+        $sqlCommand = "BEGIN INSERT INTO [dbo].[BusinessEntity]
+                       ([Name]
+                       ,[BusinessEntityCode]
+                       ,[BusinessEntityDescription]
+                       ,[BusinessEntityParentId]
+                       ,[BusinessLevelId]
+                       ,[Active]
+                       ,[BusinessEntityShortName])
+                 VALUES
+                       ( '{$_POST['Name']}'
+                       ,'{$_POST['companyCode']}'
+                       ,''
+                       ,null
+                       ,1
+                       ,$active ,'') END";
+        $companyBase->dbTransactionBegin();
+        $result =  sqlsrv_query(Database::getConnection(), $sqlCommand);
+        if ($result) {
+            $sqlIdentity = "select @@identity as EntityId";
+            $resultIdentity = sqlsrv_query(Database::getConnection(),$sqlIdentity);
+            $rowIdentity = sqlsrv_fetch_array($resultIdentity);
+            $entityId = $rowIdentity["EntityId"];
+        }else{
+            $companyBase->dbTransactionRollback();
+            echo printf('An error was received when the function sqlsrv_query was called.
+						The error message was: %s', dbGetErrorMsg());
+            die();
+        }
 
-		$record = PopulateRecord($_POST, $companyTemplate);
+        // Create the Company
+        $record = PopulateRecord($_POST, $companyTemplate);
+        $record['BusinessEntityId']['Value'] = $entityId;
 		$validateErrors = ValidateRecord($record);
 		$insertErrors = $companyBase->insert($record);
-
 		if ($validateErrors) {
 			foreach ($validateErrors as $error) {
 
@@ -65,12 +101,11 @@
 			}
 		}
 		if ($validateErrors || $insertErrors) {
+            $companyBase->dbTransactionRollback();
 			die;
 		}
-	} else {
-		header("Location: CompanyDisplayGrid.php");
+        $companyBase->dbTransactionCommit();
 	}
-
-	echo "<h1>Successful</h1>";
+    header("Location: CompanyDisplayGrid.php");
 
 

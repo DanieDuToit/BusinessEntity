@@ -9,19 +9,19 @@
 
 		static $company = array(
 			'Name'             =>
-                array('FieldName' => 'Name', 'FriendlyName' => 'Supply friendly name', 'Helptext' => 'Company Name', 'Type' => 'text', 'CheckValidFormat' => '', 'Value' => '', 'Meta' =>
+                array('FieldName' => 'Name', 'FriendlyName' => 'Name', 'Helptext' => '', 'Type' => 'text', 'CheckValidFormat' => '', 'Value' => '', 'Meta' =>
                     array(FieldParameters::required_par => true,FieldParameters::width_par => 250, FieldParameters::maxlength_par => 50)),
 			'CompanyCode'      =>
-                array('FieldName' => 'CompanyCode', 'FriendlyName' => 'Supply friendly name', 'Helptext' => 'Company code', 'Type' => 'text', 'CheckValidFormat' => '', 'Value' => '', 'Meta' =>
+                array('FieldName' => 'CompanyCode', 'FriendlyName' => '', 'Helptext' => 'Company code', 'Type' => 'text', 'CheckValidFormat' => '', 'Value' => '', 'Meta' =>
                 array(FieldParameters::width_par => 250, FieldParameters::maxlength_par => 50)),
 			'Active'           =>
-                array('FieldName' => 'Active', 'FriendlyName' => 'Supply friendly name', 'Helptext' => 'No Help Text', 'Type' => 'checkbox', 'CheckValidFormat' => '', 'Value' => 0, 'Meta' =>
+                array('FieldName' => 'Active', 'FriendlyName' => 'Active', 'Helptext' => 'Tick to make this record active', 'Type' => 'checkbox', 'CheckValidFormat' => '', 'Value' => 0, 'Meta' =>
 					array(FieldParameters::width_par => 250, FieldParameters::maxlength_par => 50)),
 			'ShortName'       =>
-                array('FieldName' => 'ShortName', 'FriendlyName' => 'Supply friendly name', 'Helptext' => 'Short Name', 'Type' => 'text', 'CheckValidFormat' => '', 'Value' => '', 'Meta' =>
-                    array(FieldParameters::width_par => 250, FieldParameters::maxlength_par => 10)),
+                array('FieldName' => 'ShortName', 'FriendlyName' => '', 'Helptext' => 'Short Name', 'Type' => 'text', 'CheckValidFormat' => '', 'Value' => '', 'Meta' =>
+                    array(FieldParameters::width_par => 250, FieldParameters::maxlength_par => 6)),
 			'BusinessEntityId' =>
-                array('FieldName' => 'BusinessEntityId', 'FriendlyName' => 'Supply friendly name', 'Helptext' => 'No Help Text', 'Type' => 'int', 'CheckValidFormat' => 'isDigitOnly', 'Value' => '', 'Meta' =>
+                array('FieldName' => 'BusinessEntityId', 'FriendlyName' => '', 'Helptext' => '', 'Type' => 'int', 'CheckValidFormat' => 'isDigitOnly', 'Value' => '', 'Meta' =>
                    array(FieldParameters::maxlength_par => 8, FieldParameters::nullIfZero_par => true))
 		);
 
@@ -52,11 +52,11 @@
 				[ShortName],
 				[BusinessEntityId] )
 				VALUES (
-				 %s,
-				 %s,
-				 %b,
-				 %s,
-				 %d END)",
+				 '%s',
+				 '%s',
+				 %d,
+				 '%s',
+				 %d) END",
 				$this::$company['Name']['Value'],
 				$this::$company['CompanyCode']['Value'],
 				$this::$company['Active']['Value'],
@@ -64,7 +64,7 @@
 				$this::$company['BusinessEntityId']['Value']
             );
 
-			$stmt = sqlsrv_prepare($this->dbBaseClass->conn, $sqlCommand); // Prepares a Transact-SQL query without executing it. Implicitly binds parameters.
+			$stmt = sqlsrv_prepare(Database::getConnection(), $sqlCommand); // Prepares a Transact-SQL query without executing it. Implicitly binds parameters.
 			if (!$stmt) {
 
 				return array(printf('An error was received when the function sqlsrv_prepare was called.
@@ -93,12 +93,12 @@
 				BEGIN
 				UPDATE Company
 				SET
-				[Name] = %s ,
-				[CompanyCode] = %s,
-				[Active] = %b,
-				[ShortName] = %s,
-				[BusinessEntityId] = %s
-				WHERE %S = %S
+				[Name] = '%s' ,
+				[CompanyCode] = '%s',
+				[Active] = %d,
+				[ShortName] = '%s',
+				[BusinessEntityId] = %d
+				WHERE %s = '%s'
 				END",
 				$this::$company['Name']['Value'],
 				$this::$company['CompanyCode']['Value'],
@@ -107,7 +107,7 @@
 				$this::$company['BusinessEntityId']['Value'],
 				$id,
 				$value);
-			$stmt = sqlsrv_prepare($this->dbBaseClass->conn, $sqlCommand); // Prepares a Transact-SQL query without executing it. Implicitly binds parameters.
+			$stmt = sqlsrv_prepare(Database::getConnection(), $sqlCommand); // Prepares a Transact-SQL query without executing it. Implicitly binds parameters.
 			if (!$stmt) {
 
 				return array(printf('An error was received when the function sqlsrv_prepare was called.
