@@ -48,7 +48,9 @@ $conn = Database::getConnection();
 <?php
 $dbBaseClass = new BaseDB();
 if (Database::getConnection() === false) {
-    die("ERROR: Could not connect. " . printf('%s', dbGetErrorMsg()));
+	$_SESSION['error'] = dbGetErrorMsg();
+	header("Location: Default.php");
+	exit;
 }
 if (isset($_POST["Search"])) {
     $bc = $_POST['SearchN'];
@@ -59,7 +61,9 @@ if (isset($_POST["Search"])) {
     $records = $dbBaseClass->getFieldsForAll('Company', array('id', 'Name','CompanyCode','Active','ShortName'));
 }
 if ($records === false) {
-    die(dbGetErrorMsg());
+	$_SESSION['error'] = dbGetErrorMsg();
+	header("Location: Default.php");
+	exit;
 }
 //$numFields = sqlsrv_num_fields($records);
 echo "<table class='withBorder'>";

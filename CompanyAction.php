@@ -27,6 +27,35 @@
 	}
 
 	if (isset($_POST['Update'])) {
+        if ($_POST['Active'] == 'Active') {
+            $active = 1;
+        } else {
+            $active = 0;
+        }
+        //Update Busines entity
+        $businessEntityBase = new BaseBusinessEntity();
+        $sqlCommand = "BEGIN
+				       UPDATE [dbo].[BusinessEntity]
+                       SET
+                       [Name] = '{$_POST['Name']}',
+                       [BusinessEntityCode] = '{$_POST['CompanyCode']}',
+				       [BusinessEntityDescription] = '',
+                       [BusinessEntityParentId] = null,
+				       [BusinessLevelId] = 1,
+                       [Active] = $active,
+				       [BusinessEntityShortName] = '{$_POST['ShortName']}'
+				       WHERE  Id = {$_POST['BusinessEntityId']}
+                       END";
+
+        echo $sqlCommand;
+
+        $result =  sqlsrv_query(Database::getConnection(), $sqlCommand);
+        if (!$result) {
+            die(printf('An error was received when the function sqlsrv_query was called.
+						The error message was: %s', dbGetErrorMsg()));
+        }
+
+        //action = Update;
 
 		$record = PopulateRecord($_POST, $companyTemplate);
 		$validateErrors = ValidateRecord($record);
@@ -48,14 +77,14 @@
 
 	} elseif (isset($_POST['Create'])) {
 		//action = create
-        // Create a  BusinessEntity record for the company
-        if ($_POST['Active'] == 'Active') {
-            $active = 1;
-        } else {
-            $active = 0;
-        }
-        $businessEntityBase = new BaseBusinessEntity();
-        $sqlCommand = "BEGIN INSERT INTO [dbo].[BusinessEntity]
+		// Create a  BusinessEntity record for the company
+		if ($_POST['Active'] == 'Active') {
+			$active = 1;
+		} else {
+			$active = 0;
+		}
+		$businessEntityBase = new BaseBusinessEntity();
+		$sqlCommand = "BEGIN INSERT INTO [dbo].[BusinessEntity]
                        ([Name]
                        ,[BusinessEntityCode]
                        ,[BusinessEntityDescription]
@@ -65,28 +94,29 @@
                        ,[BusinessEntityShortName])
                  VALUES
                        ( '{$_POST['Name']}'
-                       ,'{$_POST['companyCode']}'
+                       ,'{$_POST['CompanyCode']}'
                        ,''
                        ,null
                        ,1
-                       ,$active ,'') END";
-        $companyBase->dbTransactionBegin();
-        $result =  sqlsrv_query(Database::getConnection(), $sqlCommand);
-        if ($result) {
-            $sqlIdentity = "select @@identity as EntityId";
-            $resultIdentity = sqlsrv_query(Database::getConnection(),$sqlIdentity);
-            $rowIdentity = sqlsrv_fetch_array($resultIdentity);
-            $entityId = $rowIdentity["EntityId"];
-        }else{
-            $companyBase->dbTransactionRollback();
-            echo printf('An error was received when the function sqlsrv_query was called.
+                       ,$active ,
+                       '{$_POST['ShortName']}') END";
+		$companyBase->dbTransactionBegin();
+		$result =  sqlsrv_query(Database::getConnection(), $sqlCommand);
+		if ($result) {
+			$sqlIdentity = "select @@identity as EntityId";
+			$resultIdentity = sqlsrv_query(Database::getConnection(),$sqlIdentity);
+			$rowIdentity = sqlsrv_fetch_array($resultIdentity);
+			$entityId = $rowIdentity["EntityId"];
+		}else{
+			$companyBase->dbTransactionRollback();
+			echo printf('An error was received when the function sqlsrv_query was called.
 						The error message was: %s', dbGetErrorMsg());
-            die();
-        }
+			die();
+		}
 
-        // Create the Company
-        $record = PopulateRecord($_POST, $companyTemplate);
-        $record['BusinessEntityId']['Value'] = $entityId;
+		// Create the Company
+		$record = PopulateRecord($_POST, $companyTemplate);
+		$record['BusinessEntityId']['Value'] = $entityId;
 		$validateErrors = ValidateRecord($record);
 		$insertErrors = $companyBase->insert($record);
 		if ($validateErrors) {
@@ -101,11 +131,11 @@
 			}
 		}
 		if ($validateErrors || $insertErrors) {
-            $companyBase->dbTransactionRollback();
+			$companyBase->dbTransactionRollback();
 			die;
 		}
-        $companyBase->dbTransactionCommit();
+		$companyBase->dbTransactionCommit();
 	}
-    header("Location: CompanyDisplayGrid.php");
+	header("Location: CompanyDisplayGrid.php");
 
 

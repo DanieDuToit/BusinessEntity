@@ -21,6 +21,18 @@
     <link href="skin/demo/menu.css" rel="stylesheet" type="text/css">
     <link href="skin/stylesheet.css" rel="stylesheet" type="text/css">
 
+	    <?php
+		    if (isset($_SESSION['error'])) {
+			    ?>
+			    <div class="ErrorDiv">
+				    <?php echo $_SESSION['error']; ?>
+			    </div>
+			    <br>
+			    <?php
+			    unset($_SESSION['error']);
+		    }
+	    ?>
+
 <?php
 	/**
 	 * Created by PhpStorm.

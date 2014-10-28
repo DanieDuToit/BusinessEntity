@@ -1,4 +1,9 @@
 <?php
+	// Start session
+	session_start();
+
+?>
+<?php
 	/**
 	 * Created by PhpStorm.
 	 * User: Danie
@@ -18,12 +23,12 @@
 	include "Header.inc.php";
 
 	$action = '';
-    $recordBase = BaseBusinessEntity::$BusinessEntity;
+	$recordBase = BaseBusinessEntity::$BusinessEntity;
 	$dbBaseClass = new BaseDB();
-    // Get the BusinessEntity records
-    $businessEntityRecords = $dbBaseClass->getFieldsForAll("BusinessEntity", array('Id', 'Name'), "WHERE BusinessLevelId = 1");
+	// Get the BusinessEntity records
+	$businessEntityRecords = $dbBaseClass->getFieldsForAll("BusinessEntity", array('Id', 'Name'), "WHERE BusinessLevelId = 1");
 
-    $selectList = '';
+	$selectList = '';
 
 	if (!isset($_POST['Create'])) {
 		if (isset($_GET['id']) === false || isset($_GET['action']) === false) {
@@ -34,23 +39,22 @@
 		sanitizeString($id);
 		$prep = $dbBaseClass->getFieldsForAll("BusinessEntity", array('BusinessEntityParentId'), "WHERE id = $id");
 		$rec = sqlsrv_fetch_array($prep, SQLSRV_FETCH_ASSOC);
-        $businessEntityParentId = $rec['BusinessEntityParentId'];
+		$businessEntityParentId = $rec['BusinessEntityParentId'];
 		$prep = $dbBaseClass->getFieldsForAll("BusinessEntity", array('Name'), "WHERE id = {$rec['BusinessEntityParentId']}");
 		if ($prep == false) {
-			echo '<script language="JavaScript">';
-			echo 'alert("This division does not have a related company.")';
-			echo '</script>';
-//			header("Location: DivisionDisplayGrid.php");
+			$_SESSION['error'] = "The division does not have a related company.";
+			header("Location: DivisionDisplayGrid.php");
+			exit;
 		}
 		$rec = sqlsrv_fetch_array($prep, SQLSRV_FETCH_ASSOC);
 		$parentName = $rec['Name'];
-        while ($businessEntity = sqlsrv_fetch_array($businessEntityRecords, SQLSRV_FETCH_ASSOC)) {
-            if ($businessEntity['Id'] == $businessEntityParentId) {
-                $selectList .= "<option selected=\"selected\" value='{$businessEntity['Id']}'>{$businessEntity['Name']}</option>";
-            } else {
-                $selectList .= "<option value='{$businessEntity['Id']}'>{$businessEntity['Name']}</option>";
-            }
-        }
+		while ($businessEntity = sqlsrv_fetch_array($businessEntityRecords, SQLSRV_FETCH_ASSOC)) {
+			if ($businessEntity['Id'] == $businessEntityParentId) {
+				$selectList .= "<option selected=selected value='{$businessEntity['Id']}'>{$businessEntity['Name']}</option>";
+			} else {
+				$selectList .= "<option value='{$businessEntity['Id']}'>{$businessEntity['Name']}</option>";
+			}
+		}
 	} else {
 		while ($businessEntity = sqlsrv_fetch_array($businessEntityRecords, SQLSRV_FETCH_ASSOC)) {
 			$selectList .= "<option value='{$businessEntity['Id']}'>{$businessEntity['Name']}</option>";
@@ -63,7 +67,9 @@
 	// Set up DB connection
 	$dbBaseClass = new BaseDB();
 	if (Database::getConnection() === false) {
-		die("ERROR: Could not connect. " . printf('%s', dbGetErrorMsg()));
+		$_SESSION['error'] = "ERROR: Could not connect. " . printf('%s', dbGetErrorMsg());
+		header("Location: DivisionDisplayGrid.php");
+		exit;
 	}
 
 	// An existing record is expected when the action is not "Create"
@@ -72,7 +78,9 @@
 		$records = $dbBaseClass->getAllByFieldName('BusinessEntity', 'id', $id);
 
 		if ($records === false) {
-			die(dbGetErrorMsg());
+			$_SESSION['error'] = dbGetErrorMsg();
+			header("Location: DivisionDisplayGrid.php");
+			exit;
 		}
 
 		// Get the specific record
@@ -81,7 +89,7 @@
 	}
 	$recordBase = BaseBusinessEntity::$BusinessEntity;
 
-	function echoField($fieldIdName)
+	function echoField($fieldIdName, $hidden = false)
 	{
 		global $action;
 		global $record;
@@ -90,13 +98,16 @@
 		if ($action == 'r' || $action == 'd') {
 			$fieldParams[FieldParameters::disabled_par] = 'Disabled';
 		}
-        $inputField = (string)drawInputField($fieldIdName, $recordBase[$fieldIdName]['Type'], $record[$fieldIdName],
-            $fieldParams, $recordBase[$fieldIdName]['FriendlyName'], $recordBase[$fieldIdName]['Helptext']);
-//		$inputField = (string)drawInputField($fieldIdName, $recordBase[$fieldIdName]['Type'], $record[$fieldIdName], $fieldParams);
-		$str = (string)$recordBase[$fieldIdName]['FriendlyName'];
-		if ($str == "") $str = $fieldIdName;
-		echo "<td class=\"fieldName\"><b>$str</ b></td>";
-		echo("<td>$inputField</td>");
+		if ($hidden) {
+			echo "<input type=hidden value=\"$record[$fieldIdName]\" id=\"$fieldIdName\"  name=\"$fieldIdName\">";
+		} else {
+			$inputField = (string)drawInputField($fieldIdName, $recordBase[$fieldIdName]['Type'], $record[$fieldIdName],
+				$fieldParams, $recordBase[$fieldIdName]['FriendlyName'], $recordBase[$fieldIdName]['Helptext']);
+			$str = (string)$recordBase[$fieldIdName]['FriendlyName'];
+			if ($str == "") $str = $fieldIdName;
+			echo "<td class=\"fieldName\"><b>$str</ b></td>";
+			echo("<td>$inputField</td>");
+		}
 	}
 
 ?>
@@ -121,7 +132,7 @@
 			<?php echoField("Name") ?>
 		</tr>
 		<tr>
-			<?php echoField("BusinessEntityCode") ?>
+			<?php echoField("BusinessEntityCode", true) ?>
 		</tr>
 		<tr>
 			<?php echoField("BusinessEntityDescription") ?>
