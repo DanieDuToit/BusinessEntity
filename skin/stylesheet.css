@@ -18,14 +18,14 @@ body:before {
 
 body {
     line-height: 21px;
-    font-family: Arial,sans-serif;
+    font-family: Arial, sans-serif;
     color: #666;
     font-size: .9em;
     background: #F4F4F4;
 }
 
 input {
-    font-family: Arial,sans-serif;
+    font-family: Arial, sans-serif;
     font-size: 1em;
     color: #666;
     background-color: #fff;
@@ -33,7 +33,7 @@ input {
 }
 
 input[type="radio"] {
-    font-family: Arial,sans-serif,sans-serif;
+    font-family: Arial, sans-serif, sans-serif;
     font-size: 1em;
     color: #666;
     background-color: #fff;
@@ -41,7 +41,7 @@ input[type="radio"] {
 }
 
 input[type="checkbox"] {
-    font-family: Arial,sans-serif;
+    font-family: Arial, sans-serif;
     font-size: 1em;
     color: #666;
     background-color: #fff;
@@ -49,7 +49,7 @@ input[type="checkbox"] {
 }
 
 select {
-    font-family: Arial,sans-serif;
+    font-family: Arial, sans-serif;
     font-size: .9em;
     color: #666;
     background-color: #fff;
@@ -58,14 +58,14 @@ select {
 
 h1 {
     font-size: 1.3em;
-    font-family: Arial,sans-serif;
+    font-family: Arial, sans-serif;
     color: #036;
 }
 
 h2 {
     color: #036;
     font-size: 1.2em;
-    font-family: Arial,sans-serif;
+    font-family: Arial, sans-serif;
 }
 
 table {
@@ -103,12 +103,12 @@ a:hover {
 
 p {
     font-size: .9em;
-    font-family: Arial,sans-serif;
+    font-family: Arial, sans-serif;
     font-weight: bold;
 }
 
 textarea {
-    font-family: Arial,sans-serif;
+    font-family: Arial, sans-serif;
     font-size: .9em;
     color: #666;
     background-color: #fff;
@@ -116,14 +116,14 @@ textarea {
 }
 
 legend {
-    font-family: Arial,sans-serif;
+    font-family: Arial, sans-serif;
     font-size: .9em;
     color: #666;
     background-color: #fff;
 }
 
 input[type="button"] {
-    font-family: Arial,sans-serif;
+    font-family: Arial, sans-serif;
     font-size: .8em;
     border-radius: 4px;
     -moz-border-radius: 4px;
@@ -160,7 +160,7 @@ input[type="button"] {
 }
 
 input[type="submit"] {
-    font-family: Arial,sans-serif;
+    font-family: Arial, sans-serif;
     font-size: .8em;
     border-radius: 4px;
     -moz-border-radius: 4px;
@@ -239,13 +239,13 @@ form {
 }
 
 /*#logoHeader {*/
-    /*height: 40px;*/
-    /*background-image: url('../images/SapWebXLogo.png');*/
-    /*background-size: contain;*/
-    /*background-position: top right;*/
-    /*background-repeat: no-repeat;*/
-    /*width: 20%;*/
-    /*float: left;*/
+/*height: 40px;*/
+/*background-image: url('../images/SapWebXLogo.png');*/
+/*background-size: contain;*/
+/*background-position: top right;*/
+/*background-repeat: no-repeat;*/
+/*width: 20%;*/
+/*float: left;*/
 /*}*/
 
 #titleHeader {
@@ -320,13 +320,13 @@ form {
 }
 
 /*#footer_logo {*/
-    /*float: left;*/
-    /*padding: 10px;*/
-    /*background-image: url("../Images/pcg_logo.png");*/
-    /*background-position: left center;*/
-    /*background-repeat: no-repeat;*/
-    /*width: 85px;*/
-    /*height: 80px;*/
+/*float: left;*/
+/*padding: 10px;*/
+/*background-image: url("../Images/pcg_logo.png");*/
+/*background-position: left center;*/
+/*background-repeat: no-repeat;*/
+/*width: 85px;*/
+/*height: 80px;*/
 /*}*/
 
 #footerRight {
@@ -416,17 +416,17 @@ form {
 }
 
 /*.infoMessage {*/
-    /*background-image: url(../images/icons/glyphicons_010_envelope.png);*/
-    /*background-repeat: no-repeat;*/
-    /*background-position: left center;*/
-    /*border: 1px solid #fff;*/
-    /*float: left;*/
-    /*padding: 10px;*/
-    /*width: auto;*/
-    /*box-shadow: -3px 0px 10px #ccc;*/
-    /*-webkit-box-shadow: -3px -0px 10px #ccc;*/
-    /*-moz-box-shadow: -3px -0px 10px #ccc;*/
-    /*padding-left: 50px;*/
+/*background-image: url(../images/icons/glyphicons_010_envelope.png);*/
+/*background-repeat: no-repeat;*/
+/*background-position: left center;*/
+/*border: 1px solid #fff;*/
+/*float: left;*/
+/*padding: 10px;*/
+/*width: auto;*/
+/*box-shadow: -3px 0px 10px #ccc;*/
+/*-webkit-box-shadow: -3px -0px 10px #ccc;*/
+/*-moz-box-shadow: -3px -0px 10px #ccc;*/
+/*padding-left: 50px;*/
 /*}*/
 
 .errorMessage {
@@ -488,7 +488,7 @@ form {
     float: left;
     width: auto;
     text-align: left;
-    font-family: Arial,sans-serif;
+    font-family: Arial, sans-serif;
     padding-top: 20px;
     padding-left: 30px;
     cursor: help;
@@ -500,7 +500,7 @@ form {
 .helpPopUp {
     text-align: left;
     float: left;
-    font-family: Arial,sans-serif;
+    font-family: Arial, sans-serif;
     font-size: .9em;
     color: #444;
     background: whitesmoke;

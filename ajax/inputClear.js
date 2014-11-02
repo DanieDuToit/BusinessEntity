@@ -2,20 +2,20 @@
  * path:       web/js/
  * filename:   inputClear.js
  *
- * @package    
+ * @package
  * @author     Robert Steyn
  * @version    1.0
- * 
- * 
+ *
+ *
  */
-$(document).ready(function(){
-    
-    $("body").keydown(function(event){
+$(document).ready(function () {
+
+    $("body").keydown(function (event) {
         var aKey = event.which;
         $("#keys").html(aKey);
     });
-    
-    $("#clear").click(function(){
+
+    $("#clear").click(function () {
         $("input").val("");
     });
 

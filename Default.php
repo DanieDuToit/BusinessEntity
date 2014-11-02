@@ -6,9 +6,9 @@
     include "Header.inc.php";
 
     $menu = array(
-        'company' => array('text' => 'Company', 'url' => 'CompanyDisplayGrid.php'),
-        'division' => array('text' => 'Division', 'url' => 'DivisionDisplayGrid.php'),
-        'Branch' => array('text' => 'Branch', 'url' => 'BranchDisplayGrid.php'),
+        'company'       => array('text' => 'Company', 'url' => 'CompanyDisplayGrid.php'),
+        'division'      => array('text' => 'Division', 'url' => 'DivisionDisplayGrid.php'),
+        'Branch'        => array('text' => 'Branch', 'url' => 'BranchDisplayGrid.php'),
         'BusinessLevel' => array('text' => 'BusinessLevel', 'url' => 'BusinessLevelDisplayGrid.php')
     );
 

@@ -1,6 +1,6 @@
 "use strict";
 
-$(document).ready(function() {
+$(document).ready(function () {
 
 });
 
@@ -9,10 +9,10 @@ $(document).ready(function() {
  * @returns {Boolean}
  */
 function btnCancelClick() {
-  var editFormState = $('#editFormState').val();
-  if (editFormState) {
-    return confirm('Do you really want to return without saving your changes?');
-  } else {
-    return true;
-  }
+    var editFormState = $('#editFormState').val();
+    if (editFormState) {
+        return confirm('Do you really want to return without saving your changes?');
+    } else {
+        return true;
+    }
 }//btnCancelClick()

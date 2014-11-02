@@ -1,32 +1,32 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-        <title>Ajax Test with Jason</title>
-        <script type="text/javascript" src="jquery.js"></script>
-        <script type="text/javascript">
-            $(document).ready(function(){
-               $("#username").change(function(){
-                   params = {}
-                   params.users = $(this).val();
-                   $.getJSON("ajax2.php",params,function(data){
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+    <title>Ajax Test with Jason</title>
+    <script type="text/javascript" src="jquery.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#username").change(function () {
+                params = {};
+                params.users = $(this).val();
+                $.getJSON("ajax2.php", params, function (data) {
                     $("#firstname").val(data.firstname);
                     $("#surname").val(data.surname);
-                   });
-               });
+                });
             });
-        </script>
-    </head>
-    <body>
-        <label>Username</label>&nbsp;<select id="username">
-            <option>Select</option>
-            <option>Niel</option>
-            <option>Rob</option>
-            <option>Dries</option>
-        </select><br>
-        <label>First Name</label>&nbsp;<input id="firstname" name="firstname" type="text" /><br>
-        <label>Surname</label>&nbsp;<input id="surname" name="surname" type="text" /><br>
-        
-    </body>
+        });
+    </script>
+</head>
+<body>
+<label>Username</label>&nbsp;<select id="username">
+    <option>Select</option>
+    <option>Niel</option>
+    <option>Rob</option>
+    <option>Dries</option>
+</select><br>
+<label>First Name</label>&nbsp;<input id="firstname" name="firstname" type="text"/><br>
+<label>Surname</label>&nbsp;<input id="surname" name="surname" type="text"/><br>
+
+</body>
 </html>
 

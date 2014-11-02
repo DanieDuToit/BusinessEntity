@@ -1,7 +1,7 @@
 "use strict";
 
-$(document).ready(function(){
-  
+$(document).ready(function () {
+
 });
 
 /**
@@ -9,6 +9,6 @@ $(document).ready(function(){
  * @param {int} pageNo
  * @returns {Boolean}
  */
-function paginatorLinkOnClick(pageNo){
-  return true;
+function paginatorLinkOnClick(pageNo) {
+    return true;
 }//paginatorLinkOnClick()

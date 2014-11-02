@@ -12,8 +12,8 @@
         echo 'alert("No Company was selected.")';
         echo '</script>';
     }
-    $division = $_GET['company'];
-    $divisionId = $_GET['divisionId'];
+    $division    = $_GET['company'];
+    $divisionId  = $_GET['divisionId'];
     $displayType = $_GET['displayType'];
 
     try {
@@ -26,7 +26,7 @@
     }
 
     $divisionBase = new BaseBusinessEntity();
-//    $companyBase = new BaseCompany();
+    //    $companyBase = new BaseCompany();
     $prep = $dbBaseClass->getFieldsForAll("BusinessEntity", array('Id', 'Name'), "WHERE BusinessEntityParentId = $division");
     if ($displayType == 'd' || $displayType == 'r') {
         while ($division = sqlsrv_fetch_array($prep, SQLSRV_FETCH_ASSOC)) {

@@ -3,18 +3,18 @@
     session_start();
 ?>
 <?php
-if (isset($_POST['Return'])) {
-    header("Location: Default.php");
-}
-include "Header.inc.php";
-$conn = Database::getConnection();
+    if (isset($_POST['Return'])) {
+        header("Location: Default.php");
+    }
+    include "Header.inc.php";
+    $conn = Database::getConnection();
 
-/**
- * Created by PhpStorm.
- * User: dutoitd1
- * Date: 2014/10/14
- * Time: 01:52 PM
- */
+    /**
+     * Created by PhpStorm.
+     * User: dutoitd1
+     * Date: 2014/10/14
+     * Time: 01:52 PM
+     */
 
 ?>
 <body>
@@ -46,44 +46,44 @@ $conn = Database::getConnection();
 </div>
 <br>
 <?php
-$dbBaseClass = new BaseDB();
-if (Database::getConnection() === false) {
-	$_SESSION['error'] = dbGetErrorMsg();
-	header("Location: Default.php");
-	exit;
-}
-if (isset($_POST["Search"])) {
-    $bc = $_POST['SearchN'];
-//    echo $bc;
-    $records = $dbBaseClass->getFieldsByFilter('Company', array('id','Name','CompanyCode','Active','ShortName'),
-        "WHERE Name LIKE '%$bc%'");
-} else {
-    $records = $dbBaseClass->getFieldsForAll('Company', array('id', 'Name','CompanyCode','Active','ShortName'));
-}
-if ($records === false) {
-	$_SESSION['error'] = dbGetErrorMsg();
-	header("Location: Default.php");
-	exit;
-}
-//$numFields = sqlsrv_num_fields($records);
-echo "<table class='withBorder'>";
-echo '<thead>';
-echo '<tr></tr><th>Name</th><th>Company Code</th><th>Active</th><th>ShortName</th><th colspan="3">Action</th> <tr></tr>';
-echo '<tr>';
-echo '</tr>';
-echo '</thead>';
-while ($record = sqlsrv_fetch_array($records, SQLSRV_FETCH_BOTH)) {
-    echo "<tr>";
-    echo "<td>{$record['Name']}</td>";
-    echo "<td>{$record['CompanyCode']}</td>";
-    echo "<td>{$record['Active']}</td>";
-    echo "<td>{$record['ShortName']}</td>";
-    echo "<td><a href=Company.php?action=r&id={$record['id']}><img src=\"images/icons/view.png\" /></a></td>";
-    echo "<td><a href=Company.php?action=u&id={$record['id']}><img src=\"images/icons/edit.png\" /></a></td>";
-    echo "<td><a href=Company.php?action=d&id={$record['id']}><img src=\"images/icons/delete.png\" /></a></td>";
-    echo "</tr>";
-}
-echo "</table>";
-$dbBaseClass->close();
+    $dbBaseClass = new BaseDB();
+    if (Database::getConnection() === false) {
+        $_SESSION['error'] = dbGetErrorMsg();
+        header("Location: Default.php");
+        exit;
+    }
+    if (isset($_POST["Search"])) {
+        $bc = $_POST['SearchN'];
+        //    echo $bc;
+        $records = $dbBaseClass->getFieldsByFilter('Company', array('id', 'Name', 'CompanyCode', 'Active', 'ShortName'),
+            "WHERE Name LIKE '%$bc%'");
+    } else {
+        $records = $dbBaseClass->getFieldsForAll('Company', array('id', 'Name', 'CompanyCode', 'Active', 'ShortName'));
+    }
+    if ($records === false) {
+        $_SESSION['error'] = dbGetErrorMsg();
+        header("Location: Default.php");
+        exit;
+    }
+    //$numFields = sqlsrv_num_fields($records);
+    echo "<table class='withBorder'>";
+    echo '<thead>';
+    echo '<tr></tr><th>Name</th><th>Company Code</th><th>Active</th><th>ShortName</th><th colspan="3">Action</th> <tr></tr>';
+    echo '<tr>';
+    echo '</tr>';
+    echo '</thead>';
+    while ($record = sqlsrv_fetch_array($records, SQLSRV_FETCH_BOTH)) {
+        echo "<tr>";
+        echo "<td>{$record['Name']}</td>";
+        echo "<td>{$record['CompanyCode']}</td>";
+        echo "<td>{$record['Active']}</td>";
+        echo "<td>{$record['ShortName']}</td>";
+        echo "<td><a href=Company.php?action=r&id={$record['id']}><img src=\"images/icons/view.png\" /></a></td>";
+        echo "<td><a href=Company.php?action=u&id={$record['id']}><img src=\"images/icons/edit.png\" /></a></td>";
+        echo "<td><a href=Company.php?action=d&id={$record['id']}><img src=\"images/icons/delete.png\" /></a></td>";
+        echo "</tr>";
+    }
+    echo "</table>";
+    $dbBaseClass->close();
 ?>
 </body>

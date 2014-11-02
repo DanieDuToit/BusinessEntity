@@ -1,38 +1,39 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-        <title>Ajax Test 1</title>
-        <script type="text/javascript" src="jquery.js"></script>
-        <script type="text/javascript">
-            $(document).ready(function(){
-               $("#food").change(function(){
-                   params = {}
-                   params.food = $(this).val();
-                   $.get("ajax1.php", params, function(data) {
-                       $("#subfood").html(data);
-                       $("#subfood").show();
-                       $("#subfoodlabel").show();
-                   });
-               });
-               $("#but").click(function(){
-                   $.get("ajax3.php",params,function(data){
-                       $("#subfood").val(data);
-                   });
-               });
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+    <title>Ajax Test 1</title>
+    <script type="text/javascript" src="jquery.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#food").change(function () {
+                params = {};
+                params.food = $(this).val();
+                $.get("ajax1.php", params, function (data) {
+                    $("#subfood").html(data);
+                    $("#subfood").show();
+                    $("#subfoodlabel").show();
+                });
             });
-        </script>
-    </head>
-    <body>
-        <label>Food</label>&nbsp;<select id="food">
-            <option value="0">Select</option>
-            <option value="1">Fruit</option>
-            <option value="2">Vegtables</option>
-            <option value="3">Candy</option>
-        </select><br>
-        <label id="subfoodlabel" style="display:none">Sub Food</label>&nbsp;
-          <select id="subfood" style="display:none"><option>Select</option>
-        </select>
-    </body>
+            $("#but").click(function () {
+                $.get("ajax3.php", params, function (data) {
+                    $("#subfood").val(data);
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+<label>Food</label>&nbsp;<select id="food">
+    <option value="0">Select</option>
+    <option value="1">Fruit</option>
+    <option value="2">Vegtables</option>
+    <option value="3">Candy</option>
+</select><br>
+<label id="subfoodlabel" style="display:none">Sub Food</label>&nbsp;
+<select id="subfood" style="display:none">
+    <option>Select</option>
+</select>
+</body>
 </html>
 

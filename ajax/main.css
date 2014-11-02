@@ -5,8 +5,7 @@
     Description: Background image stylesheet
 */
 
-body
-{
+body {
     background-image: url("background.png");
     background-position: top center;
     background-attachment: fixed;

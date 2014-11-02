@@ -10,25 +10,25 @@
 
         static $BusinessEntity = array(
 
-            'Name' =>
+            'Name'                      =>
                 array('FieldName' => 'Name', 'FriendlyName' => 'Name', 'Helptext' => 'BusinesEntity Name', 'Type' => 'text', 'CheckValidFormat' => '', 'Value' => '', 'Meta' =>
                     array(FieldParameters::required_par => true, FieldParameters::width_par => 250, FieldParameters::maxlength_par => 50)),
-            'BusinessEntityCode' =>
+            'BusinessEntityCode'        =>
                 array('FieldName' => 'BusinessEntityCode', 'FriendlyName' => 'Code', 'Helptext' => 'Business Entity code', 'Type' => 'text', 'CheckValidFormat' => '', 'Value' => '', 'Meta' =>
                     array(FieldParameters::width_par => 250, FieldParameters::maxlength_par => 50)),
             'BusinessEntityDescription' =>
                 array('FieldName' => 'BusinessEntityDescription', 'FriendlyName' => 'Description', 'Helptext' => '', 'Type' => 'text', 'CheckValidFormat' => '', 'Value' => '', 'Meta' =>
                     array(FieldParameters::width_par => 250, FieldParameters::maxlength_par => 250)),
-            'BusinessEntityParentId' =>
+            'BusinessEntityParentId'    =>
                 array('FieldName' => 'BusinessEntityParentId', 'FriendlyName' => 'Parent Id', 'Helptext' => '', 'Type' => 'int', 'CheckValidFormat' => 'isDigitOnly', 'Value' => '', 'Meta' =>
                     array(FieldParameters::maxlength_par => 8, FieldParameters::nullIfZero_par => true)),
-            'BusinessLevelId' =>
+            'BusinessLevelId'           =>
                 array('FieldName' => 'BusinessLevelId', 'FriendlyName' => 'Business Level Id', 'Helptext' => '', 'Type' => 'int', 'CheckValidFormat' => 'isDigitOnly', 'Value' => '', 'Meta' =>
                     array(FieldParameters::maxlength_par => 8)),
-            'Active' =>
+            'Active'                    =>
                 array('FieldName' => 'Active', 'FriendlyName' => 'Active', 'Helptext' => '', 'Type' => 'checkbox', 'CheckValidFormat' => '', 'Value' => 0, 'Meta' =>
                     array(FieldParameters::width_par => 250, FieldParameters::maxlength_par => 50)),
-            'BusinessEntityShortName' =>
+            'BusinessEntityShortName'   =>
                 array('FieldName' => 'BusinessEntityShortName', 'FriendlyName' => 'Short Name', 'Helptext' => 'Short Name', 'Type' => 'text', 'CheckValidFormat' => '', 'Value' => '', 'Meta' =>
                     array(FieldParameters::width_par => 250, FieldParameters::maxlength_par => 6))
 
@@ -50,7 +50,7 @@
             }
 
             $this::$BusinessEntity = $record;
-            $sqlCommand = sprintf("
+            $sqlCommand            = sprintf("
 				BEGIN
 				INSERT INTO [dbo].[BusinessEntity] (
 				[Name],
@@ -102,7 +102,7 @@
             }
             //populate the company array
             $this::$BusinessEntity = $changeRecord;
-            $sqlCommand = sprintf("
+            $sqlCommand            = sprintf("
 				BEGIN
 				UPDATE BusinessEntity
 				SET
@@ -113,16 +113,16 @@
 				[BusinessLevelId] = %d,
 				[Active]= %d,
 				[BusinessEntityShortName] = '%s' WHERE %s = '%s' END",
-            $this::$BusinessEntity['Name']['Value'],
-            $this::$BusinessEntity['BusinessEntityCode']['Value'],
-            $this::$BusinessEntity['BusinessEntityDescription']['Value'],
-            $this::$BusinessEntity['BusinessEntityParentId']['Value'],
-            2,
-            $this::$BusinessEntity['Active']['Value'],
-            $this::$BusinessEntity['BusinessEntityShortName']['Value'],
-            $id,
-            $value);
-            $stmt = sqlsrv_prepare(Database::getConnection(), $sqlCommand); // Prepares a Transact-SQL query without executing it. Implicitly binds parameters.
+                $this::$BusinessEntity['Name']['Value'],
+                $this::$BusinessEntity['BusinessEntityCode']['Value'],
+                $this::$BusinessEntity['BusinessEntityDescription']['Value'],
+                $this::$BusinessEntity['BusinessEntityParentId']['Value'],
+                2,
+                $this::$BusinessEntity['Active']['Value'],
+                $this::$BusinessEntity['BusinessEntityShortName']['Value'],
+                $id,
+                $value);
+            $stmt                  = sqlsrv_prepare(Database::getConnection(), $sqlCommand); // Prepares a Transact-SQL query without executing it. Implicitly binds parameters.
             if (!$stmt) {
 
                 return array(printf('An error was received when the function sqlsrv_prepare was called.
